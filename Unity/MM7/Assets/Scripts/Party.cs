@@ -63,7 +63,7 @@ public class Party : Singleton<Party> {
                 Debug.DrawRay(ray.origin, ray.direction, Color.blue, 2, true);
                 //Debug.Log("HIT: " + hit.transform.gameObject.tag);
 
-                focussedText.text = hit.transform.gameObject.tag.TagToDescription();
+                focussedText.text = hit.transform.gameObject.tag.TagToDescription() + " - " + hit.distance;
             }
             else
             {

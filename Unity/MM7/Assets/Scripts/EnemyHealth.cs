@@ -11,13 +11,14 @@ public class EnemyHealth : MonoBehaviour {
     private NavMeshAgent agent;
     private Animator animator;
     private ParticleSystem blood;
-
+    private EnemyMove enemyMoveBehaviour;
 
 	// Use this for initialization
 	void Start () {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         blood = GetComponentInChildren<ParticleSystem>();
+        enemyMoveBehaviour = GetComponent<EnemyMove>();
 	}
 	
 	// Update is called once per frame
@@ -44,6 +45,7 @@ public class EnemyHealth : MonoBehaviour {
             else
             {
                 animator.SetTrigger("Die");
+                Destroy(enemyMoveBehaviour);
                 agent.enabled = false;
                 foreach (var c in GetComponents<Collider>())
                 {

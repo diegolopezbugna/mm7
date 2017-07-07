@@ -11,23 +11,36 @@ public class RandomWanderMove : MonoBehaviour {
     [SerializeField]
     private int maxdistance = 20;
 
-    private Vector3? currentDestination;
     private Vector3 initialPosition;
-
     private NavMeshAgent agent;
+
+    private IEnumerator runningCorroutine;
 
 	// Use this for initialization
 	void Start () {
         agent = GetComponent<NavMeshAgent>();
-
         initialPosition = transform.localPosition;
-//        StartCoroutine(MoveArround());
-        StartCoroutine(MoveArroundMesh());
+        StartMoving();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	}
+
+    public void StartMoving() {
+        if (runningCorroutine == null)
+        {
+            agent.isStopped = false;
+            runningCorroutine = MoveArroundMesh();
+            StartCoroutine(runningCorroutine);
+        }
+    }
+
+    public void StopMoving() {
+        if (runningCorroutine != null)
+            StopCoroutine(runningCorroutine);
+        runningCorroutine = null;
+    }
 
     IEnumerator MoveArroundMesh() {
         if (agent.isActiveAndEnabled)
@@ -44,20 +57,23 @@ public class RandomWanderMove : MonoBehaviour {
     IEnumerator MoveArround() {
         yield return new WaitForSeconds(Random.Range(1f, 5f));
 
-        Vector3 newDestination = GetNewDestination();
-
-        var lerpTime = 0f;
-        while ((newDestination - transform.localPosition).sqrMagnitude > 1f)
+        if (enabled)
         {
-            lerpTime += Time.deltaTime * 2;
-            if (lerpTime < 1)
-            {
-                var newRotation = Quaternion.LookRotation(newDestination - transform.localPosition);
-                transform.localRotation = Quaternion.Lerp(transform.localRotation, newRotation, lerpTime);
-            }
+            Vector3 newDestination = GetNewDestination();
 
-            transform.localPosition = Vector3.MoveTowards(transform.localPosition, newDestination, speed * Time.deltaTime);
-            yield return null;
+            var lerpTime = 0f;
+            while ((newDestination - transform.localPosition).sqrMagnitude > 1f)
+            {
+                lerpTime += Time.deltaTime * 2;
+                if (lerpTime < 1)
+                {
+                    var newRotation = Quaternion.LookRotation(newDestination - transform.localPosition);
+                    transform.localRotation = Quaternion.Lerp(transform.localRotation, newRotation, lerpTime);
+                }
+
+                transform.localPosition = Vector3.MoveTowards(transform.localPosition, newDestination, speed * Time.deltaTime);
+                yield return null;
+            }
         }
 
         StartCoroutine(MoveArround());

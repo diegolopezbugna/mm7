@@ -46,8 +46,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\EnemyHealth.cs" />
+     <Compile Include="Assets\Scripts\Party.cs" />
+     <Compile Include="Assets\Scripts\PartyRangedAttack.cs" />
      <Compile Include="Assets\Scripts\RandomWanderMove.cs" />
+     <Compile Include="Assets\Scripts\Singleton.cs" />
+     <Compile Include="Assets\Scripts\StreamVideo.cs" />
      <Compile Include="Assets\Scripts\SwitchingPositionsWanderEnemyMove.cs" />
+     <Compile Include="Assets\Scripts\TagToDescription.cs" />
      <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Simple.shader" />
      <None Include="Assets\Standard Assets\Environment\Water (Basic)\Shaders\FXWaterBasic.shader" />
      <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />

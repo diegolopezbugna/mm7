@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class RandomWanderMove : MonoBehaviour {
 
@@ -13,16 +14,29 @@ public class RandomWanderMove : MonoBehaviour {
     private Vector3? currentDestination;
     private Vector3 initialPosition;
 
+    private NavMeshAgent agent;
+
 	// Use this for initialization
 	void Start () {
+        agent = GetComponent<NavMeshAgent>();
+
         initialPosition = transform.localPosition;
-        StartCoroutine(MoveArround());
+//        StartCoroutine(MoveArround());
+        StartCoroutine(MoveArroundMesh());
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	}
 
+    IEnumerator MoveArroundMesh() {
+        yield return new WaitForSeconds(Random.Range(1f, 5f));
+        Vector3 newDestination = GetNewDestination();
+        agent.SetDestination(newDestination);
+        yield return new WaitForSeconds(5);
+        StartCoroutine(MoveArroundMesh());
+    }
+        
     IEnumerator MoveArround() {
         yield return new WaitForSeconds(Random.Range(1f, 5f));
 

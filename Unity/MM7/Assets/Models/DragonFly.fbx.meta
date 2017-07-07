@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 19d241c36e3484441a23bf97bc97d40a
-timeCreated: 1499198999
+guid: eb7a30af2c3c7f24e97873468171e4a9
+timeCreated: 1499451219
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -70,10 +70,14 @@ ModelImporter:
     4300000: Body
     7400000: Idle2
     7400002: Attack
-    7400004: Attack
-    7400006: Idle
-    7400008: Idle2
-    7400010: Armature|Untitled
+    7400004: Hurt
+    7400006: Die
+    7400008: Armature|Attack
+    7400010: Armature|Die
+    7400012: Armature|Hurt
+    7400014: Armature|Idle
+    7400016: Idle2
+    7400018: Armature|Untitled
     9500000: //RootNode
     13700000: Body
   materials:
@@ -100,8 +104,98 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
+      name: Idle2
+      takeName: Armature|Idle2
+      firstFrame: 0
+      lastFrame: 17
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/InicioInferior
+        weight: 1
+      - path: Armature/InicioInferior/Bone.011
+        weight: 1
+      - path: Armature/InicioInferior/Bone.011/Bone.010
+        weight: 1
+      - path: Armature/InicioInferior/Bone.011/Bone.010/Bone.009
+        weight: 1
+      - path: Armature/InicioInferior/Bone.011/Bone.010/Bone.009/Bone.008
+        weight: 1
+      - path: Armature/InicioInferior/Bone.011/Bone.010/Bone.009/Bone.008/Bone.007
+        weight: 1
+      - path: Armature/InicioInferior/Bone.011/Bone.010/Bone.009/Bone.008/Bone.007/Bone.006
+        weight: 1
+      - path: Armature/InicioInferior/Bone.011/Bone.010/Bone.009/Bone.008/Bone.007/Bone.006/Bone.005
+        weight: 1
+      - path: Armature/InicioInferior/Bone.011/Bone.010/Bone.009/Bone.008/Bone.007/Bone.006/Bone.005/Bone.004
+        weight: 1
+      - path: Armature/InicioInferior/Bone.011/Bone.010/Bone.009/Bone.008/Bone.007/Bone.006/Bone.005/Bone.004/Bone.003
+        weight: 1
+      - path: Armature/InicioInferior/Bone.011/Bone.010/Bone.009/Bone.008/Bone.007/Bone.006/Bone.005/Bone.004/Bone.003/Bone.002
+        weight: 1
+      - path: Armature/InicioInferior/Bone.011/Bone.010/Bone.009/Bone.008/Bone.007/Bone.006/Bone.005/Bone.004/Bone.003/Bone.002/Bone.001
+        weight: 1
+      - path: Armature/InicioInferior/Bone.011/Bone.010/Bone.009/Bone.008/Bone.007/Bone.006/Bone.005/Bone.004/Bone.003/Bone.002/Bone.001/Bone
+        weight: 1
+      - path: Armature/InicioInferior/Bone.011/Bone.010/Bone.009/Bone.008/Bone.007/Bone.006/Bone.005/Bone.004/Bone.003/Bone.002/Bone.001/Bone/Bone_end
+        weight: 1
+      - path: Armature/InicioSuperior
+        weight: 1
+      - path: Armature/InicioSuperior/Bone.014
+        weight: 1
+      - path: Armature/InicioSuperior/Bone.014/Bone.015
+        weight: 1
+      - path: Armature/InicioSuperior/Bone.014/Bone.015/Bone.015_end
+        weight: 1
+      - path: Armature/InicioSuperior/Bone.014/Bone.020
+        weight: 1
+      - path: Armature/InicioSuperior/Bone.014/Bone.020/Bone.020_end
+        weight: 1
+      - path: Armature/InicioSuperior/LeftWing1
+        weight: 1
+      - path: Armature/InicioSuperior/LeftWing1/LeftWing1_end
+        weight: 1
+      - path: Armature/InicioSuperior/LeftWing2
+        weight: 1
+      - path: Armature/InicioSuperior/LeftWing2/LeftWing2_end
+        weight: 1
+      - path: Armature/InicioSuperior/RightWing1
+        weight: 1
+      - path: Armature/InicioSuperior/RightWing1/RightWing1_end
+        weight: 1
+      - path: Armature/InicioSuperior/RightWing2
+        weight: 1
+      - path: Armature/InicioSuperior/RightWing2/RightWing2_end
+        weight: 1
+      - path: Body
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
       name: Attack
-      takeName: Armature|Attack
+      takeName: Attack
       firstFrame: 0
       lastFrame: 30
       wrapMode: 0
@@ -190,17 +284,17 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Idle
-      takeName: Armature|Idle
+      name: Hurt
+      takeName: Hurt
       firstFrame: 0
-      lastFrame: 20
+      lastFrame: 15
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -280,17 +374,17 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Idle2
-      takeName: Armature|Idle2
+      name: Die
+      takeName: Die
       firstFrame: 0
-      lastFrame: 17
+      lastFrame: 20
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0

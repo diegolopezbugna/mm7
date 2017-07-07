@@ -30,7 +30,7 @@ public class EnemyHealth : MonoBehaviour {
 
         if (other.tag == "Arrow")
         {
-            agent.isStopped = true;
+            //agent.isStopped = true;
             Destroy(other.gameObject);
 
             health -= 10; //other.getDamageFor(this.gameObject);
@@ -45,6 +45,10 @@ public class EnemyHealth : MonoBehaviour {
             {
                 animator.SetTrigger("Die");
                 agent.enabled = false;
+                foreach (var c in GetComponents<Collider>())
+                {
+                    c.enabled = false;
+                }
             }
 
         }

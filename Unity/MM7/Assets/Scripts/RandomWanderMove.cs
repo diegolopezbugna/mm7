@@ -30,11 +30,15 @@ public class RandomWanderMove : MonoBehaviour {
 	}
 
     IEnumerator MoveArroundMesh() {
-        yield return new WaitForSeconds(Random.Range(1f, 5f));
-        Vector3 newDestination = GetNewDestination();
-        agent.SetDestination(newDestination);
-        yield return new WaitForSeconds(5);
-        StartCoroutine(MoveArroundMesh());
+        if (agent.isActiveAndEnabled)
+        {
+            yield return new WaitForSeconds(Random.Range(1f, 5f));
+            Vector3 newDestination = GetNewDestination();
+            if (agent.isActiveAndEnabled)
+                agent.SetDestination(newDestination);
+            yield return new WaitForSeconds(5);
+            StartCoroutine(MoveArroundMesh());
+        }
     }
         
     IEnumerator MoveArround() {

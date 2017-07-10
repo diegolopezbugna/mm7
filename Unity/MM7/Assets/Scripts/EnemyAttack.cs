@@ -9,13 +9,17 @@ public class EnemyAttack : MonoBehaviour {
     private bool isRanged;
 
     [SerializeField]
-    private float maxAttackDistanceSqr = 20;
+    private float maxAttackDistanceSqr = 9;
 
     [SerializeField]
     private float minAttackDistanceSqr = 0;
 
+    [SerializeField]
+    private float damage = 10;
+
     private Animator animator;
     private NavMeshAgent agent;
+    private BoxCollider[] weaponsColliders;
 
     private float lastAttack = 0;
 
@@ -23,6 +27,7 @@ public class EnemyAttack : MonoBehaviour {
 	void Start () {
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
+        weaponsColliders = GetComponentsInChildren<BoxCollider>();
 	}
 	
 	// Update is called once per frame
@@ -33,6 +38,8 @@ public class EnemyAttack : MonoBehaviour {
         if (distanceToParty > minAttackDistanceSqr &&
             distanceToParty < maxAttackDistanceSqr)
         {
+//            transform.LookAt(Party.Instance.transform);
+
             var currentTime = Time.time;
             if (currentTime - lastAttack > 2)
             {
@@ -49,4 +56,21 @@ public class EnemyAttack : MonoBehaviour {
         }
 
 	}
+
+    public float GetDamage(Party party) {
+        // TODO: mejorar, verificar personaje al que le pega
+        // TODO: caracteristicas
+        return damage;
+    }
+
+    public void WeaponActivate() {
+        foreach (var w in weaponsColliders)
+            w.enabled = true;
+    }
+
+    public void WeaponDeactivate() {
+        foreach (var w in weaponsColliders)
+            w.enabled = false;
+    }
+
 }

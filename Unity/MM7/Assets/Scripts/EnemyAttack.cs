@@ -38,6 +38,7 @@ public class EnemyAttack : MonoBehaviour {
         if (distanceToParty > minAttackDistanceSqr &&
             distanceToParty < maxAttackDistanceSqr)
         {
+            Party.Instance.SetEnemyEngagingParty(this.gameObject, distanceToParty);
 //            transform.LookAt(Party.Instance.transform);
 
             var currentTime = Time.time;

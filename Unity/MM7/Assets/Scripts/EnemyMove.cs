@@ -27,11 +27,14 @@ public class EnemyMove : MonoBehaviour {
 	void Update () {
 
         float distanceToParty = (Party.Instance.transform.position - transform.position).sqrMagnitude;
+
         isEngagingParty = distanceToParty < this.EngagingDistanceSqr && distanceToParty > 16; // TODO: attack distance
         // TODO: activar a los mounstros cercanos?
 
         if (isEngagingParty)
         {
+            Party.Instance.SetEnemyEngagingParty(this.gameObject, distanceToParty);
+
             wanderMoveBehaviour.StopMoving();
             // ESTO SE EJECUTA TAMBIEN CUANDO ATACA!  JUNTAR ENEMYmove y ENEMYattack
             agent.SetDestination(Party.Instance.transform.position);

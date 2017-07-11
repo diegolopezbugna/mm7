@@ -12,6 +12,7 @@ public class EnemyHealth : MonoBehaviour {
     private Animator animator;
     private ParticleSystem blood;
     private EnemyMove enemyMoveBehaviour;
+    private EnemyAttack enemyAttackBehaviour;
 
 	// Use this for initialization
 	void Start () {
@@ -19,6 +20,7 @@ public class EnemyHealth : MonoBehaviour {
         animator = GetComponent<Animator>();
         blood = GetComponentInChildren<ParticleSystem>();
         enemyMoveBehaviour = GetComponent<EnemyMove>();
+        enemyAttackBehaviour = GetComponent<EnemyAttack>();
 	}
 	
 	// Update is called once per frame
@@ -46,6 +48,7 @@ public class EnemyHealth : MonoBehaviour {
             {
                 animator.SetTrigger("Die");
                 Destroy(enemyMoveBehaviour);
+                Destroy(enemyAttackBehaviour);
                 agent.enabled = false;
                 foreach (var c in GetComponents<Collider>())
                 {

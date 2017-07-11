@@ -11,6 +11,24 @@ public class Party : Singleton<Party> {
     [SerializeField]
     private GameObject crosshair;
 
+    [SerializeField]
+    private float handToHandCombatDistanceSqr = 9;
+
+    [SerializeField]
+    private RawImage[] c1StatusImages;
+
+    [SerializeField]
+    private RawImage[] c2StatusImages;
+
+    [SerializeField]
+    private RawImage[] c3StatusImages;
+
+    [SerializeField]
+    private RawImage[] c4StatusImages;
+
+    [SerializeField]
+    private Slider c1HitPoints;
+
     private Transform currentTarget;
     public Transform CurrentTarget
     {
@@ -37,9 +55,14 @@ public class Party : Singleton<Party> {
         }
     }
 
+    private bool isEnemyEngagingPartyThisFrame = false;
+    private bool isEnemyInHandToHandCombatThisFrame = false;
+
 	// Use this for initialization
 	void Start () {
-		
+        c1HitPoints.minValue = 0;
+        c1HitPoints.maxValue = 50; //chat HPs 
+        c1HitPoints.value = 10;
 	}
 	
 	// Update is called once per frame
@@ -50,6 +73,10 @@ public class Party : Singleton<Party> {
     void FixedUpdate() {
         bool isUserAttacking = Input.GetKeyDown("q");
         CalculateTarget(isUserAttacking);
+    }
+
+    void LateUpdate() {
+        CheckEnemiesEngagingStatus();
     }
 
     void CalculateTarget(bool includeTargetPoint) {
@@ -88,4 +115,42 @@ public class Party : Singleton<Party> {
         }
     }
 
+    public void SetEnemyEngagingParty(GameObject enemy, float distanceSqr) {
+        // TODO cuerpo a cuerpo?
+        isEnemyEngagingPartyThisFrame = true;
+
+        if (distanceSqr < handToHandCombatDistanceSqr)
+            isEnemyInHandToHandCombatThisFrame = true;
+    }
+
+    private void CheckEnemiesEngagingStatus() {
+        if (isEnemyInHandToHandCombatThisFrame)
+        {
+            SetCharactersEngagingStatus(0, false);
+            SetCharactersEngagingStatus(1, false);
+            SetCharactersEngagingStatus(2, true);
+        }
+        else if (isEnemyEngagingPartyThisFrame)
+        {
+            SetCharactersEngagingStatus(0, false);
+            SetCharactersEngagingStatus(1, true);
+            SetCharactersEngagingStatus(2, false);
+        }
+        else
+        {
+            SetCharactersEngagingStatus(0, true);
+            SetCharactersEngagingStatus(1, false);
+            SetCharactersEngagingStatus(2, false);
+        }
+        isEnemyInHandToHandCombatThisFrame = false;
+        isEnemyEngagingPartyThisFrame = false;
+    }
+
+    private void SetCharactersEngagingStatus(int statusIndex, bool value)
+    {
+        c1StatusImages[statusIndex].enabled = value;
+        c2StatusImages[statusIndex].enabled = value;
+        c3StatusImages[statusIndex].enabled = value;
+        c4StatusImages[statusIndex].enabled = value;
+    }
 }

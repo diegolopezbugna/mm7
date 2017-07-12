@@ -46,6 +46,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Business\PlayingCharacter.cs" />
+     <Compile Include="Assets\Business\Profession.cs" />
+     <Compile Include="Assets\Business\Race.cs" />
+     <Compile Include="Assets\Business\Skill.cs" />
      <Compile Include="Assets\Scripts\CharPortrait.cs" />
      <Compile Include="Assets\Scripts\EnemyAttack.cs" />
      <Compile Include="Assets\Scripts\EnemyHealth.cs" />

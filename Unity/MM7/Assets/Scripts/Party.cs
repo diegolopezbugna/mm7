@@ -54,10 +54,23 @@ public class Party : Singleton<Party> {
         charsPortraits[2].SetPortraitImages(new string[] { "PC15-01" });
         charsPortraits[3].SetPortraitImages(new string[] { "PC11-01" });
 
+        charsPortraits[0].SetMaxHitPoints(50);
+        charsPortraits[0].SetHitPoints(50);
+        charsPortraits[1].SetMaxHitPoints(40);
+        charsPortraits[1].SetHitPoints(40);
+        charsPortraits[2].SetMaxHitPoints(30);
+        charsPortraits[2].SetHitPoints(30);
+        charsPortraits[3].SetMaxHitPoints(20);
+        charsPortraits[4].SetHitPoints(20);
+
         charsPortraits[0].SetMaxSpellPoints(0);
         charsPortraits[0].SetSpellPoints(0);
         charsPortraits[1].SetMaxSpellPoints(0);
         charsPortraits[1].SetSpellPoints(0);
+        charsPortraits[2].SetMaxSpellPoints(20);
+        charsPortraits[2].SetSpellPoints(20);
+        charsPortraits[3].SetMaxSpellPoints(20);
+        charsPortraits[3].SetSpellPoints(20);
 
 
 	}

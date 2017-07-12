@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Emerald.unity
+- path: Assets/Scenes/PartyCreation.unity
   isLoaded: 1
   isActive: 1

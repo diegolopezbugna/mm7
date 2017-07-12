@@ -46,11 +46,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Business\PlayingCharacter.cs" />
-     <Compile Include="Assets\Business\Profession.cs" />
-     <Compile Include="Assets\Business\Race.cs" />
-     <Compile Include="Assets\Business\Skill.cs" />
+     <Compile Include="Assets\Scripts\Business\PlayingCharacter.cs" />
+     <Compile Include="Assets\Scripts\Business\Profession.cs" />
+     <Compile Include="Assets\Scripts\Business\Race.cs" />
+     <Compile Include="Assets\Scripts\Business\Skill.cs" />
      <Compile Include="Assets\Scripts\CharPortrait.cs" />
+     <Compile Include="Assets\Scripts\CreateParty.cs" />
+     <Compile Include="Assets\Scripts\CreatePartyChar.cs" />
      <Compile Include="Assets\Scripts\EnemyAttack.cs" />
      <Compile Include="Assets\Scripts\EnemyHealth.cs" />
      <Compile Include="Assets\Scripts\EnemyMove.cs" />

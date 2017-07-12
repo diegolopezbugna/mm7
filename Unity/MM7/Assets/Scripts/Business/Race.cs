@@ -12,7 +12,7 @@ namespace Business
     
     public class Race
     {
-        public Race(RaceCode code,
+        private Race(RaceCode code,
             int might, int intellect, int personality, int endurance, int accuracy, int speed) {
             RaceCode = code;
             DefaultMight = might;
@@ -44,7 +44,7 @@ namespace Business
 
 
 
-        public static Race HumanRace() {
+        public static Race Human() {
             Race r = new Race(RaceCode.Human, 11, 11, 11, 9, 11, 11);
             r.GetBonusCostForMight = Race.NormalCost;
             r.GetBonusCostForIntellect = Race.NormalCost;
@@ -55,7 +55,7 @@ namespace Business
             return r;
         }
 
-        public static Race GoblinRace() {
+        public static Race Goblin() {
             Race r = new Race(RaceCode.Goblin, 14, 7, 7, 11, 11, 14);
             r.GetBonusCostForMight = Race.ProficientCost;
             r.GetBonusCostForIntellect = Race.HandicappedCost;
@@ -66,7 +66,7 @@ namespace Business
             return r;
         }
 
-        public static Race DwarfRace() {
+        public static Race Dwarf() {
             Race r = new Race(RaceCode.Dwarf, 14, 11, 11, 14, 7, 7);
             r.GetBonusCostForMight = Race.ProficientCost;
             r.GetBonusCostForIntellect = Race.NormalCost;
@@ -77,7 +77,7 @@ namespace Business
             return r;
         }
 
-        public static Race ElfRace() {
+        public static Race Elf() {
             Race r = new Race(RaceCode.Elf, 7, 14, 11, 7, 14, 11);
             r.GetBonusCostForMight = Race.HandicappedCost;
             r.GetBonusCostForIntellect = Race.ProficientCost;
@@ -86,6 +86,18 @@ namespace Business
             r.GetBonusCostForAccuracy = Race.ProficientCost;
             r.GetBonusCostForSpeed = Race.NormalCost;
             return r;
+        }
+
+        public static Race FromCode(RaceCode code) {
+            if (code == RaceCode.Human)
+                return Race.Human();
+            else if (code == RaceCode.Elf)
+                return Race.Elf();
+            else if (code == RaceCode.Dwarf)
+                return Race.Dwarf();
+            else if (code == RaceCode.Goblin)
+                return Race.Goblin();
+            return null;
         }
 
         // Normal 9 a 25 de a 1

@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 2f280ef6a37345c4c98ae2c1a64579ab
+timeCreated: 1499868993
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Crud
+  fontNames:
+  - Crud
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

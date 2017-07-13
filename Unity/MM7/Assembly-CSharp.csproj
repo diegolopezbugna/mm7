@@ -46,10 +46,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Business\BonusCost.cs" />
      <Compile Include="Assets\Scripts\Business\PlayingCharacter.cs" />
+     <Compile Include="Assets\Scripts\Business\Presenters\CreatePartyViewInterface.cs" />
      <Compile Include="Assets\Scripts\Business\Profession.cs" />
      <Compile Include="Assets\Scripts\Business\Race.cs" />
      <Compile Include="Assets\Scripts\Business\Skill.cs" />
+     <Compile Include="Assets\Scripts\Business\UseCases\CreatePartyUseCase.cs" />
      <Compile Include="Assets\Scripts\CharPortrait.cs" />
      <Compile Include="Assets\Scripts\CreateParty.cs" />
      <Compile Include="Assets\Scripts\CreatePartyChar.cs" />

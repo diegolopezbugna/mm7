@@ -15,8 +15,6 @@ public class CreatePartyChar : MonoBehaviour {
     [SerializeField]
     private int portraitSelected = 1;
 
-    public RaceCode RaceSelected { get; private set; }
-
     [SerializeField]
     private Text raceText;
 
@@ -38,9 +36,11 @@ public class CreatePartyChar : MonoBehaviour {
     [SerializeField]
     private Text speedValue;
 
+    private Race raceSelected;
+
 	// Use this for initialization
 	void Start () {
-		
+        UpdatePortrait();
 	}
 	
 	// Update is called once per frame
@@ -71,24 +71,42 @@ public class CreatePartyChar : MonoBehaviour {
 
     private void UpdateRace() {
         if (portraitSelected <= 8)
-            RaceSelected = RaceCode.Human;
+            raceSelected = Race.Human();
         else if (portraitSelected <= 12)
-            RaceSelected = RaceCode.Elf;
+            raceSelected = Race.Elf();
         else if (portraitSelected <= 16)
-            RaceSelected = RaceCode.Dwarf;
+            raceSelected = Race.Dwarf();
         else if (portraitSelected <= 20)
-            RaceSelected = RaceCode.Goblin;
+            raceSelected = Race.Goblin();
 
-        raceText.text = RaceSelected.ToString();
+        raceText.text = raceSelected.Name;
 
-        var race = Race.FromCode(RaceSelected);
-
-        mightValue.text = race.DefaultMight.ToString();
-        intellectValue.text = race.DefaultIntellect.ToString();
-        personalityValue.text = race.DefaultPersonality.ToString();
-        enduranceValue.text = race.DefaultEndurance.ToString();
-        accuracyValue.text = race.DefaultAccuracy.ToString();
-        speedValue.text = race.DefaultSpeed.ToString();
+        mightValue.text = raceSelected.DefaultMight.ToString();
+        intellectValue.text = raceSelected.DefaultIntellect.ToString();
+        personalityValue.text = raceSelected.DefaultPersonality.ToString();
+        enduranceValue.text = raceSelected.DefaultEndurance.ToString();
+        accuracyValue.text = raceSelected.DefaultAccuracy.ToString();
+        speedValue.text = raceSelected.DefaultSpeed.ToString();
 
     }
+
+    public void AddMight() {
+        var currentValue = int.Parse(mightValue.text);
+        var bonusCost = raceSelected.GetBonusCostForMight(currentValue, true);
+        if (CreateParty.Instance.CreatePartyUseCase.CanUseBonusPoints(bonusCost.BonusChange))
+        {
+            CreateParty.Instance.CreatePartyUseCase.BonusPointsUsed(bonusCost.BonusChange);
+            mightValue.text = (currentValue + bonusCost.AttributeChange).ToString();
+        }
+
+        // TODO: check next
+    }
+
+    public void SubstractMight() {
+        var currentValue = int.Parse(mightValue.text);
+        var bonusCost = raceSelected.GetBonusCostForMight(currentValue, false);
+        CreateParty.Instance.CreatePartyUseCase.BonusPointsUsed(-bonusCost.BonusChange);
+        mightValue.text = (currentValue - bonusCost.AttributeChange).ToString();
+    }
+
 }

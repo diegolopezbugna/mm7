@@ -2,22 +2,39 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Business;
 
-public class CreateParty : MonoBehaviour {
+public class CreateParty : Singleton<CreateParty>, CreatePartyViewInterface {
+
+    public CreatePartyUseCase CreatePartyUseCase { get; private set; }
 
     [SerializeField]
-    private CreatePartyChar[] CreatePartyChars;
+    private CreatePartyChar[] createPartyChars;
         
     [SerializeField]
-    private GameObject SkillsContainer;
+    private GameObject skillsContainer;
 
     [SerializeField]
-    private GameObject ProfessionsContainer;
+    private GameObject professionsContainer;
+
+    [SerializeField]
+    private Text bonusPointsText;
+
+    private int _bonusPoints;
+    public int BonusPoints
+    {
+        get { return _bonusPoints; }
+        set {
+            _bonusPoints = value;
+            bonusPointsText.text = value.ToString();
+        }
+    }
 
 	// Use this for initialization
 	void Start () {
         CreateSkills();
         CreateProfessions();
+        CreatePartyUseCase = new CreatePartyUseCase(this);
 	}
 	
 	// Update is called once per frame
@@ -27,7 +44,7 @@ public class CreateParty : MonoBehaviour {
 
     void CreateSkills() {
         List<Text> skillsTexts = new List<Text>();
-        var skill1 = SkillsContainer.GetComponentInChildren<Text>();
+        var skill1 = skillsContainer.GetComponentInChildren<Text>();
         skillsTexts.Add(skill1);
 
         for (int i = 1; i <= 8; i++)
@@ -40,7 +57,7 @@ public class CreateParty : MonoBehaviour {
 
     void CreateProfessions() {
         List<Text> skillsTexts = new List<Text>();
-        var skill1 = ProfessionsContainer.GetComponentInChildren<Text>();
+        var skill1 = professionsContainer.GetComponentInChildren<Text>();
         skillsTexts.Add(skill1);
 
         for (int i = 1; i <= 8; i++)
@@ -50,5 +67,4 @@ public class CreateParty : MonoBehaviour {
             skillsTexts.Add(newSkill);
         }
     }
-        
 }

@@ -35,12 +35,12 @@ namespace Business
 
         // TODO: resistances
 
-        public Func<int, bool, float> GetBonusCostForMight { get; private set; }
-        public Func<int, bool, float> GetBonusCostForIntellect { get; private set; }
-        public Func<int, bool, float> GetBonusCostForPersonality { get; private set; }
-        public Func<int, bool, float> GetBonusCostForEndurance { get; private set; }
-        public Func<int, bool, float> GetBonusCostForAccuracy { get; private set; }
-        public Func<int, bool, float> GetBonusCostForSpeed { get; private set; }
+        public Func<int, bool, BonusCost> GetBonusCostForMight { get; private set; }
+        public Func<int, bool, BonusCost> GetBonusCostForIntellect { get; private set; }
+        public Func<int, bool, BonusCost> GetBonusCostForPersonality { get; private set; }
+        public Func<int, bool, BonusCost> GetBonusCostForEndurance { get; private set; }
+        public Func<int, bool, BonusCost> GetBonusCostForAccuracy { get; private set; }
+        public Func<int, bool, BonusCost> GetBonusCostForSpeed { get; private set; }
 
 
 
@@ -101,57 +101,64 @@ namespace Business
         }
 
         // Normal 9 a 25 de a 1
-        private static Func<int, bool, float> NormalCost = (int currentValue, bool isAdd) =>
+        private static Func<int, bool, BonusCost> NormalCost = (int currentValue, bool isAdd) =>
         {
+            BonusCost cost;
             if (currentValue == 25 && isAdd)
-                return int.MaxValue;
+                cost = new BonusCost(true);
             else if (currentValue == 9 && !isAdd)
-                return int.MaxValue;
+                cost = new BonusCost(true);
             else
-                return isAdd ? 1.0f : -1.0f;
+                cost = new BonusCost(1, 1);
+            return cost;
         };
 
         // Normal 7 a 20 de a 1
-        private static Func<int, bool, float> Normal9Cost = (int currentValue, bool isAdd) =>
+        private static Func<int, bool, BonusCost> Normal9Cost = (int currentValue, bool isAdd) =>
         {
+            BonusCost cost;
             if (currentValue == 20 && isAdd)
-                return int.MaxValue;
+                cost = new BonusCost(true);
             else if (currentValue == 7 && !isAdd)
-                return int.MaxValue;
+                cost = new BonusCost(true);
             else
-                return isAdd ? 1.0f : -1.0f;
+                cost = new BonusCost(1, 1);
+            return cost;
         };
             
         // Attribute raises by 2 for each point spent. Going below initial value adds 2 points to pool. 
-        private static Func<int, bool, float> ProficientCost = (int currentValue, bool isAdd) =>
+        private static Func<int, bool, BonusCost> ProficientCost = (int currentValue, bool isAdd) =>
         {
+            BonusCost cost;
             if (currentValue == 30 && isAdd)
-                return int.MaxValue;
+                cost = new BonusCost(true);
             else if (currentValue == 12 && !isAdd)
-                return int.MaxValue;
+                cost = new BonusCost(true);
             else if (isAdd && currentValue < 14)
-                return 2.0f;
+                cost = new BonusCost(1, 2);
             else if (!isAdd && currentValue <= 14)
-                return -2.0f;
+                cost = new BonusCost(1, 2);
             else
-                return isAdd ? 0.5f : -0.5f;
+                cost = new BonusCost(2, 1);
+            return cost;
         };
 
         // Attribute requires 2 points to raise by one. Going below initial value adds 1/2 point to pool
-        private static Func<int, bool, float> HandicappedCost = (int currentValue, bool isAdd) =>
-            {
-                if (currentValue == 15 && isAdd)
-                    return int.MaxValue;
-                else if (currentValue == 5 && !isAdd)
-                    return int.MaxValue;
-                else if (isAdd && currentValue < 7)
-                    return 0.5f;
-                else if (!isAdd && currentValue <= 7)
-                    return -0.5f;
-                else
-                    return isAdd ? 2.0f : -2.0f;
-            };
-
+        private static Func<int, bool, BonusCost> HandicappedCost = (int currentValue, bool isAdd) =>
+        {
+            BonusCost cost;
+            if (currentValue == 15 && isAdd)
+                cost = new BonusCost(true);
+            else if (currentValue == 5 && !isAdd)
+                cost = new BonusCost(true);
+            else if (isAdd && currentValue < 7)
+                cost = new BonusCost(2, 1);
+            else if (!isAdd && currentValue <= 7)
+                cost = new BonusCost(2, 1);
+            else
+                cost = new BonusCost(1, 2);
+            return cost;
+        };
 
     }
 }

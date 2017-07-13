@@ -12,31 +12,22 @@ public class CreatePartyChar : MonoBehaviour {
     [SerializeField]
     private int maxPortraits = 20;
 
-    [SerializeField]
-    private int portraitSelected = 1;
+    private int _portraitSelected;
+    public int PortraitSelected { 
+        get { return _portraitSelected; }
+        set {
+            _portraitSelected = value;
+            UpdatePortrait();
+        }
+    }
 
     [SerializeField]
     private Text raceText;
 
     [SerializeField]
-    private Text mightValue;
+    private CreatePartyCharAttribute[] attributes;
 
-    [SerializeField]
-    private Text intellectValue;
-
-    [SerializeField]
-    private Text personalityValue;
-
-    [SerializeField]
-    private Text enduranceValue;
-
-    [SerializeField]
-    private Text accuracyValue;
-
-    [SerializeField]
-    private Text speedValue;
-
-    private Race raceSelected;
+    public Race RaceSelected { get; set; }
 
 	// Use this for initialization
 	void Start () {
@@ -49,64 +40,41 @@ public class CreatePartyChar : MonoBehaviour {
 	}
 
     public void PrevPortraitButtonClick() {
-        if (portraitSelected == 1)
-            portraitSelected = 20;
+        if (PortraitSelected == 1)
+            PortraitSelected = 20;
         else
-            portraitSelected--;
+            PortraitSelected--;
         UpdatePortrait();
     }
 
     public void NextPortraitButtonClick() {
-        if (portraitSelected == maxPortraits)
-            portraitSelected = 1;
+        if (PortraitSelected == maxPortraits)
+            PortraitSelected = 1;
         else
-            portraitSelected++;
+            PortraitSelected++;
         UpdatePortrait();
     }
 
     private void UpdatePortrait() {
-        portraitImage.texture = Resources.Load(string.Format("Portraits/PC{0:D2}01", portraitSelected)) as Texture;
+        portraitImage.texture = Resources.Load(string.Format("Portraits/PC{0:D2}01", PortraitSelected)) as Texture;
         UpdateRace();
     }
 
+    // TODO: move to business
     private void UpdateRace() {
-        if (portraitSelected <= 8)
-            raceSelected = Race.Human();
-        else if (portraitSelected <= 12)
-            raceSelected = Race.Elf();
-        else if (portraitSelected <= 16)
-            raceSelected = Race.Dwarf();
-        else if (portraitSelected <= 20)
-            raceSelected = Race.Goblin();
+        if (PortraitSelected <= 8)
+            RaceSelected = Race.Human();
+        else if (PortraitSelected <= 12)
+            RaceSelected = Race.Elf();
+        else if (PortraitSelected <= 16)
+            RaceSelected = Race.Dwarf();
+        else if (PortraitSelected <= 20)
+            RaceSelected = Race.Goblin();
 
-        raceText.text = raceSelected.Name;
+        raceText.text = RaceSelected.Name;
 
-        mightValue.text = raceSelected.DefaultMight.ToString();
-        intellectValue.text = raceSelected.DefaultIntellect.ToString();
-        personalityValue.text = raceSelected.DefaultPersonality.ToString();
-        enduranceValue.text = raceSelected.DefaultEndurance.ToString();
-        accuracyValue.text = raceSelected.DefaultAccuracy.ToString();
-        speedValue.text = raceSelected.DefaultSpeed.ToString();
-
-    }
-
-    public void AddMight() {
-        var currentValue = int.Parse(mightValue.text);
-        var bonusCost = raceSelected.GetBonusCostForMight(currentValue, true);
-        if (CreateParty.Instance.CreatePartyUseCase.CanUseBonusPoints(bonusCost.BonusChange))
-        {
-            CreateParty.Instance.CreatePartyUseCase.BonusPointsUsed(bonusCost.BonusChange);
-            mightValue.text = (currentValue + bonusCost.AttributeChange).ToString();
-        }
-
-        // TODO: check next
-    }
-
-    public void SubstractMight() {
-        var currentValue = int.Parse(mightValue.text);
-        var bonusCost = raceSelected.GetBonusCostForMight(currentValue, false);
-        CreateParty.Instance.CreatePartyUseCase.BonusPointsUsed(-bonusCost.BonusChange);
-        mightValue.text = (currentValue - bonusCost.AttributeChange).ToString();
+        foreach (var a in attributes)
+            a.SetDefaultAttributeValue(RaceSelected);
     }
 
 }

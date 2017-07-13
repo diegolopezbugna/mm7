@@ -35,6 +35,7 @@ public class CreateParty : Singleton<CreateParty>, CreatePartyViewInterface {
         CreateSkills();
         CreateProfessions();
         CreatePartyUseCase = new CreatePartyUseCase(this);
+        CreatePartyUseCase.ClearWithDefaultValues();
 	}
 	
 	// Update is called once per frame
@@ -66,5 +67,13 @@ public class CreateParty : Singleton<CreateParty>, CreatePartyViewInterface {
             newSkill.text = i.ToString();
             skillsTexts.Add(newSkill);
         }
+    }
+
+    public void SetPortraitSelectedForChar(int portrait, int charIndex) {
+        createPartyChars[charIndex].PortraitSelected = portrait;
+    }
+
+    public void Clear() {
+        CreatePartyUseCase.ClearWithDefaultValues();
     }
 }

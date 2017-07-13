@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Business
 {
@@ -12,79 +14,109 @@ namespace Business
     
     public class Race
     {
-        private Race(RaceCode code,
-            int might, int intellect, int personality, int endurance, int accuracy, int speed) {
+        private Race(RaceCode code) {
             RaceCode = code;
-            DefaultMight = might;
-            DefaultIntellect = intellect;
-            DefaultPersonality = personality;
-            DefaultEndurance = endurance;
-            DefaultAccuracy = accuracy;
-            DefaultSpeed = speed;
         }
 
         public RaceCode RaceCode { get; private set; }
         public string Name { get { return RaceCode.ToString(); } }
-
-        public int DefaultMight { get; private set; }
-        public int DefaultIntellect { get; private set; }
-        public int DefaultPersonality { get; private set; }
-        public int DefaultEndurance { get; private set; }
-        public int DefaultAccuracy { get; private set; }
-        public int DefaultSpeed { get; private set; }
+        public Dictionary<AttributeCode, int> DefaultAttributeValues { get; private set; }
 
         // TODO: resistances
 
-        public Func<int, bool, BonusCost> GetBonusCostForMight { get; private set; }
-        public Func<int, bool, BonusCost> GetBonusCostForIntellect { get; private set; }
-        public Func<int, bool, BonusCost> GetBonusCostForPersonality { get; private set; }
-        public Func<int, bool, BonusCost> GetBonusCostForEndurance { get; private set; }
-        public Func<int, bool, BonusCost> GetBonusCostForAccuracy { get; private set; }
-        public Func<int, bool, BonusCost> GetBonusCostForSpeed { get; private set; }
-
-
+        /// <summary>
+        /// Gets the bonus points cost for adding/substracting attributes values on party creation.
+        /// </summary>
+        /// <remarks>>
+        /// AttributeCode: attribute
+        /// int: current attribute value
+        /// bool: if it's an add operation (false for substracting values)
+        /// </remarks>
+        public Func<AttributeCode, int, bool, BonusCost> GetBonusCost { get; private set; }
 
         public static Race Human() {
-            Race r = new Race(RaceCode.Human, 11, 11, 11, 9, 11, 11);
-            r.GetBonusCostForMight = Race.NormalCost;
-            r.GetBonusCostForIntellect = Race.NormalCost;
-            r.GetBonusCostForPersonality = Race.NormalCost;
-            r.GetBonusCostForEndurance = Race.Normal9Cost;
-            r.GetBonusCostForAccuracy = Race.NormalCost;
-            r.GetBonusCostForSpeed = Race.NormalCost;
+            Race r = new Race(RaceCode.Human);
+            r.DefaultAttributeValues = new Dictionary<AttributeCode, int>() { 
+                { AttributeCode.Might, 11 },
+                { AttributeCode.Intellect, 11 },
+                { AttributeCode.Personality, 11 },
+                { AttributeCode.Endurance, 9 },
+                { AttributeCode.Accuracy, 11 },
+                { AttributeCode.Speed, 11 },
+            };
+            r.GetBonusCost = (AttributeCode attributeCode, int  currentValue, bool isAdd) =>
+            {
+                if (attributeCode == AttributeCode.Endurance)
+                    return Race.Normal9Cost(currentValue, isAdd);
+                else
+                    return Race.NormalCost(currentValue, isAdd);
+            };
             return r;
         }
 
         public static Race Goblin() {
-            Race r = new Race(RaceCode.Goblin, 14, 7, 7, 11, 11, 14);
-            r.GetBonusCostForMight = Race.ProficientCost;
-            r.GetBonusCostForIntellect = Race.HandicappedCost;
-            r.GetBonusCostForPersonality = Race.HandicappedCost;
-            r.GetBonusCostForEndurance = Race.NormalCost;
-            r.GetBonusCostForAccuracy = Race.NormalCost;
-            r.GetBonusCostForSpeed = Race.ProficientCost;
+            Race r = new Race(RaceCode.Goblin);
+            r.DefaultAttributeValues = new Dictionary<AttributeCode, int>() { 
+                { AttributeCode.Might, 14 },
+                { AttributeCode.Intellect, 7 },
+                { AttributeCode.Personality, 7 },
+                { AttributeCode.Endurance, 11 },
+                { AttributeCode.Accuracy, 11 },
+                { AttributeCode.Speed, 14 },
+            };
+            r.GetBonusCost = (AttributeCode attributeCode, int  currentValue, bool isAdd) =>
+            {
+                if (attributeCode == AttributeCode.Might || attributeCode == AttributeCode.Speed)
+                    return Race.ProficientCost(currentValue, isAdd);
+                else if (attributeCode == AttributeCode.Intellect || attributeCode == AttributeCode.Personality)
+                    return Race.HandicappedCost(currentValue, isAdd);
+                else
+                    return Race.NormalCost(currentValue, isAdd);
+            };
             return r;
         }
 
         public static Race Dwarf() {
-            Race r = new Race(RaceCode.Dwarf, 14, 11, 11, 14, 7, 7);
-            r.GetBonusCostForMight = Race.ProficientCost;
-            r.GetBonusCostForIntellect = Race.NormalCost;
-            r.GetBonusCostForPersonality = Race.NormalCost;
-            r.GetBonusCostForEndurance = Race.ProficientCost;
-            r.GetBonusCostForAccuracy = Race.HandicappedCost;
-            r.GetBonusCostForSpeed = Race.HandicappedCost;
+            Race r = new Race(RaceCode.Dwarf);
+            r.DefaultAttributeValues = new Dictionary<AttributeCode, int>() { 
+                { AttributeCode.Might, 14 },
+                { AttributeCode.Intellect, 11 },
+                { AttributeCode.Personality, 11 },
+                { AttributeCode.Endurance, 14 },
+                { AttributeCode.Accuracy, 7 },
+                { AttributeCode.Speed, 7 },
+            };
+            r.GetBonusCost = (AttributeCode attributeCode, int  currentValue, bool isAdd) =>
+            {
+                if (attributeCode == AttributeCode.Might || attributeCode == AttributeCode.Endurance)
+                    return Race.ProficientCost(currentValue, isAdd);
+                else if (attributeCode == AttributeCode.Accuracy || attributeCode == AttributeCode.Speed)
+                    return Race.HandicappedCost(currentValue, isAdd);
+                else
+                    return Race.NormalCost(currentValue, isAdd);
+            };
             return r;
         }
 
         public static Race Elf() {
-            Race r = new Race(RaceCode.Elf, 7, 14, 11, 7, 14, 11);
-            r.GetBonusCostForMight = Race.HandicappedCost;
-            r.GetBonusCostForIntellect = Race.ProficientCost;
-            r.GetBonusCostForPersonality = Race.NormalCost;
-            r.GetBonusCostForEndurance = Race.HandicappedCost;
-            r.GetBonusCostForAccuracy = Race.ProficientCost;
-            r.GetBonusCostForSpeed = Race.NormalCost;
+            Race r = new Race(RaceCode.Elf);
+            r.DefaultAttributeValues = new Dictionary<AttributeCode, int>() { 
+                { AttributeCode.Might, 7 },
+                { AttributeCode.Intellect, 14 },
+                { AttributeCode.Personality, 11 },
+                { AttributeCode.Endurance, 7 },
+                { AttributeCode.Accuracy, 14 },
+                { AttributeCode.Speed, 11 },
+            };
+            r.GetBonusCost = (AttributeCode attributeCode, int  currentValue, bool isAdd) =>
+            {
+                if (attributeCode == AttributeCode.Intellect || attributeCode == AttributeCode.Accuracy)
+                    return Race.ProficientCost(currentValue, isAdd);
+                else if (attributeCode == AttributeCode.Might || attributeCode == AttributeCode.Endurance)
+                    return Race.HandicappedCost(currentValue, isAdd);
+                else
+                    return Race.NormalCost(currentValue, isAdd);
+            };
             return r;
         }
 
@@ -101,8 +133,7 @@ namespace Business
         }
 
         // Normal 9 a 25 de a 1
-        private static Func<int, bool, BonusCost> NormalCost = (int currentValue, bool isAdd) =>
-        {
+        private static BonusCost NormalCost(int currentValue, bool isAdd) {
             BonusCost cost;
             if (currentValue == 25 && isAdd)
                 cost = new BonusCost(true);
@@ -111,11 +142,10 @@ namespace Business
             else
                 cost = new BonusCost(1, 1);
             return cost;
-        };
+        }
 
         // Normal 7 a 20 de a 1
-        private static Func<int, bool, BonusCost> Normal9Cost = (int currentValue, bool isAdd) =>
-        {
+        private static BonusCost Normal9Cost(int currentValue, bool isAdd) {
             BonusCost cost;
             if (currentValue == 20 && isAdd)
                 cost = new BonusCost(true);
@@ -124,11 +154,10 @@ namespace Business
             else
                 cost = new BonusCost(1, 1);
             return cost;
-        };
+        }
             
         // Attribute raises by 2 for each point spent. Going below initial value adds 2 points to pool. 
-        private static Func<int, bool, BonusCost> ProficientCost = (int currentValue, bool isAdd) =>
-        {
+        private static BonusCost ProficientCost(int currentValue, bool isAdd) {
             BonusCost cost;
             if (currentValue == 30 && isAdd)
                 cost = new BonusCost(true);
@@ -141,11 +170,10 @@ namespace Business
             else
                 cost = new BonusCost(2, 1);
             return cost;
-        };
+        }
 
         // Attribute requires 2 points to raise by one. Going below initial value adds 1/2 point to pool
-        private static Func<int, bool, BonusCost> HandicappedCost = (int currentValue, bool isAdd) =>
-        {
+        private static BonusCost HandicappedCost(int currentValue, bool isAdd) {
             BonusCost cost;
             if (currentValue == 15 && isAdd)
                 cost = new BonusCost(true);
@@ -158,7 +186,7 @@ namespace Business
             else
                 cost = new BonusCost(1, 2);
             return cost;
-        };
+        }
 
     }
 }

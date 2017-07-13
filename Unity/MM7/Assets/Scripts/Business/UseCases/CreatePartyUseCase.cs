@@ -24,6 +24,14 @@ namespace Business
             view.BonusPoints = BonusPoints;
         }
 
+        public void ClearWithDefaultValues() {
+            view.BonusPoints = 50;
+            view.SetPortraitSelectedForChar(18, 0);
+            view.SetPortraitSelectedForChar(4, 1);
+            view.SetPortraitSelectedForChar(15, 2);
+            view.SetPortraitSelectedForChar(11, 3);
+        }
+
     }
 }
 

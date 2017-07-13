@@ -9,7 +9,7 @@ public class CreateParty : Singleton<CreateParty>, CreatePartyViewInterface {
     public CreatePartyUseCase CreatePartyUseCase { get; private set; }
 
     [SerializeField]
-    private CreatePartyChar[] createPartyChars;
+    private List<CreatePartyChar> createPartyChars;
         
     [SerializeField]
     private GameObject skillsContainer;
@@ -29,6 +29,8 @@ public class CreateParty : Singleton<CreateParty>, CreatePartyViewInterface {
             bonusPointsText.text = value.ToString();
         }
     }
+
+    private int CreatePartyCharSelectedIndex { get; set; }
 
 	// Use this for initialization
 	void Start () {
@@ -57,15 +59,20 @@ public class CreateParty : Singleton<CreateParty>, CreatePartyViewInterface {
     }
 
     void CreateProfessions() {
-        List<Text> skillsTexts = new List<Text>();
-        var skill1 = professionsContainer.GetComponentInChildren<Text>();
-        skillsTexts.Add(skill1);
+        var professions = Profession.BasicProfessions();
+
+        List<Text> profTexts = new List<Text>();
+        var prof1 = professionsContainer.GetComponentInChildren<Text>();
+        prof1.text = professions[0].Name;
+        prof1.GetComponent<ProfessionData>().Profession = professions[0];
+        profTexts.Add(prof1);
 
         for (int i = 1; i <= 8; i++)
         {
-            var newSkill = Instantiate(skill1, skill1.transform.parent);
-            newSkill.text = i.ToString();
-            skillsTexts.Add(newSkill);
+            var newProf = Instantiate(prof1, prof1.transform.parent);
+            newProf.text = professions[i].Name;
+            newProf.GetComponent<ProfessionData>().Profession = professions[i];
+            profTexts.Add(newProf);
         }
     }
 
@@ -75,5 +82,15 @@ public class CreateParty : Singleton<CreateParty>, CreatePartyViewInterface {
 
     public void Clear() {
         CreatePartyUseCase.ClearWithDefaultValues();
+    }
+
+    public void SelectProfession(Profession profession, Text professionText) {
+        
+    }
+
+    public void SelectChar(CreatePartyChar toSelect) {
+        CreatePartyCharSelectedIndex = createPartyChars.IndexOf(toSelect);
+        foreach (var cpc in createPartyChars)
+            cpc.IsSelected = cpc == toSelect;
     }
 }

@@ -179,6 +179,20 @@ namespace Business
             };
         }
 
+        public static List<Profession> BasicProfessions() {
+            return new List<Profession>()
+            {
+                Profession.Knight(),
+                Profession.Paladin(),
+                Profession.Ranger(),
+                Profession.Cleric(),
+                Profession.Druid(),
+                Profession.Sorcerer(),
+                Profession.Archer(),
+                Profession.Monk(),
+                Profession.Thief(),
+            };
+        }
     }
 }
 

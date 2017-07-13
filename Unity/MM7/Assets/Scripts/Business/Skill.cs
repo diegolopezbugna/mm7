@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Business
 {
@@ -50,11 +52,29 @@ namespace Business
         Grandmaster,
     }
     
-    public interface Skill
-    {
-        SkillCode SkillCode { get; }
-        SkillLevel Level { get; }
-        int Points { get; }
-    }
+//    public interface Skill
+//    {
+//        SkillCode SkillCode { get; }
+//        SkillLevel Level { get; }
+//        int Points { get; }
+//    }
+
+//    public class Skill {
+//        public SkillCode SkillCode { get; set; }
+//        public string Name { get; set; }
+//        public string Descrition { get; set; }
+//
+//        private static IList<Skill> _all;
+//        public static IList<Skill> All() {
+//            if (_all == null)
+//            {
+//                _all = new List<Skill>();
+//                _all.Add(new Skill() { SkillCode = SkillCode.Axe, Name = "Axe" });
+//            }
+//        }
+//
+//    }
+
+
 }
 

@@ -48,11 +48,13 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Business\Attribute.cs" />
      <Compile Include="Assets\Scripts\Business\BonusCost.cs" />
+     <Compile Include="Assets\Scripts\Business\Game.cs" />
      <Compile Include="Assets\Scripts\Business\PlayingCharacter.cs" />
      <Compile Include="Assets\Scripts\Business\Presenters\CreatePartyViewInterface.cs" />
      <Compile Include="Assets\Scripts\Business\Profession.cs" />
      <Compile Include="Assets\Scripts\Business\Race.cs" />
      <Compile Include="Assets\Scripts\Business\Skill.cs" />
+     <Compile Include="Assets\Scripts\Business\UseCases\CreatePartySelectProfessionUseCase.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\CreatePartyUseCase.cs" />
      <Compile Include="Assets\Scripts\CharPortrait.cs" />
      <Compile Include="Assets\Scripts\CreateParty.cs" />
@@ -64,6 +66,7 @@
      <Compile Include="Assets\Scripts\Party.cs" />
      <Compile Include="Assets\Scripts\PartyHealth.cs" />
      <Compile Include="Assets\Scripts\PartyRangedAttack.cs" />
+     <Compile Include="Assets\Scripts\ProfessionData.cs" />
      <Compile Include="Assets\Scripts\RandomWanderMove.cs" />
      <Compile Include="Assets\Scripts\Singleton.cs" />
      <Compile Include="Assets\Scripts\StreamVideo.cs" />

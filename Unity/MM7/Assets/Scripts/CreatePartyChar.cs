@@ -27,6 +27,18 @@ public class CreatePartyChar : MonoBehaviour {
     [SerializeField]
     private CreatePartyCharAttribute[] attributes;
 
+    [SerializeField]
+    private RawImage selectedImage;
+
+    private bool _isSelected = false;
+    public bool IsSelected {
+        get { return _isSelected; }
+        set {
+            _isSelected = value;
+            selectedImage.enabled = value;
+        }
+    }
+
     public Race RaceSelected { get; set; }
 
 	// Use this for initialization
@@ -75,6 +87,10 @@ public class CreatePartyChar : MonoBehaviour {
 
         foreach (var a in attributes)
             a.SetDefaultAttributeValue(RaceSelected);
+    }
+
+    public void SelectChar() {
+        CreateParty.Instance.SelectChar(this);
     }
 
 }

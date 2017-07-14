@@ -50,4 +50,8 @@ public class CreatePartyCharAttribute : MonoBehaviour {
     public void SetDefaultAttributeValue(Race race) {
         attributeValueText.text = race.DefaultAttributeValues[attributeCode].ToString();
     }
+
+    public void SetAttributeValue(int value) {
+        attributeValueText.text = value.ToString();
+    }
 }

@@ -68,6 +68,21 @@ public class CreatePartyChar : MonoBehaviour {
         }
     }
 
+    public string CharacterName
+    {
+        get {
+            return characterNameInputField.text;
+        }
+        set {
+            characterNameInputField.text = value;
+        }
+    }
+    private InputField characterNameInputField;
+
+    void Awake() {
+        characterNameInputField = this.GetComponentInChildren<InputField>();
+    }
+
 	// Use this for initialization
 	void Start () {
         //UpdatePortrait();
@@ -153,4 +168,8 @@ public class CreatePartyChar : MonoBehaviour {
             SetSkill(3, skill);
     }
 
+    public void SetAttributeValues(int[] values) {
+        for (var i = 0; i < values.Length; i++)
+            attributes[i].SetAttributeValue(values[i]);
+    }
 }

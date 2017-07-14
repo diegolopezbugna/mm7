@@ -8,6 +8,10 @@ namespace Business
         void SetPortraitSelectedForChar(int portrait, int charIndex);
         void SetCharSelected(int charIndex);
         void SetProfessionForChar(Profession profession, int charIndex);
+        void SetSkillForChar(Skill skill, int charIndex);
+        void SetNameForChar(string name, int charIndex);
+        void SetAttributeValuesForChar(int[] values, int charIndex);
+
     }
 }
 

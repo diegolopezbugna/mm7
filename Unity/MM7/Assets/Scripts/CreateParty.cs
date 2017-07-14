@@ -75,7 +75,7 @@ public class CreateParty : Singleton<CreateParty>, CreatePartyViewInterface
 
     public void Clear()
     {
-        CreatePartyUseCase.ClearWithDefaultValues();
+        CreatePartyUseCase.Clear();
     }
 
     public void SetProfessionForChar(Profession profession, int charIndex)
@@ -138,11 +138,23 @@ public class CreateParty : Singleton<CreateParty>, CreatePartyViewInterface
         }
     }
 
+    public void SetSkillForChar(Skill skill, int charIndex) {
+        createPartyChars[charIndex].AddSkill(skill);
+    }
+
+    public void SetNameForChar(string name, int charIndex) {
+        createPartyChars[charIndex].CharacterName = name;
+    }
+
     public void GiveBackUsedBonusPoints() {
         CreatePartyUseCase.GiveBackUsedBonusPoints(CreatePartyCharSelectedIndex);
     }
 
     public int GetCharIndex(CreatePartyChar cpc) {
         return createPartyChars.IndexOf(cpc);
+    }
+
+    public void SetAttributeValuesForChar(int[] values, int charIndex) {
+        createPartyChars[charIndex].SetAttributeValues(values);
     }
 }

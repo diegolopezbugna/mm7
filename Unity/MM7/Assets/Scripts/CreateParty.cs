@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Business;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class CreateParty : Singleton<CreateParty>, CreatePartyViewInterface
 {
@@ -156,5 +157,9 @@ public class CreateParty : Singleton<CreateParty>, CreatePartyViewInterface
 
     public void SetAttributeValuesForChar(int[] values, int charIndex) {
         createPartyChars[charIndex].SetAttributeValues(values);
+    }
+
+    public void Ok() {
+        SceneManager.LoadScene("Emerald");
     }
 }

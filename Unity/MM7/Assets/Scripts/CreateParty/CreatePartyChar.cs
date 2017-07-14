@@ -172,4 +172,24 @@ public class CreatePartyChar : MonoBehaviour {
         for (var i = 0; i < values.Length; i++)
             attributes[i].SetAttributeValue(values[i]);
     }
+
+    public PlayingCharacter GetPlayingCaracter() {
+        PlayingCharacter pc = new PlayingCharacter(CharacterName, RaceSelected, PortraitSelected.ToString("D2"));
+        pc.Profession = Profession;
+
+        pc.Might = attributes[0].GetAttributeValue();
+        pc.Intellect = attributes[1].GetAttributeValue();
+        pc.Personality = attributes[2].GetAttributeValue();
+        pc.Endurance = attributes[3].GetAttributeValue();
+        pc.Accuracy = attributes[4].GetAttributeValue();
+        pc.Speed = attributes[5].GetAttributeValue();
+
+        pc.Level = 1;
+        pc.Experience = 0;
+
+        pc.HitPoints = pc.MaxHitPoints;
+        pc.SpellPoints = pc.MaxSpellPoints;
+
+        return pc;
+    }
 }

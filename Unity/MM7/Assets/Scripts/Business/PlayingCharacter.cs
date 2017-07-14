@@ -5,16 +5,15 @@ namespace Business
 {
     public class PlayingCharacter
     {
-        public Race Race { get; private set; }
-        public string Portrait { get; private set; }
-        public Profession Profession { get; private set; }
-
         public string Name { get; private set; }
+        public Race Race { get; private set; }
+        public string PortraitCode { get; private set; }
 
-        public int Level { get; private set; }
-        public long Experience { get; private set; }
+        public Profession Profession { get; set; }
+        public int Level { get; set; }
+        public long Experience { get; set; }
 
-        public int HitPoints { get; private set; }
+        public int HitPoints { get; set; }
         public int MaxHitPoints { 
             get { 
                 return Profession.StartingHitPoints + 
@@ -22,7 +21,7 @@ namespace Business
             } 
         }
 
-        public int SpellPoints { get; private set; }
+        public int SpellPoints { get; set; }
         public int MaxSpellPoints { 
             get { 
                 var professionSpellPointsAttributeValue = Profession.GetSpellPointsAttributeValue(this);
@@ -31,14 +30,22 @@ namespace Business
             }
         }
 
-        public int Might { get; private set; }
-        public int Intellect { get; private set; }
-        public int Personality { get; private set; }
-        public int Endurance { get; private set; }
-        public int Accuracy { get; private set; }
-        public int Speed { get; private set; }
+        public int Might { get; set; }
+        public int Intellect { get; set; }
+        public int Personality { get; set; }
+        public int Endurance { get; set; }
+        public int Accuracy { get; set; }
+        public int Speed { get; set; }
 
         // TODO: resistances
+
+        public PlayingCharacter(string name, Race race, string portraitCode) {
+            Name = name;
+            Race = race;
+            PortraitCode = portraitCode;
+            Level = 1;
+            Experience = 0;
+        }
 
         public int GetAttributeTableValue(int attributeValue) {
             if (attributeValue < 3)

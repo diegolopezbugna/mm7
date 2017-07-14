@@ -160,6 +160,12 @@ public class CreateParty : Singleton<CreateParty>, CreatePartyViewInterface
     }
 
     public void Ok() {
+        var partyStats = new PartyStats();
+        partyStats.Chars = new List<PlayingCharacter>();
+        foreach (var cpc in createPartyChars)
+            partyStats.Chars.Add(cpc.GetPlayingCaracter());
+        Game.Instance.PartyStats = partyStats;
+
         SceneManager.LoadScene("Emerald");
     }
 }

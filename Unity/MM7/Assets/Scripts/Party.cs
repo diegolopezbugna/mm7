@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Business;
 
 public class Party : Singleton<Party> {
 
@@ -49,30 +50,15 @@ public class Party : Singleton<Party> {
 	// Use this for initialization
 	void Start () {
 
-        charsPortraits[0].SetPortraitImages(new string[] { "PC17-01" });
-        charsPortraits[1].SetPortraitImages(new string[] { "PC04-01" });
-        charsPortraits[2].SetPortraitImages(new string[] { "PC15-01" });
-        charsPortraits[3].SetPortraitImages(new string[] { "PC11-01" });
-
-        charsPortraits[0].SetMaxHitPoints(50);
-        charsPortraits[0].SetHitPoints(50);
-        charsPortraits[1].SetMaxHitPoints(40);
-        charsPortraits[1].SetHitPoints(40);
-        charsPortraits[2].SetMaxHitPoints(30);
-        charsPortraits[2].SetHitPoints(30);
-        charsPortraits[3].SetMaxHitPoints(20);
-        charsPortraits[4].SetHitPoints(20);
-
-        charsPortraits[0].SetMaxSpellPoints(0);
-        charsPortraits[0].SetSpellPoints(0);
-        charsPortraits[1].SetMaxSpellPoints(0);
-        charsPortraits[1].SetSpellPoints(0);
-        charsPortraits[2].SetMaxSpellPoints(20);
-        charsPortraits[2].SetSpellPoints(20);
-        charsPortraits[3].SetMaxSpellPoints(20);
-        charsPortraits[3].SetSpellPoints(20);
-
-
+        var chars = Game.Instance.PartyStats.Chars;
+        for (int i = 0; i < chars.Count; i++)
+        {
+            charsPortraits[i].SetPortraitImages(new string[] { string.Format("PC{0}01", chars[i].PortraitCode) });
+            charsPortraits[i].SetMaxHitPoints(chars[i].MaxHitPoints);
+            charsPortraits[i].SetHitPoints(chars[i].HitPoints);
+            charsPortraits[i].SetMaxSpellPoints(chars[i].MaxSpellPoints);
+            charsPortraits[i].SetSpellPoints(chars[i].SpellPoints);
+        }
 	}
 	
 	// Update is called once per frame

@@ -54,4 +54,8 @@ public class CreatePartyCharAttribute : MonoBehaviour {
     public void SetAttributeValue(int value) {
         attributeValueText.text = value.ToString();
     }
+
+    public int GetAttributeValue() {
+        return int.Parse(attributeValueText.text);
+    }
 }

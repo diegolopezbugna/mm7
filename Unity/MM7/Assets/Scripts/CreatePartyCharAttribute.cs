@@ -27,7 +27,7 @@ public class CreatePartyCharAttribute : MonoBehaviour {
         substractButton.onClick.AddListener(() => {
             var currentValue = int.Parse(attributeValueText.text);
             var bonusCost = createPartyChar.RaceSelected.GetBonusCost(attributeCode, currentValue, false);
-            CreateParty.Instance.CreatePartyUseCase.BonusPointsUsed(-bonusCost.BonusChange);
+            CreateParty.Instance.CreatePartyUseCase.BonusPointsUsed(-bonusCost.BonusChange, CreateParty.Instance.GetCharIndex(createPartyChar));
             attributeValueText.text = (currentValue - bonusCost.AttributeChange).ToString();
         });
 
@@ -36,7 +36,7 @@ public class CreatePartyCharAttribute : MonoBehaviour {
             var bonusCost = createPartyChar.RaceSelected.GetBonusCost(attributeCode, currentValue, true);
             if (CreateParty.Instance.CreatePartyUseCase.CanUseBonusPoints(bonusCost.BonusChange))
             {
-                CreateParty.Instance.CreatePartyUseCase.BonusPointsUsed(bonusCost.BonusChange);
+                CreateParty.Instance.CreatePartyUseCase.BonusPointsUsed(bonusCost.BonusChange, CreateParty.Instance.GetCharIndex(createPartyChar));
                 attributeValueText.text = (currentValue + bonusCost.AttributeChange).ToString();
             }
         });

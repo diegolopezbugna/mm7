@@ -63,12 +63,15 @@
      <Compile Include="Assets\Scripts\EnemyAttack.cs" />
      <Compile Include="Assets\Scripts\EnemyHealth.cs" />
      <Compile Include="Assets\Scripts\EnemyMove.cs" />
+     <Compile Include="Assets\Scripts\Infrastruture\Localization.cs" />
+     <Compile Include="Assets\Scripts\Infrastruture\StringExtensions.cs" />
      <Compile Include="Assets\Scripts\Party.cs" />
      <Compile Include="Assets\Scripts\PartyHealth.cs" />
      <Compile Include="Assets\Scripts\PartyRangedAttack.cs" />
      <Compile Include="Assets\Scripts\ProfessionData.cs" />
      <Compile Include="Assets\Scripts\RandomWanderMove.cs" />
      <Compile Include="Assets\Scripts\Singleton.cs" />
+     <Compile Include="Assets\Scripts\SkillData.cs" />
      <Compile Include="Assets\Scripts\StreamVideo.cs" />
      <Compile Include="Assets\Scripts\SwitchingPositionsWanderEnemyMove.cs" />
      <Compile Include="Assets\Scripts\TagToDescription.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Infrastructure;
 
 namespace Business
 {
@@ -16,10 +17,11 @@ namespace Business
     {
         private Race(RaceCode code) {
             RaceCode = code;
+            Name = Localization.Instance.Get(code.ToString());
         }
 
         public RaceCode RaceCode { get; private set; }
-        public string Name { get { return RaceCode.ToString(); } }
+        public string Name { get; private set; }
         public Dictionary<AttributeCode, int> DefaultAttributeValues { get; private set; }
 
         // TODO: resistances

@@ -19,6 +19,6 @@ public class ProfessionData : MonoBehaviour {
 	}
 
     public void CreatePartyOnClick() {
-        CreateParty.Instance.SelectProfession(Profession, this.GetComponent<Text>());
+        CreateParty.Instance.SelectProfession(Profession);
     }
 }

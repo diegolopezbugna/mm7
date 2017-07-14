@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Business;
+using Infrastructure;
 
 public class CreatePartyChar : MonoBehaviour {
 
@@ -30,6 +31,15 @@ public class CreatePartyChar : MonoBehaviour {
     [SerializeField]
     private RawImage selectedImage;
 
+    [SerializeField]
+    private Text professionText;
+
+    [SerializeField]
+    private RawImage professionImage;
+
+    [SerializeField]
+    private SkillData[] skills;
+
     private bool _isSelected = false;
     public bool IsSelected {
         get { return _isSelected; }
@@ -41,9 +51,26 @@ public class CreatePartyChar : MonoBehaviour {
 
     public Race RaceSelected { get; set; }
 
+    private Profession _profession;
+    public Profession Profession
+    { 
+        get { return _profession; } 
+        set
+        {
+            _profession = value;
+            professionText.text = value.Name;
+            professionImage.texture = Resources.Load("Professions/IC_" + value.ProfessionCode.ToString()) as Texture;
+
+            SetSkill(0, Skill.Get(value.DefaultSkills[0]));
+            SetSkill(1, Skill.Get(value.DefaultSkills[1]));
+            SetSkill(2, null);
+            SetSkill(3, null);
+        }
+    }
+
 	// Use this for initialization
 	void Start () {
-        UpdatePortrait();
+        //UpdatePortrait();
 	}
 	
 	// Update is called once per frame
@@ -52,6 +79,7 @@ public class CreatePartyChar : MonoBehaviour {
 	}
 
     public void PrevPortraitButtonClick() {
+        SelectChar();
         if (PortraitSelected == 1)
             PortraitSelected = 20;
         else
@@ -60,6 +88,7 @@ public class CreatePartyChar : MonoBehaviour {
     }
 
     public void NextPortraitButtonClick() {
+        SelectChar();
         if (PortraitSelected == maxPortraits)
             PortraitSelected = 1;
         else
@@ -87,10 +116,41 @@ public class CreatePartyChar : MonoBehaviour {
 
         foreach (var a in attributes)
             a.SetDefaultAttributeValue(RaceSelected);
+
+        CreateParty.Instance.GiveBackUsedBonusPoints();
     }
 
     public void SelectChar() {
         CreateParty.Instance.SelectChar(this);
+    }
+
+    public void SetSkill(int index, Skill skill) {
+        skills[index].Skill = skill;
+        var text = skills[index].GetComponent<Text>();
+        if (skill != null)
+        {
+            text.text = skill.Name;
+//            text.color = CreateParty.Instance.YellowSelectedColor;
+        }
+        else
+        {
+            text.text = Localization.Instance.Get("None");
+//            text.color = CreateParty.Instance.YellowSelectedColor;
+        }
+    }
+
+    public void RemoveSkill(Skill skill) {
+        if (skills[2].Skill == skill)
+            SetSkill(2, null);
+        else if (skills[3].Skill == skill)
+            SetSkill(3, null);
+    }
+
+    public void AddSkill(Skill skill) {
+        if (skills[2].Skill == null)
+            SetSkill(2, skill);
+        else if (skills[3].Skill == null)
+            SetSkill(3, skill);
     }
 
 }

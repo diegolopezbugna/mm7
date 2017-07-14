@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Infrastructure;
 
 namespace Business
 {
@@ -20,7 +21,7 @@ namespace Business
     public class Profession
     {
         public ProfessionCode ProfessionCode { get; private set; }
-        public string Name { get { return ProfessionCode.ToString(); } }
+        public string Name { get; private set; }
         public int StartingHitPoints { get; private set; }
         public int HitPointsPerLevel { get; private set; }
         public int StartingSpellPoints { get; private set; }
@@ -30,12 +31,31 @@ namespace Business
 
         public Profession(ProfessionCode code) {
             ProfessionCode = code;
+            Name = Localization.Instance.Get(code.ToString());
         }
 
         public Func<PlayingCharacter, int> GetSpellPointsAttributeValue { get; private set; }
 
+        private static object allLocker = new Object();
 
-        public static Profession Knight() {
+        private static IList<Profession> _all;
+        public static IList<Profession> All() {
+            if (_all == null)
+            {
+                lock (allLocker)
+                    _all = BasicProfessions();
+            }
+            return _all;
+        }
+
+        public static Profession Get(ProfessionCode code) {
+            foreach (var s in All())
+                if (code == s.ProfessionCode)
+                    return s;
+            return null;
+        }
+
+        private static Profession Knight() {
             return new Profession(ProfessionCode.Knight) {
                 StartingHitPoints = 40,
                 HitPointsPerLevel = 5,
@@ -51,7 +71,7 @@ namespace Business
             };
         }
 
-        public static Profession Paladin() {
+        private static Profession Paladin() {
             return new Profession(ProfessionCode.Paladin) {
                 StartingHitPoints = 30,
                 HitPointsPerLevel = 5,
@@ -67,7 +87,7 @@ namespace Business
             };
         }
 
-        public static Profession Ranger() {
+        private static Profession Ranger() {
             return new Profession(ProfessionCode.Ranger) {
                 StartingHitPoints = 30,
                 HitPointsPerLevel = 4,
@@ -83,7 +103,7 @@ namespace Business
             };
         }
 
-        public static Profession Cleric() {
+        private static Profession Cleric() {
             return new Profession(ProfessionCode.Cleric) {
                 StartingHitPoints = 25,
                 HitPointsPerLevel = 2,
@@ -99,7 +119,7 @@ namespace Business
             };
         }
 
-        public static Profession Druid() {
+        private static Profession Druid() {
             return new Profession(ProfessionCode.Druid) {
                 StartingHitPoints = 20,
                 HitPointsPerLevel = 2,
@@ -115,7 +135,7 @@ namespace Business
             };
         }
 
-        public static Profession Sorcerer() {
+        private static Profession Sorcerer() {
             return new Profession(ProfessionCode.Sorcerer) {
                 StartingHitPoints = 20,
                 HitPointsPerLevel = 2,
@@ -131,7 +151,7 @@ namespace Business
             };
         }
 
-        public static Profession Archer() {
+        private static Profession Archer() {
             return new Profession(ProfessionCode.Archer) {
                 StartingHitPoints = 30,
                 HitPointsPerLevel = 3,
@@ -163,7 +183,7 @@ namespace Business
             };
         }
 
-        public static Profession Thief() {
+        private static Profession Thief() {
             return new Profession(ProfessionCode.Thief) { 
                 StartingHitPoints = 35,
                 HitPointsPerLevel = 4,
@@ -179,7 +199,7 @@ namespace Business
             };
         }
 
-        public static List<Profession> BasicProfessions() {
+        private static List<Profession> BasicProfessions() {
             return new List<Profession>()
             {
                 Profession.Knight(),

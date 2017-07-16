@@ -4,8 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using Business;
 using Infrastructure;
+using System.Linq;
 
 public class CreatePartyChar : MonoBehaviour {
+
+    public Color YellowSelectedColor = new Color(255f / 255f, 240f / 255f, 41f / 255f);
 
     [SerializeField]
     private RawImage portraitImage;
@@ -29,25 +32,19 @@ public class CreatePartyChar : MonoBehaviour {
     private CreatePartyCharAttribute[] attributes;
 
     [SerializeField]
-    private RawImage selectedImage;
-
-    [SerializeField]
     private Text professionText;
 
     [SerializeField]
     private RawImage professionImage;
 
     [SerializeField]
-    private SkillData[] skills;
+    private Text skillsTitleText;
 
-    private bool _isSelected = false;
-    public bool IsSelected {
-        get { return _isSelected; }
-        set {
-            _isSelected = value;
-            selectedImage.enabled = value;
-        }
-    }
+    [SerializeField]
+    private GameObject skillsContainer;
+
+    [SerializeField]
+    private GameObject professionsContainer;
 
     public Race RaceSelected { get; set; }
 
@@ -61,10 +58,15 @@ public class CreatePartyChar : MonoBehaviour {
             professionText.text = value.Name;
             professionImage.texture = Resources.Load("Professions/IC_" + value.ProfessionCode.ToString()) as Texture;
 
-            SetSkill(0, Skill.Get(value.DefaultSkills[0]));
-            SetSkill(1, Skill.Get(value.DefaultSkills[1]));
-            SetSkill(2, null);
-            SetSkill(3, null);
+            foreach (var txt in professionsContainer.GetComponentsInChildren<Text>())
+            {
+                var professionData = txt.GetComponent<ProfessionData>();
+                txt.color = (professionData.Profession == value ? YellowSelectedColor : Color.white);
+            }
+
+            CreateSkills();
+            SetDefaultSkill(Skill.Get(value.DefaultSkills[0]));
+            SetDefaultSkill(Skill.Get(value.DefaultSkills[1]));
         }
     }
 
@@ -79,13 +81,16 @@ public class CreatePartyChar : MonoBehaviour {
     }
     private InputField characterNameInputField;
 
+    private List<Skill> SkillsDefault { get; set; }
+    private List<Skill> SkillsSelected { get; set; }
+
     void Awake() {
         characterNameInputField = this.GetComponentInChildren<InputField>();
+        CreateProfessions();
     }
 
 	// Use this for initialization
 	void Start () {
-        //UpdatePortrait();
 	}
 	
 	// Update is called once per frame
@@ -94,7 +99,6 @@ public class CreatePartyChar : MonoBehaviour {
 	}
 
     public void PrevPortraitButtonClick() {
-        SelectChar();
         if (PortraitSelected == 1)
             PortraitSelected = 20;
         else
@@ -103,7 +107,6 @@ public class CreatePartyChar : MonoBehaviour {
     }
 
     public void NextPortraitButtonClick() {
-        SelectChar();
         if (PortraitSelected == maxPortraits)
             PortraitSelected = 1;
         else
@@ -132,45 +135,100 @@ public class CreatePartyChar : MonoBehaviour {
         foreach (var a in attributes)
             a.SetDefaultAttributeValue(RaceSelected);
 
-        CreateParty.Instance.GiveBackUsedBonusPoints();
+        CreateParty.Instance.GiveBackUsedBonusPoints(this);
     }
 
-    public void SelectChar() {
-        CreateParty.Instance.SelectChar(this);
-    }
+    private void CreateSkills()
+    {
+        SkillsDefault = new List<Skill>();
+        SkillsSelected = new List<Skill>();
 
-    public void SetSkill(int index, Skill skill) {
-        skills[index].Skill = skill;
-        var text = skills[index].GetComponent<Text>();
-        if (skill != null)
+        var skills = Profession.DefaultSkills.Select(s => Skill.Get(s)).Union(
+            Profession.AvailableSkills.Select(s => Skill.Get(s))).ToList();
+
+        // remove skills but first
+        var texts = skillsContainer.GetComponentsInChildren<Text>();
+        for (int i = 1; i < texts.Length; i++)
         {
-            text.text = skill.Name;
-//            text.color = CreateParty.Instance.YellowSelectedColor;
+            texts[i].GetComponent<SkillData>().Skill = null;   // destroy is not inmediate
+            Destroy(texts[i].gameObject);
         }
-        else
+
+        var skill1 = texts[0];
+        skill1.text = skills[0].Name;
+        skill1.color = Color.white;
+        skill1.GetComponent<SkillData>().Skill = skills[0];
+
+        for (int i = 1; i <= skills.Count - 1; i++)
         {
-            text.text = Localization.Instance.Get("None");
-//            text.color = CreateParty.Instance.YellowSelectedColor;
+            var newSkill = Instantiate(skill1, skill1.transform.parent);
+            newSkill.text = skills[i].Name;
+            newSkill.GetComponent<SkillData>().Skill = skills[i];
         }
     }
 
-    public void RemoveSkill(Skill skill) {
-        if (skills[2].Skill == skill)
-            SetSkill(2, null);
-        else if (skills[3].Skill == skill)
-            SetSkill(3, null);
+    public void SetDefaultSkill(Skill skill) {
+        SkillsDefault.Add(skill);
+        var txt = GetSkillObject(skill).GetComponent<Text>();
+        txt.color = YellowSelectedColor;  // TODO: otro color para la default?
+        SetSkillsTitle();
     }
 
-    public void AddSkill(Skill skill) {
-        if (skills[2].Skill == null)
-            SetSkill(2, skill);
-        else if (skills[3].Skill == null)
-            SetSkill(3, skill);
+    public void ToggleSkill(Skill skill) {
+        if (SkillsDefault.Contains(skill))
+            return;
+
+        if (SkillsSelected.Contains(skill))
+        {
+            SkillsSelected.Remove(skill);
+            var txt = GetSkillObject(skill).GetComponent<Text>();
+            txt.color = Color.white;
+        }
+        else if (SkillsSelected.Count < 2)
+        {
+            SkillsSelected.Add(skill);
+            var txt = GetSkillObject(skill).GetComponent<Text>();
+            txt.color = Color.green;
+        }
+
+        SetSkillsTitle();
+    }
+
+    private void SetSkillsTitle() {
+        skillsTitleText.text = string.Format("SKILLS {0}/4", SkillsDefault.Count + SkillsSelected.Count);
+    }
+
+    public void SkillOnClick(SkillData skillData)
+    {
+        ToggleSkill(skillData.Skill);
+    }
+
+    private GameObject GetSkillObject(Skill skill) {
+        foreach (var skillData in skillsContainer.GetComponentsInChildren<SkillData>())
+            if (skillData.Skill == skill)
+                return skillData.gameObject;
+        return null;
     }
 
     public void SetAttributeValues(int[] values) {
         for (var i = 0; i < values.Length; i++)
             attributes[i].SetAttributeValue(values[i]);
+    }
+
+    void CreateProfessions()
+    {
+        var professions = Profession.All();
+
+        var prof1 = professionsContainer.GetComponentInChildren<Text>();
+        prof1.text = professions[0].Name;
+        prof1.GetComponent<ProfessionData>().Profession = professions[0];
+
+        for (int i = 1; i < professions.Count; i++)
+        {
+            var newProf = Instantiate(prof1, prof1.transform.parent);
+            newProf.text = professions[i].Name;
+            newProf.GetComponent<ProfessionData>().Profession = professions[i];
+        }
     }
 
     public PlayingCharacter GetPlayingCaracter() {

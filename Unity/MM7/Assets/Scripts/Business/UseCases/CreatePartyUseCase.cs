@@ -60,7 +60,6 @@ namespace Business
             view.SetSkillForChar(Skill.Get(SkillCode.Leather), 3);
             view.SetSkillForChar(Skill.Get(SkillCode.AirMagic), 3);
                 
-            view.SetCharSelected(0);
             bonusPointsUsedByChar = new int[4] { 13, 6, 14, 17 };
             BonusPoints = 0;
             view.BonusPoints = 0;
@@ -103,7 +102,6 @@ namespace Business
                 view.SetProfessionForChar(party.Chars[i].Profession, i);
             }
 
-            view.SetCharSelected(0);
             bonusPointsUsedByChar = new int[4];
             BonusPoints = 50;
             view.BonusPoints = 50;

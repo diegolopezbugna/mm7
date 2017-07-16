@@ -17,16 +17,4 @@ public class SkillData : MonoBehaviour {
 	void Update () {
 		
 	}
-
-    public void CreatePartyOnClick() {
-        if (Skill != null)
-            CreateParty.Instance.AddSkill(Skill);
-    }
-        
-    public void CreatePartyCharOnClick() {
-        if (Skill != null)
-        {
-            this.transform.parent.parent.GetComponent<CreatePartyChar>().RemoveSkill(Skill);
-        }
-    }
 }

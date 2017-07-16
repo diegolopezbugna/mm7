@@ -55,7 +55,6 @@
      <Compile Include="Assets\Scripts\Business\Profession.cs" />
      <Compile Include="Assets\Scripts\Business\Race.cs" />
      <Compile Include="Assets\Scripts\Business\Skill.cs" />
-     <Compile Include="Assets\Scripts\Business\UseCases\CreatePartySelectProfessionUseCase.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\CreatePartyUseCase.cs" />
      <Compile Include="Assets\Scripts\CharPortrait.cs" />
      <Compile Include="Assets\Scripts\CreateParty\CreateParty.cs" />

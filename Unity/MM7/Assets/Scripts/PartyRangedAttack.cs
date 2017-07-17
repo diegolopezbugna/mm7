@@ -28,8 +28,10 @@ public class PartyRangedAttack : MonoBehaviour {
         // TODO: que salga de una distinta posición según el personaje
         var origin = transform.TransformPoint(0, 0.5f, 0);
         var a = Instantiate(arrow);
-        a.GetComponent<ArrowMove>().SetTarget(targetTransform, true, () =>
+		var didHit = targetTransform != null && targetTransform.tag.StartsWith("Enemy");
+		a.GetComponent<ArrowMove>().SetTarget(targetTransform, didHit, () =>
             {
+				targetTransform.GetComponent<EnemyHealth>().TakeHit(10);
             });
         a.transform.position = origin;
         if (targetPoint.HasValue)

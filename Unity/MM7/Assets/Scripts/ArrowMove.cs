@@ -14,27 +14,29 @@ public class ArrowMove : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+		previousDistanceToTarget = float.MaxValue;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (Target == null)
-            return;
-
+		if (Target == null || !DidHit) {
+			var distanceToParty = (Party.Instance.transform.position - transform.position).sqrMagnitude;
+			if (distanceToParty > destroyDistance) {
+				Destroy(this);
+				Destroy(this.gameObject);
+			}
+			return;
+		}
+			
         var distanceToTarget = (Target.position - transform.position).sqrMagnitude;
-
-        if (distanceToTarget < 1.0f || (distanceToTarget > previousDistanceToTarget && distanceToTarget > destroyDistance))
+        if (distanceToTarget < 0.1f || distanceToTarget > previousDistanceToTarget)
         {
             Destroy(this.gameObject);
-            if (DidHit)
-            {
-                OnTargetReached();
-            }
+            OnTargetReached();
         }
         else if (DidHit)
         {
-            transform.LookAt(Target);
+            //transform.LookAt(Target);
             // TODO: actualizar trayectoria?
         }
 

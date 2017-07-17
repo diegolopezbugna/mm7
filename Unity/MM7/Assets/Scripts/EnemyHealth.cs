@@ -23,34 +23,24 @@ public class EnemyHealth : MonoBehaviour {
 		
 	}
 
-    void OnTriggerEnter(Collider other) {
-        Debug.Log("OnTriggerEnter");
+    public void TakeHit(int damage) {
+        health -= damage; //other.getDamageFor(this.gameObject);
+        blood.Play();
 
-        if (other.tag == "Arrow")
+        // TODO: sacar este if usando doble dispatch
+        if (health > 0)
         {
-            Destroy(other.gameObject);
-
-            // TODO: esto calcularlo con las tablas, no según el colider SACAR DE ACA!
-
-            health -= 10; //other.getDamageFor(this.gameObject);
-            blood.Play();
-
-            // TODO: sacar este if usando doble dispatch
-            if (health > 0)
-            {
-                animator.SetTrigger("Hurt");
-            }
-            else
-            {
-                animator.SetTrigger("Die");
-                Destroy(enemyAttackBehaviour);
-//                foreach (var c in GetComponents<Collider>())
-//                {
-//                    c.enabled = false;
-//                }
-            }
-
+            animator.SetTrigger("Hurt");
         }
-
+        else
+        {
+            animator.SetTrigger("Die");
+            Destroy(enemyAttackBehaviour);
+            foreach (var c in GetComponents<Collider>())
+            {
+               
+                //c.enabled = false;
+            }
+        }
     }
 }

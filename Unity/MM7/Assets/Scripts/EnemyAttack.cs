@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class EnemyAttack : MonoBehaviour {
 
@@ -17,17 +16,28 @@ public class EnemyAttack : MonoBehaviour {
     [SerializeField]
     private float damage = 10;
 
+    [SerializeField]
+    private float engagingSpeed = 10;
+
     private Animator animator;
-    private NavMeshAgent agent;
-    private BoxCollider[] weaponsColliders;
 
     private float lastAttack = 0;
+
+    private RandomWanderMove wanderMoveBehaviour;
+
+    private bool isEngagingParty = false;
+
+    private const int engagingDistanceSqr = 20 * 20;
+    public float EngagingDistanceSqr {
+        get {
+            return engagingDistanceSqr;
+        }
+    }
 
 	// Use this for initialization
 	void Start () {
         animator = GetComponent<Animator>();
-        agent = GetComponent<NavMeshAgent>();
-        weaponsColliders = GetComponentsInChildren<BoxCollider>();
+        wanderMoveBehaviour = GetComponent<RandomWanderMove>();
 	}
 	
 	// Update is called once per frame
@@ -39,14 +49,13 @@ public class EnemyAttack : MonoBehaviour {
             distanceToParty < maxAttackDistanceSqr)
         {
             Party.Instance.SetEnemyEngagingParty(this.gameObject, distanceToParty);
-//            transform.LookAt(Party.Instance.transform);
+            transform.LookAt(Party.Instance.transform); // TODO: smooth
 
             var currentTime = Time.time;
-            if (currentTime - lastAttack > 2)
+            if (currentTime - lastAttack > 2f)
             {
                 lastAttack = currentTime;
-                if (agent.isActiveAndEnabled)
-                    agent.isStopped = true;
+                // STOP MOVE!
                 animator.SetTrigger("Attack");
 
                 if (isRanged)
@@ -54,6 +63,18 @@ public class EnemyAttack : MonoBehaviour {
                     // TODO: proyectiles?
                 }
             }
+        }
+        else if (distanceToParty < this.EngagingDistanceSqr && distanceToParty > maxAttackDistanceSqr) {
+            Party.Instance.SetEnemyEngagingParty(this.gameObject, distanceToParty);
+
+            wanderMoveBehaviour.StopMoving();
+            transform.LookAt(Party.Instance.transform);
+            // TODO: smooth rotation and acceleration
+            transform.localPosition = Vector3.MoveTowards(transform.position, Party.Instance.transform.position, engagingSpeed * Time.deltaTime);
+        }
+        else if (distanceToParty > this.EngagingDistanceSqr)
+        {
+            wanderMoveBehaviour.StartMoving();
         }
 
 	}
@@ -63,15 +84,4 @@ public class EnemyAttack : MonoBehaviour {
         // TODO: caracteristicas
         return damage;
     }
-
-    public void WeaponActivate() {
-        foreach (var w in weaponsColliders)
-            w.enabled = true;
-    }
-
-    public void WeaponDeactivate() {
-        foreach (var w in weaponsColliders)
-            w.enabled = false;
-    }
-
 }

@@ -87,13 +87,12 @@ public class Party : Singleton<Party> {
                 //Debug.Log("HIT: " + hit.transform.gameObject.tag);
 
                 focussedText.text = hit.transform.gameObject.tag.TagToDescription() + " - " + hit.distance;
+                CurrentTarget = hit.transform;
             }
             else
             {
                 focussedText.text = "";
             }
-
-            CurrentTarget = hit.transform;
 
             if (includeTargetPoint)
                 CurrentTargetPoint = hit.point;

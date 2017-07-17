@@ -20,18 +20,21 @@ public class PartyRangedAttack : MonoBehaviour {
 	void Update () {
         if (Input.GetKeyDown("q"))
         {
-            DoThrowArrow(Party.Instance.CurrentTargetPoint);
+            DoThrowArrow(Party.Instance.CurrentTargetPoint, Party.Instance.CurrentTarget);
         }
 	}
 
-    void DoThrowArrow(Vector3? target) {
+    void DoThrowArrow(Vector3? targetPoint, Transform targetTransform) {
         // TODO: que salga de una distinta posición según el personaje
         var origin = transform.TransformPoint(0, 0.5f, 0);
         var a = Instantiate(arrow);
+        a.GetComponent<ArrowMove>().SetTarget(targetTransform, true, () =>
+            {
+            });
         a.transform.position = origin;
-        if (target.HasValue)
+        if (targetPoint.HasValue)
         {
-            a.transform.LookAt(target.Value);
+            a.transform.LookAt(targetPoint.Value);
         }
         else
         {

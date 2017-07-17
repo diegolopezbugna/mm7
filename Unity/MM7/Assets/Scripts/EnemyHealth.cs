@@ -1,25 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class EnemyHealth : MonoBehaviour {
 
     [SerializeField]
     private int health;
 
-    private NavMeshAgent agent;
     private Animator animator;
     private ParticleSystem blood;
-    private EnemyMove enemyMoveBehaviour;
     private EnemyAttack enemyAttackBehaviour;
 
 	// Use this for initialization
 	void Start () {
-        agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         blood = GetComponentInChildren<ParticleSystem>();
-        enemyMoveBehaviour = GetComponent<EnemyMove>();
         enemyAttackBehaviour = GetComponent<EnemyAttack>();
 	}
 	
@@ -33,8 +28,9 @@ public class EnemyHealth : MonoBehaviour {
 
         if (other.tag == "Arrow")
         {
-            //agent.isStopped = true;
             Destroy(other.gameObject);
+
+            // TODO: esto calcularlo con las tablas, no según el colider SACAR DE ACA!
 
             health -= 10; //other.getDamageFor(this.gameObject);
             blood.Play();
@@ -47,13 +43,11 @@ public class EnemyHealth : MonoBehaviour {
             else
             {
                 animator.SetTrigger("Die");
-                Destroy(enemyMoveBehaviour);
                 Destroy(enemyAttackBehaviour);
-                agent.enabled = false;
-                foreach (var c in GetComponents<Collider>())
-                {
-                    c.enabled = false;
-                }
+//                foreach (var c in GetComponents<Collider>())
+//                {
+//                    c.enabled = false;
+//                }
             }
 
         }

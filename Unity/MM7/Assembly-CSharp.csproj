@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\ArrowMove.cs" />
      <Compile Include="Assets\Scripts\Business\Attribute.cs" />
      <Compile Include="Assets\Scripts\Business\BonusCost.cs" />
      <Compile Include="Assets\Scripts\Business\Game.cs" />
@@ -62,7 +63,6 @@
      <Compile Include="Assets\Scripts\CreateParty\CreatePartyCharAttribute.cs" />
      <Compile Include="Assets\Scripts\EnemyAttack.cs" />
      <Compile Include="Assets\Scripts\EnemyHealth.cs" />
-     <Compile Include="Assets\Scripts\EnemyMove.cs" />
      <Compile Include="Assets\Scripts\Infrastruture\Localization.cs" />
      <Compile Include="Assets\Scripts\Infrastruture\StringExtensions.cs" />
      <Compile Include="Assets\Scripts\Party.cs" />

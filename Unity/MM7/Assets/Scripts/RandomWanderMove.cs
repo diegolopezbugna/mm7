@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class RandomWanderMove : MonoBehaviour {
 
@@ -12,13 +11,11 @@ public class RandomWanderMove : MonoBehaviour {
     private int maxdistance = 20;
 
     private Vector3 initialPosition;
-    private NavMeshAgent agent;
 
     private IEnumerator runningCorroutine;
 
 	// Use this for initialization
 	void Start () {
-        agent = GetComponent<NavMeshAgent>();
         initialPosition = transform.localPosition;
         StartMoving();
 	}
@@ -30,8 +27,7 @@ public class RandomWanderMove : MonoBehaviour {
     public void StartMoving() {
         if (runningCorroutine == null)
         {
-            agent.isStopped = false;
-            runningCorroutine = MoveArroundMesh();
+            runningCorroutine = MoveArround();
             StartCoroutine(runningCorroutine);
         }
     }
@@ -42,18 +38,6 @@ public class RandomWanderMove : MonoBehaviour {
         runningCorroutine = null;
     }
 
-    IEnumerator MoveArroundMesh() {
-        if (agent.isActiveAndEnabled)
-        {
-            yield return new WaitForSeconds(Random.Range(1f, 5f));
-            Vector3 newDestination = GetNewDestination();
-            if (agent.isActiveAndEnabled)
-                agent.SetDestination(newDestination);
-            yield return new WaitForSeconds(5);
-            StartCoroutine(MoveArroundMesh());
-        }
-    }
-        
     IEnumerator MoveArround() {
         yield return new WaitForSeconds(Random.Range(1f, 5f));
 
@@ -71,7 +55,7 @@ public class RandomWanderMove : MonoBehaviour {
                     transform.localRotation = Quaternion.Lerp(transform.localRotation, newRotation, lerpTime);
                 }
 
-                transform.localPosition = Vector3.MoveTowards(transform.localPosition, newDestination, speed * Time.deltaTime);
+                transform.localPosition = Vector3.MoveTowards(transform.position, newDestination, speed * Time.deltaTime);
                 yield return null;
             }
         }

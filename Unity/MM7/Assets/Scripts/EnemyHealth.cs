@@ -7,15 +7,23 @@ public class EnemyHealth : MonoBehaviour {
     [SerializeField]
     private int health;
 
+    [SerializeField]
+    private float dieAnimationDuration = 0.5f;
+
+    [SerializeField]
+    private float dieMoveToFloorSpeed = 3;
+
     private Animator animator;
     private ParticleSystem blood;
     private EnemyAttack enemyAttackBehaviour;
+    private RandomWanderMove enemyRandomWanderMoveBehaviour;
 
 	// Use this for initialization
 	void Start () {
         animator = GetComponent<Animator>();
         blood = GetComponentInChildren<ParticleSystem>();
         enemyAttackBehaviour = GetComponent<EnemyAttack>();
+        enemyRandomWanderMoveBehaviour = GetComponent<RandomWanderMove>();
 	}
 	
 	// Update is called once per frame
@@ -35,12 +43,38 @@ public class EnemyHealth : MonoBehaviour {
         else
         {
             animator.SetTrigger("Die");
-            Destroy(enemyAttackBehaviour);
-            foreach (var c in GetComponents<Collider>())
+            var colliders = GetComponents<Collider>();
+            if (colliders != null && colliders.Length > 0)
             {
-               
-                //c.enabled = false;
+                Destroy(colliders[0]);
+                if (colliders.Length > 1)
+                    colliders[1].enabled = true;
             }
+            Destroy(enemyAttackBehaviour);
+            Destroy(enemyRandomWanderMoveBehaviour);
+            MoveToFloor();
         }
+    }
+
+    void MoveToFloor() {
+        var rigidbody = transform.GetComponent<Rigidbody>();
+        rigidbody.isKinematic = true;
+        RaycastHit hitInfo;
+        LayerMask floorLayer = 1 << 9;
+        if (Physics.Raycast(transform.position, Vector3.down, out hitInfo, 500f, floorLayer))
+        {
+            Debug.Log("MoveToFloor");
+            StartCoroutine(DoMoveToFloor(hitInfo.point));
+        }
+    }
+
+    IEnumerator DoMoveToFloor(Vector3 floorPoint) {
+        yield return new WaitForSeconds(dieAnimationDuration);
+        while (transform.position.y > floorPoint.y)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, floorPoint, Time.deltaTime * dieMoveToFloorSpeed);
+            yield return null;
+        }
+        Destroy(this);
     }
 }

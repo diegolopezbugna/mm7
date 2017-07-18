@@ -31,7 +31,9 @@ public class PartyRangedAttack : MonoBehaviour {
 		var didHit = targetTransform != null && targetTransform.tag.StartsWith("Enemy");
 		a.GetComponent<ArrowMove>().SetTarget(targetTransform, didHit, () =>
             {
-				targetTransform.GetComponent<EnemyHealth>().TakeHit(10);
+                var scriptHealth = targetTransform.GetComponent<EnemyHealth>();
+                if (scriptHealth != null)
+                    scriptHealth.TakeHit(10); // TODO: damage
             });
         a.transform.position = origin;
         if (targetPoint.HasValue)

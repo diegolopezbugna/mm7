@@ -57,5 +57,48 @@ namespace Business
             else
                 return attributeValue / 25 + 7;
         }
+
+        public int ArmorClass {
+            get {
+                // TODO: add items and skills
+                return GetAttributeTableValue(Speed);
+            }
+        }
+
+        public int AttackBonus {
+            get {
+                // TODO: add items and skills
+                return GetAttributeTableValue(Accuracy);
+            }
+        }
+
+        public int DamageMin {
+            get {
+                // TODO: add items and skills
+                return GetAttributeTableValue(Might);
+            }
+        }
+
+        public int DamageMax {
+            get {
+                // TODO: add items and skills
+                return GetAttributeTableValue(Might);
+            }
+        }
+
+        public int RangedDamageMin {
+            get {
+                // TODO: add items and skills
+                return 0;
+            }
+        }
+
+        public int RangedDamageMax {
+            get {
+                // TODO: add items and skills
+                return 0;
+            }
+        }
+
     }
 }

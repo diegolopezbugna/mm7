@@ -5,7 +5,10 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour {
 
     [SerializeField]
-    private int health;
+    private int hitPoints;
+
+    [SerializeField]
+    private int experience;
 
     [SerializeField]
     private float dieAnimationDuration = 0.5f;
@@ -32,11 +35,11 @@ public class EnemyHealth : MonoBehaviour {
 	}
 
     public void TakeHit(int damage) {
-        health -= damage; //other.getDamageFor(this.gameObject);
+        hitPoints -= damage; //other.getDamageFor(this.gameObject);
         blood.Play();
 
         // TODO: sacar este if usando doble dispatch
-        if (health > 0)
+        if (hitPoints > 0)
         {
             animator.SetTrigger("Hurt");
         }

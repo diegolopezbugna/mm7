@@ -23,19 +23,12 @@ public class PartyHealth : MonoBehaviour {
 		
 	}
 
-    void OnTriggerEnter(Collider other) {
-
-        if (other.tag == "EnemyWeapon")
-        {
-            var attack = other.GetComponentsInParent<EnemyAttack>();
-            attack[0].GetDamage(Party.Instance);
-            // TODO: health
-
-            StartCoroutine(TakeHit());
-        }
+    public void TakeHit(int charIndex) {
+        StartCoroutine(ShowTakeHit());
+        // TODO: animated portrait
     }
 
-    IEnumerator TakeHit() {
+    IEnumerator ShowTakeHit() {
         Debug.Log("HIT");
 
         Color bloodColor = initialBloodColor;

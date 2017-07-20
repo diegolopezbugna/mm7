@@ -18,6 +18,9 @@ public class Party : Singleton<Party> {
     [SerializeField]
     private CharPortrait[] charsPortraits;
 
+    [SerializeField]
+    private ScrollRect messagesScrollView;
+
     private Transform currentTarget;
     public Transform CurrentTarget
     {
@@ -47,6 +50,8 @@ public class Party : Singleton<Party> {
     private bool isEnemyEngagingPartyThisFrame = false;
     private bool isEnemyInHandToHandCombatThisFrame = false;
 
+    private PartyHealth partyHealth;
+
 	// Use this for initialization
 	void Start () {
 
@@ -59,6 +64,7 @@ public class Party : Singleton<Party> {
             charsPortraits[i].SetMaxSpellPoints(chars[i].MaxSpellPoints);
             charsPortraits[i].SetSpellPoints(chars[i].SpellPoints);
         }
+        partyHealth = this.GetComponent<PartyHealth>();
 	}
 	
 	// Update is called once per frame
@@ -138,4 +144,29 @@ public class Party : Singleton<Party> {
         isEnemyEngagingPartyThisFrame = false;
     }
 
+    public void EnemyAttacks(EnemyAttack enemy, int charIndex) {
+
+        var ac = Game.Instance.PartyStats.Chars[charIndex].ArmorClass;
+        var chanceToHit = (5f + enemy.MonsterLevel * 2f) / (10f + enemy.MonsterLevel * 2f + ac);
+
+        var message = "";
+        if (Random.Range(0f, 1f) > chanceToHit)
+        {
+            var damage = Random.Range(enemy.DamageMin, enemy.DamageMax + 1);  // TODO: review damage formula
+            message = string.Format("{0} hits {1} for {2} points", enemy.tag.TagToDescription(), Game.Instance.PartyStats.Chars[charIndex].Name, damage);
+            Game.Instance.PartyStats.Chars[charIndex].HitPoints -= damage; // this code smells... this is a UseCase!
+            partyHealth.TakeHit(charIndex);
+            charsPortraits[charIndex].SetHitPoints(Game.Instance.PartyStats.Chars[charIndex].HitPoints);
+        }
+        else
+        {
+            message = string.Format("{0} misses {1}", enemy.tag.TagToDescription(), Game.Instance.PartyStats.Chars[charIndex].Name);
+        }
+        Debug.Log(message);
+        var text = messagesScrollView.content.GetComponentInChildren<Text>();
+        var newText = Instantiate(text, messagesScrollView.content.transform);
+        newText.text = message;
+        Canvas.ForceUpdateCanvases();
+        messagesScrollView.verticalNormalizedPosition = 0;
+    }
 }

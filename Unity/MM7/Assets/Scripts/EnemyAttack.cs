@@ -14,17 +14,30 @@ public class EnemyAttack : MonoBehaviour {
     private float minAttackDistanceSqr = 0;
 
     [SerializeField]
-    private float damage = 10;
-
-    [SerializeField]
     private float engagingSpeed = 10;
 
+    [SerializeField]
+    private float attackAnimationPartyHitDuration = 0.5f;
+
+    [SerializeField]
+    private int monsterLevel;
+    public int MonsterLevel { get { return monsterLevel; } }
+
+    [SerializeField]
+    private int damageMin;
+    public int DamageMin { get { return damageMin; } }
+
+    [SerializeField]
+    private int damageMax;
+    public int DamageMax { get { return damageMax; } }
+
+    [SerializeField]
+    private int armorClass = 0;
+    public int ArmorClass { get { return armorClass; } }
+
     private Animator animator;
-
-    private float lastAttack = 0;
-
     private RandomWanderMove wanderMoveBehaviour;
-
+    private float lastAttack = 0;
     private bool isEngagingParty = false;
 
     private const int engagingDistanceSqr = 20 * 20;
@@ -45,43 +58,41 @@ public class EnemyAttack : MonoBehaviour {
 
         float distanceToParty = (Party.Instance.transform.position - transform.position).sqrMagnitude;
 
-        if (distanceToParty > minAttackDistanceSqr &&
-            distanceToParty < maxAttackDistanceSqr)
-        {
-            Party.Instance.SetEnemyEngagingParty(this.gameObject, distanceToParty);
-            transform.LookAt(Party.Instance.transform); // TODO: smooth
-
-            var currentTime = Time.time;
-            if (currentTime - lastAttack > 2f)
-            {
-                lastAttack = currentTime;
-                // STOP MOVE!
-                animator.SetTrigger("Attack");
-
-                if (isRanged)
-                {
-                    // TODO: proyectiles?
-                }
-            }
-        }
-        else if (distanceToParty < this.EngagingDistanceSqr && distanceToParty > maxAttackDistanceSqr) {
-            Party.Instance.SetEnemyEngagingParty(this.gameObject, distanceToParty);
-
-            wanderMoveBehaviour.StopMoving();
-            transform.LookAt(Party.Instance.transform);
-            // TODO: smooth rotation and acceleration
-            transform.localPosition = Vector3.MoveTowards(transform.position, Party.Instance.transform.position, engagingSpeed * Time.deltaTime);
-        }
-        else if (distanceToParty > this.EngagingDistanceSqr)
+        if (distanceToParty > this.EngagingDistanceSqr)
         {
             wanderMoveBehaviour.StartMoving();
         }
+        else
+        {
+            Party.Instance.SetEnemyEngagingParty(this.gameObject, distanceToParty);
+            wanderMoveBehaviour.StopMoving();
+            transform.LookAt(Party.Instance.transform); // TODO: smooth
 
+            if (distanceToParty > maxAttackDistanceSqr)
+            {
+                transform.localPosition = Vector3.MoveTowards(transform.position, Party.Instance.transform.position, engagingSpeed * Time.deltaTime);
+            }
+            else
+            {
+                var currentTime = Time.time;
+                if (currentTime - lastAttack > 2f)
+                {
+                    lastAttack = currentTime;
+                    StartCoroutine(AttackParty());
+                }
+            }
+        }
 	}
 
-    public float GetDamage(Party party) {
-        // TODO: mejorar, verificar personaje al que le pega
-        // TODO: caracteristicas
-        return damage;
+    IEnumerator AttackParty() {
+        animator.SetTrigger("Attack");
+        yield return new WaitForSeconds(attackAnimationPartyHitDuration);
+        // TODO: char attacked
+        var charAttacked = Random.Range(0, 4);
+        Party.Instance.EnemyAttacks(this, charAttacked);
+        if (isRanged)
+        {
+            // TODO: proyectiles?
+        }
     }
 }

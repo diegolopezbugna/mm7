@@ -52,11 +52,19 @@ public class CharPortrait : MonoBehaviour {
         set {
             _conditionStatus = value;
             if (value == CharConditionStatus.Unconscious)
+            {
                 charPortraitImage.texture = portraitImages.Unconscious;
+                SetStatus(CharEnemyEngagingStatus.None);
+            }
             else if (value == CharConditionStatus.Dead)
+            {
                 charPortraitImage.texture = portraitImages.Dead;
+                SetStatus(CharEnemyEngagingStatus.None);
+            }
             else
+            {
                 charPortraitImage.texture = portraitImages.Normal;
+            }
         }
     }
 
@@ -80,7 +88,7 @@ public class CharPortrait : MonoBehaviour {
     }
 
     private string GetPortraitImagePath(string portraitCode, string portraitSubcode) {
-        return string.Format("Portraits/PC{0}{1}");
+        return string.Format("Portraits/PC{0}{1}", portraitCode, portraitSubcode);
     }
 
     public void SetPortraitImages(string normal, string[] damage, string unconscious, string dead)
@@ -114,6 +122,9 @@ public class CharPortrait : MonoBehaviour {
 
     public void SetStatus(CharEnemyEngagingStatus status)
     {
+        if (!IsCharActive() && status != CharEnemyEngagingStatus.None)
+            return;
+
         if (status == CharEnemyEngagingStatus.Green)
             SetStatusGreen();
         else if (status == CharEnemyEngagingStatus.Yellow)
@@ -124,11 +135,15 @@ public class CharPortrait : MonoBehaviour {
             SetStatusNone();
     }
 
-    public IEnumerable ShowHitPortrait() {
+    public void ShowHitPortrait() {
+        StartCoroutine(DoShowHitPortrait());
+    }
+        
+    private IEnumerator DoShowHitPortrait() {
         var ratio = hitPointsSlider.value / hitPointsSlider.maxValue;
         charPortraitImage.texture = portraitImages.Damage[ratio > 0.66 ? 0 : (ratio > 0.33 ? 1 : 2)];
-        yield return new WaitForSeconds(1f);
-        charPortraitImage.texture = portraitImages.Normal;
+        yield return new WaitForSeconds(0.5f);
+        ConditionStatus = ConditionStatus;
     }
 
     private void SetStatusNone() 
@@ -159,5 +174,8 @@ public class CharPortrait : MonoBehaviour {
         statusRedImage.enabled = true;
     }
 
-
+    public bool IsCharActive() {
+        return ConditionStatus != CharConditionStatus.Unconscious && 
+            ConditionStatus != CharConditionStatus.Dead;
+    }
 }

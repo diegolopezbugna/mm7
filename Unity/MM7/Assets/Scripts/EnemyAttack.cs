@@ -87,12 +87,31 @@ public class EnemyAttack : MonoBehaviour {
     IEnumerator AttackParty() {
         animator.SetTrigger("Attack");
         yield return new WaitForSeconds(attackAnimationPartyHitDuration);
-        // TODO: char attacked
-        var charAttacked = Random.Range(0, 4);
-        Party.Instance.EnemyAttacks(this, charAttacked);
-        if (isRanged)
+        var charAttacked = GetCharAttacked();
+        if (charAttacked >= 0)
         {
-            // TODO: proyectiles?
+            Party.Instance.EnemyAttacks(this, charAttacked);
+            if (isRanged)
+            {
+                // TODO: proyectiles?
+            }
         }
+        else
+        {
+            // TODO: can't attack
+        }
+    }
+
+    private int GetCharAttacked() {
+        var charAttacked = Random.Range(0, 4);
+        int i = 0;
+        while (!Party.Instance.IsCharActive(charAttacked))
+        {
+            if (i == 20)
+                return -1;
+            charAttacked = Random.Range(0, 4);
+            i++;
+        }
+        return charAttacked;
     }
 }

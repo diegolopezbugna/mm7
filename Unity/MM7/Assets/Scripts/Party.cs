@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 using Business;
 
 public class Party : Singleton<Party> {
@@ -63,6 +64,7 @@ public class Party : Singleton<Party> {
             charsPortraits[i].SetHitPoints(chars[i].HitPoints);
             charsPortraits[i].SetMaxSpellPoints(chars[i].MaxSpellPoints);
             charsPortraits[i].SetSpellPoints(chars[i].SpellPoints);
+            charsPortraits[i].ConditionStatus = CharConditionStatus.Normal;
         }
         partyHealth = this.GetComponent<PartyHealth>();
 	}
@@ -158,6 +160,12 @@ public class Party : Singleton<Party> {
             partyHealth.TakeHit(charIndex);
             charsPortraits[charIndex].SetHitPoints(Game.Instance.PartyStats.Chars[charIndex].HitPoints);
             charsPortraits[charIndex].ShowHitPortrait();
+            if (Game.Instance.PartyStats.Chars[charIndex].HitPoints <= 0)
+            {
+                charsPortraits[charIndex].ConditionStatus = CharConditionStatus.Unconscious;
+                message += " who gets unconscious";
+            }
+            // TODO: dead
         }
         else
         {
@@ -169,5 +177,9 @@ public class Party : Singleton<Party> {
         newText.text = message;
         Canvas.ForceUpdateCanvases();
         messagesScrollView.verticalNormalizedPosition = 0;
+    }
+
+    public bool IsCharActive(int charIndex) {
+        return charsPortraits[charIndex].IsCharActive();
     }
 }

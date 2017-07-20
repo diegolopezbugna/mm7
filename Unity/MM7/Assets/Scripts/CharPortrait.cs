@@ -3,11 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum CharPortraitStatus {
+public enum CharEnemyEngagingStatus {
     None,
     Green,
     Yellow,
     Red
+}
+
+public enum CharConditionStatus {
+    Normal,
+    Unconscious,
+    Dead,
+}
+
+public class CharPortraitImages {
+    public Texture Normal;
+    public List<Texture> Damage;
+    public Texture Unconscious;
+    public Texture Dead;
 }
 
 public class CharPortrait : MonoBehaviour {
@@ -30,6 +43,23 @@ public class CharPortrait : MonoBehaviour {
     [SerializeField]
     private Slider spellPointsSlider;
 
+    private CharPortraitImages portraitImages;
+
+    private CharConditionStatus _conditionStatus;
+    public CharConditionStatus ConditionStatus
+    {
+        get { return _conditionStatus; }
+        set {
+            _conditionStatus = value;
+            if (value == CharConditionStatus.Unconscious)
+                charPortraitImage.texture = portraitImages.Unconscious;
+            else if (value == CharConditionStatus.Dead)
+                charPortraitImage.texture = portraitImages.Dead;
+            else
+                charPortraitImage.texture = portraitImages.Normal;
+        }
+    }
+
 	// Use this for initialization
 	void Start () {
 	}
@@ -38,12 +68,30 @@ public class CharPortrait : MonoBehaviour {
 	void Update () {
 	}
 
-    // TODO: distintas.. otro objeto?
-    public void SetPortraitImages(string[] images)
+    public void SetPortraitImageCode(string portraitCode) {
+        SetPortraitImages(
+            GetPortraitImagePath(portraitCode, "01"), 
+            new string[] { 
+                GetPortraitImagePath(portraitCode, "37"),
+                GetPortraitImagePath(portraitCode, "38"),
+                GetPortraitImagePath(portraitCode, "39")},
+            GetPortraitImagePath(portraitCode, "11"),
+            "Portraits/PCover03a");
+    }
+
+    private string GetPortraitImagePath(string portraitCode, string portraitSubcode) {
+        return string.Format("Portraits/PC{0}{1}");
+    }
+
+    public void SetPortraitImages(string normal, string[] damage, string unconscious, string dead)
     {
-        // TODO: mas imagens
-        Texture t = Resources.Load("Portraits/" + images[0]) as Texture;
-        charPortraitImage.texture = t;
+        portraitImages = new CharPortraitImages();
+        portraitImages.Normal = Resources.Load(normal) as Texture;
+        portraitImages.Damage = new List<Texture>(damage.Length - 1);
+        foreach (var d in damage)
+            portraitImages.Damage.Add(Resources.Load(d) as Texture);
+        portraitImages.Unconscious = Resources.Load(unconscious) as Texture;
+        portraitImages.Dead = Resources.Load(dead) as Texture;
     }
 
     public void SetMaxHitPoints(float maxHitPoints)
@@ -64,16 +112,23 @@ public class CharPortrait : MonoBehaviour {
         spellPointsSlider.value = spellPoints;
     }
 
-    public void SetStatus(CharPortraitStatus status)
+    public void SetStatus(CharEnemyEngagingStatus status)
     {
-        if (status == CharPortraitStatus.Green)
+        if (status == CharEnemyEngagingStatus.Green)
             SetStatusGreen();
-        else if (status == CharPortraitStatus.Yellow)
+        else if (status == CharEnemyEngagingStatus.Yellow)
             SetStatusYellow();
-        else if (status == CharPortraitStatus.Red)
+        else if (status == CharEnemyEngagingStatus.Red)
             SetStatusRed();
         else
             SetStatusNone();
+    }
+
+    public IEnumerable ShowHitPortrait() {
+        var ratio = hitPointsSlider.value / hitPointsSlider.maxValue;
+        charPortraitImage.texture = portraitImages.Damage[ratio > 0.66 ? 0 : (ratio > 0.33 ? 1 : 2)];
+        yield return new WaitForSeconds(1f);
+        charPortraitImage.texture = portraitImages.Normal;
     }
 
     private void SetStatusNone() 
@@ -103,5 +158,6 @@ public class CharPortrait : MonoBehaviour {
         statusYellowImage.enabled = false;
         statusRedImage.enabled = true;
     }
+
 
 }

@@ -58,7 +58,7 @@ public class Party : Singleton<Party> {
         var chars = Game.Instance.PartyStats.Chars;
         for (int i = 0; i < chars.Count; i++)
         {
-            charsPortraits[i].SetPortraitImages(new string[] { string.Format("PC{0}01", chars[i].PortraitCode) });
+            charsPortraits[i].SetPortraitImageCode(chars[i].PortraitCode);
             charsPortraits[i].SetMaxHitPoints(chars[i].MaxHitPoints);
             charsPortraits[i].SetHitPoints(chars[i].HitPoints);
             charsPortraits[i].SetMaxSpellPoints(chars[i].MaxSpellPoints);
@@ -128,17 +128,17 @@ public class Party : Singleton<Party> {
         if (isEnemyInHandToHandCombatThisFrame)
         {
             foreach (var p in charsPortraits)
-                p.SetStatus(CharPortraitStatus.Red);
+                p.SetStatus(CharEnemyEngagingStatus.Red);
         }
         else if (isEnemyEngagingPartyThisFrame)
         {
             foreach (var p in charsPortraits)
-                p.SetStatus(CharPortraitStatus.Yellow);
+                p.SetStatus(CharEnemyEngagingStatus.Yellow);
         }
         else
         {
             foreach (var p in charsPortraits)
-                p.SetStatus(CharPortraitStatus.Green);
+                p.SetStatus(CharEnemyEngagingStatus.Green);
         }
         isEnemyInHandToHandCombatThisFrame = false;
         isEnemyEngagingPartyThisFrame = false;
@@ -157,6 +157,7 @@ public class Party : Singleton<Party> {
             Game.Instance.PartyStats.Chars[charIndex].HitPoints -= damage; // this code smells... this is a UseCase!
             partyHealth.TakeHit(charIndex);
             charsPortraits[charIndex].SetHitPoints(Game.Instance.PartyStats.Chars[charIndex].HitPoints);
+            charsPortraits[charIndex].ShowHitPortrait();
         }
         else
         {

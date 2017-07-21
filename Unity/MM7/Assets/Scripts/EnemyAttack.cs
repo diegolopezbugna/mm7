@@ -17,6 +17,9 @@ public class EnemyAttack : MonoBehaviour {
     private float engagingSpeed = 10;
 
     [SerializeField]
+    private float alertOthersDistanceSqr = 20 * 20;
+
+    [SerializeField]
     private float attackAnimationPartyHitDuration = 0.5f;
 
     [SerializeField]
@@ -58,7 +61,7 @@ public class EnemyAttack : MonoBehaviour {
 
         float distanceToParty = (Party.Instance.transform.position - transform.position).sqrMagnitude;
 
-        if (distanceToParty > this.EngagingDistanceSqr)
+        if (distanceToParty > this.EngagingDistanceSqr && !isEngagingParty)
         {
             wanderMoveBehaviour.StartMoving();
         }
@@ -114,4 +117,23 @@ public class EnemyAttack : MonoBehaviour {
         }
         return charAttacked;
     }
+
+    public void ForceEngageParty() {
+        isEngagingParty = true;
+    }
+
+    public void AlertOthers() {
+        ForceEngageParty();
+        var distanceToPartySqr = (Party.Instance.transform.position - transform.position).sqrMagnitude;
+        if (distanceToPartySqr > this.EngagingDistanceSqr)
+        {
+            var allEnemies = GameObject.FindObjectsOfType<EnemyAttack>();
+            foreach (var e in allEnemies)
+            {
+                if ((transform.position - e.transform.position).sqrMagnitude < alertOthersDistanceSqr)
+                    e.ForceEngageParty();
+            }
+        }
+    }
+
 }

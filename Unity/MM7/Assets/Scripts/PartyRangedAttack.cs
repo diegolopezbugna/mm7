@@ -62,7 +62,8 @@ public class PartyRangedAttack : MonoBehaviour {
 
         if (targetTransform != null && targetTransform.tag.StartsWith("Enemy"))
         {
-            var monsterArmorClass = targetTransform.GetComponent<EnemyAttack>().ArmorClass;
+            var enemyAttackBehaviour = targetTransform.GetComponent<EnemyAttack>();
+            var monsterArmorClass = enemyAttackBehaviour.ArmorClass;
             var toHitAttackNumber = attackingChar.RangedAttackBonus * 2f + monsterArmorClass + 30f;
             var toHitDefenseNumber = (monsterArmorClass + 15f) * GetAttackDistanceMultiplier(targetTransform); 
             var didHit = Random.Range(1f, toHitAttackNumber) > Random.Range(1f, toHitDefenseNumber);
@@ -77,6 +78,7 @@ public class PartyRangedAttack : MonoBehaviour {
                         // TODO: physical resistance
                         var damage = Random.Range(attackingChar.RangedDamageMin, attackingChar.RangedDamageMax + 1);
                         MessagesScroller.Instance.AddMessage(string.Format("{0} hits {1} for {2} points", attackingChar.Name, targetTransform.tag.TagToDescription(), damage));
+                        enemyAttackBehaviour.AlertOthers();
                         scriptHealth.TakeHit(damage);
                     }
                 });
@@ -92,7 +94,8 @@ public class PartyRangedAttack : MonoBehaviour {
             a.transform.rotation = transform.rotation;
         }
 
-        a.velocity = a.transform.forward * 20f;
+        // TODO: if enemy is moving, calc rotation to catch it
+        a.velocity = a.transform.forward * 40f;
     }
 
     private float GetAttackDistanceMultiplier(Transform target) {

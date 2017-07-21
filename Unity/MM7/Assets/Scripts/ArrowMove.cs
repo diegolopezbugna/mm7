@@ -34,11 +34,6 @@ public class ArrowMove : MonoBehaviour {
             Destroy(this.gameObject);
             OnTargetReached();
         }
-        else if (DidHit)
-        {
-            //transform.LookAt(Target);
-            // TODO: actualizar trayectoria?
-        }
 
         previousDistanceToTarget = distanceToTarget;
 	}

@@ -22,21 +22,8 @@ public class MessagesScroller : Singleton<MessagesScroller> {
     public void AddMessage(string message) {
         Debug.Log(message);
         var newText = Instantiate(textTemplate, messagesScrollView.content.transform);
-//        var newGO = new GameObject();
-//        newGO.transform.SetParent(messagesScrollView.content.transform);
-//        var newText = newGO.AddComponent<Text>();
         newText.text = message;
-        //Canvas.ForceUpdateCanvases();
-        // TODO: FIX screwed!
-        messagesScrollView.verticalNormalizedPosition = 0;
-        //StartCoroutine(DoGoBottom());
-    }
-
-    IEnumerator DoGoBottom() {
-        yield return new WaitForFixedUpdate();
-        messagesScrollView.verticalNormalizedPosition = 0;
         Canvas.ForceUpdateCanvases();
+        messagesScrollView.verticalNormalizedPosition = 0;
     }
-
-
 }

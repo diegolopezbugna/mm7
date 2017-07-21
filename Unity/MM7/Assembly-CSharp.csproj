@@ -3,8 +3,9 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
+    <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{67909955-9651-70FF-A0DF-54067D8CED0D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -33,84 +34,82 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.XML" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="UnityEngine">
-      <HintPath>C:\Program Files\Unity\Editor\Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor">
-      <HintPath>C:\Program Files\Unity\Editor\Data\Managed\UnityEditor.dll</HintPath>
+      <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
     </Reference>
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\ArrowMove.cs" />
-    <Compile Include="Assets\Scripts\Business\Attribute.cs" />
-    <Compile Include="Assets\Scripts\Business\BonusCost.cs" />
-    <Compile Include="Assets\Scripts\Business\Game.cs" />
-    <Compile Include="Assets\Scripts\Business\PartyStats.cs" />
-    <Compile Include="Assets\Scripts\Business\PlayingCharacter.cs" />
-    <Compile Include="Assets\Scripts\Business\Presenters\CreatePartyViewInterface.cs" />
-    <Compile Include="Assets\Scripts\Business\Profession.cs" />
-    <Compile Include="Assets\Scripts\Business\Race.cs" />
-    <Compile Include="Assets\Scripts\Business\Skill.cs" />
-    <Compile Include="Assets\Scripts\Business\UseCases\CreatePartyUseCase.cs" />
-    <Compile Include="Assets\Scripts\CharPortrait.cs" />
-    <Compile Include="Assets\Scripts\CreateParty\CreateParty.cs" />
-    <Compile Include="Assets\Scripts\CreateParty\CreatePartyChar.cs" />
-    <Compile Include="Assets\Scripts\CreateParty\CreatePartyCharAttribute.cs" />
-    <Compile Include="Assets\Scripts\EnemyAttack.cs" />
-    <Compile Include="Assets\Scripts\EnemyHealth.cs" />
-    <Compile Include="Assets\Scripts\Infrastruture\Localization.cs" />
-    <Compile Include="Assets\Scripts\Infrastruture\StringExtensions.cs" />
-    <Compile Include="Assets\Scripts\MessagesScroller.cs" />
-    <Compile Include="Assets\Scripts\Party.cs" />
-    <Compile Include="Assets\Scripts\PartyHealth.cs" />
-    <Compile Include="Assets\Scripts\PartyRangedAttack.cs" />
-    <Compile Include="Assets\Scripts\RandomWanderMove.cs" />
-    <Compile Include="Assets\Scripts\Singleton.cs" />
-    <Compile Include="Assets\Scripts\StreamVideo.cs" />
-    <Compile Include="Assets\Scripts\SwitchingPositionsWanderEnemyMove.cs" />
-    <Compile Include="Assets\Scripts\TagToDescription.cs" />
-    <Compile Include="Assets\Scripts\UI\ProfessionData.cs" />
-    <Compile Include="Assets\Scripts\UI\SkillData.cs" />
-    <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Simple.shader" />
-    <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
-    <None Include="Assets\Standard Assets\Environment\Water\Water\Shaders\FXWaterPro.shader" />
-    <None Include="Assets\Standard Assets\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />
-    <None Include="Assets\Standard Assets\Characters\FirstPersonCharacter\FirstPersonCharacterGuidelines.txt" />
-    <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\WaterInclude.cginc" />
-    <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Advanced.shader" />
-    <None Include="Assets\Standard Assets\Characters\RollerBall\RollerBallGuidelines.txt" />
-    <Reference Include="UnityEngine.UI">
-      <HintPath>C:\Program Files\Unity\Editor\Data\UnityExtensions\Unity\GUISystem\UnityEngine.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>C:\Program Files\Unity\Editor\Data\UnityExtensions\Unity\Networking\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.TestRunner">
-      <HintPath>C:\Program Files\Unity\Editor\Data\UnityExtensions\Unity\TestRunner\UnityEngine.TestRunner.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>C:\Program Files\Unity\Editor\Data\UnityExtensions\Unity\TestRunner\net35\unity-custom\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Analytics">
-      <HintPath>C:\Program Files\Unity\Editor\Data\UnityExtensions\Unity\UnityAnalytics\UnityEngine.Analytics.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.HoloLens">
-      <HintPath>C:\Program Files\Unity\Editor\Data\UnityExtensions\Unity\UnityHoloLens\RuntimeEditor\UnityEngine.HoloLens.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.VR">
-      <HintPath>C:\Program Files\Unity\Editor\Data\UnityExtensions\Unity\UnityVR\RuntimeEditor\UnityEngine.VR.dll</HintPath>
-    </Reference>
-    <None Include="Assets\Standard Assets\Environment\Water %28Basic%29\Shaders\FXWaterBasic.shader" />
+     <Compile Include="Assets\Scripts\ArrowMove.cs" />
+     <Compile Include="Assets\Scripts\Business\Attribute.cs" />
+     <Compile Include="Assets\Scripts\Business\BonusCost.cs" />
+     <Compile Include="Assets\Scripts\Business\Game.cs" />
+     <Compile Include="Assets\Scripts\Business\PartyStats.cs" />
+     <Compile Include="Assets\Scripts\Business\PlayingCharacter.cs" />
+     <Compile Include="Assets\Scripts\Business\Presenters\CreatePartyViewInterface.cs" />
+     <Compile Include="Assets\Scripts\Business\Profession.cs" />
+     <Compile Include="Assets\Scripts\Business\Race.cs" />
+     <Compile Include="Assets\Scripts\Business\Skill.cs" />
+     <Compile Include="Assets\Scripts\Business\UseCases\CreatePartyUseCase.cs" />
+     <Compile Include="Assets\Scripts\CharPortrait.cs" />
+     <Compile Include="Assets\Scripts\CreateParty\CreateParty.cs" />
+     <Compile Include="Assets\Scripts\CreateParty\CreatePartyChar.cs" />
+     <Compile Include="Assets\Scripts\CreateParty\CreatePartyCharAttribute.cs" />
+     <Compile Include="Assets\Scripts\EnemyAttack.cs" />
+     <Compile Include="Assets\Scripts\EnemyHealth.cs" />
+     <Compile Include="Assets\Scripts\Infrastruture\Localization.cs" />
+     <Compile Include="Assets\Scripts\Infrastruture\StringExtensions.cs" />
+     <Compile Include="Assets\Scripts\MessagesScroller.cs" />
+     <Compile Include="Assets\Scripts\Party.cs" />
+     <Compile Include="Assets\Scripts\PartyHealth.cs" />
+     <Compile Include="Assets\Scripts\PartyRangedAttack.cs" />
+     <Compile Include="Assets\Scripts\RandomWanderMove.cs" />
+     <Compile Include="Assets\Scripts\Singleton.cs" />
+     <Compile Include="Assets\Scripts\StreamVideo.cs" />
+     <Compile Include="Assets\Scripts\SwitchingPositionsWanderEnemyMove.cs" />
+     <Compile Include="Assets\Scripts\TagToDescription.cs" />
+     <Compile Include="Assets\Scripts\UI\ProfessionData.cs" />
+     <Compile Include="Assets\Scripts\UI\SkillData.cs" />
+     <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Simple.shader" />
+     <None Include="Assets\Standard Assets\Environment\Water (Basic)\Shaders\FXWaterBasic.shader" />
+     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
+     <None Include="Assets\Standard Assets\Environment\Water\Water\Shaders\FXWaterPro.shader" />
+     <None Include="Assets\Standard Assets\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />
+     <None Include="Assets\Standard Assets\Characters\FirstPersonCharacter\FirstPersonCharacterGuidelines.txt" />
+     <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\WaterInclude.cginc" />
+     <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Advanced.shader" />
+     <None Include="Assets\Standard Assets\Characters\RollerBall\RollerBallGuidelines.txt" />
+ <Reference Include="UnityEngine.UI">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.Networking">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.TestRunner">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/TestRunner/UnityEngine.TestRunner.dll</HintPath>
+ </Reference>
+ <Reference Include="nunit.framework">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/TestRunner/net35/unity-custom/nunit.framework.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.Analytics">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.HoloLens">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.VR">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>
+ </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{51F53BAF-695B-FD27-742D-0C75F80A6DC6}</Project>
-      <Name>Assembly-CSharp-firstpass</Name>
-    </ProjectReference>
+      <Project>{51F53BAF-695B-FD27-742D-0C75F80A6DC6}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -120,7 +119,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup>
-    <Folder Include="Assets\Scripts\Business\" />
-  </ItemGroup>
+  
 </Project>

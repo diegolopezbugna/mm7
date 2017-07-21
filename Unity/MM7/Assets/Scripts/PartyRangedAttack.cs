@@ -63,25 +63,29 @@ public class PartyRangedAttack : MonoBehaviour {
         if (targetTransform != null && targetTransform.tag.StartsWith("Enemy"))
         {
             var enemyAttackBehaviour = targetTransform.GetComponent<EnemyAttack>();
-            var monsterArmorClass = enemyAttackBehaviour.ArmorClass;
-            var toHitAttackNumber = attackingChar.RangedAttackBonus * 2f + monsterArmorClass + 30f;
-            var toHitDefenseNumber = (monsterArmorClass + 15f) * GetAttackDistanceMultiplier(targetTransform); 
-            var didHit = Random.Range(1f, toHitAttackNumber) > Random.Range(1f, toHitDefenseNumber);
-            if (!didHit)
+            if (enemyAttackBehaviour != null) // TODO: prevent attacking a dying enemy
             {
-                MessagesScroller.Instance.AddMessage(string.Format("{0} misses {1}", attackingChar.Name, targetTransform.tag.TagToDescription()));
-            }
-            a.GetComponent<ArrowMove>().SetTarget(targetTransform, didHit, () =>
+                var monsterArmorClass = enemyAttackBehaviour.ArmorClass;
+                var toHitAttackNumber = attackingChar.RangedAttackBonus * 2f + monsterArmorClass + 30f;
+                var toHitDefenseNumber = (monsterArmorClass + 15f) * GetAttackDistanceMultiplier(targetTransform); 
+                var didHit = Random.Range(1f, toHitAttackNumber) > Random.Range(1f, toHitDefenseNumber);
+                if (!didHit)
                 {
-                    var scriptHealth = targetTransform.GetComponent<EnemyHealth>();
-                    if (scriptHealth != null) {
-                        // TODO: physical resistance
-                        var damage = Random.Range(attackingChar.RangedDamageMin, attackingChar.RangedDamageMax + 1);
-                        MessagesScroller.Instance.AddMessage(string.Format("{0} hits {1} for {2} points", attackingChar.Name, targetTransform.tag.TagToDescription(), damage));
-                        enemyAttackBehaviour.AlertOthers();
-                        scriptHealth.TakeHit(damage);
-                    }
-                });
+                    MessagesScroller.Instance.AddMessage(string.Format("{0} misses {1}", attackingChar.Name, targetTransform.tag.TagToDescription()));
+                }
+                a.GetComponent<ArrowMove>().SetTarget(targetTransform, didHit, () =>
+                    {
+                        var scriptHealth = targetTransform.GetComponent<EnemyHealth>();
+                        if (scriptHealth != null && scriptHealth.IsActive())
+                        {
+                            // TODO: physical resistance
+                            var damage = Random.Range(attackingChar.RangedDamageMin, attackingChar.RangedDamageMax + 1);
+                            MessagesScroller.Instance.AddMessage(string.Format("{0} hits {1} for {2} points", attackingChar.Name, targetTransform.tag.TagToDescription(), damage));
+                            enemyAttackBehaviour.AlertOthers();
+                            scriptHealth.TakeHit(damage);
+                        }
+                    });
+            }
         }
 
         a.transform.position = origin;

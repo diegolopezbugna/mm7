@@ -80,4 +80,8 @@ public class EnemyHealth : MonoBehaviour {
         }
         Destroy(this);
     }
+
+    public bool IsActive() {
+        return hitPoints > 0;
+    }
 }

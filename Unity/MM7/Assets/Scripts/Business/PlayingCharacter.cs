@@ -86,17 +86,31 @@ namespace Business
             }
         }
 
+        public int RangedAttackBonus {
+            get {
+                // TODO: add items and skills
+                return GetAttributeTableValue(Accuracy);
+            }
+        }
+
         public int RangedDamageMin {
             get {
                 // TODO: add items and skills
-                return 0;
+                return 4;
             }
         }
 
         public int RangedDamageMax {
             get {
                 // TODO: add items and skills
-                return 0;
+                return 8;
+            }
+        }
+
+        public float RecoveryTime {
+            get {
+                // TODO: formula! depends on speed? armor?
+                return 2f;
             }
         }
 

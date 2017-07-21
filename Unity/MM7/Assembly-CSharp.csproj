@@ -65,6 +65,7 @@
      <Compile Include="Assets\Scripts\EnemyHealth.cs" />
      <Compile Include="Assets\Scripts\Infrastruture\Localization.cs" />
      <Compile Include="Assets\Scripts\Infrastruture\StringExtensions.cs" />
+     <Compile Include="Assets\Scripts\MessagesScroller.cs" />
      <Compile Include="Assets\Scripts\Party.cs" />
      <Compile Include="Assets\Scripts\PartyHealth.cs" />
      <Compile Include="Assets\Scripts\PartyRangedAttack.cs" />

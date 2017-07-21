@@ -19,9 +19,6 @@ public class Party : Singleton<Party> {
     [SerializeField]
     private CharPortrait[] charsPortraits;
 
-    [SerializeField]
-    private ScrollRect messagesScrollView;
-
     private Transform currentTarget;
     public Transform CurrentTarget
     {
@@ -171,12 +168,7 @@ public class Party : Singleton<Party> {
         {
             message = string.Format("{0} misses {1}", enemy.tag.TagToDescription(), Game.Instance.PartyStats.Chars[charIndex].Name);
         }
-        Debug.Log(message);
-        var text = messagesScrollView.content.GetComponentInChildren<Text>();
-        var newText = Instantiate(text, messagesScrollView.content.transform);
-        newText.text = message;
-        Canvas.ForceUpdateCanvases();
-        messagesScrollView.verticalNormalizedPosition = 0;
+        MessagesScroller.Instance.AddMessage(message);
     }
 
     public bool IsCharActive(int charIndex) {

@@ -85,6 +85,6 @@ public class CreateParty : Singleton<CreateParty>, CreatePartyViewInterface
             partyStats.Chars.Add(cpc.GetPlayingCaracter());
         Game.Instance.PartyStats = partyStats;
 
-        SceneManager.LoadScene("Emerald");
+        SceneManager.LoadScene("EmeraldIsland");
     }
 }

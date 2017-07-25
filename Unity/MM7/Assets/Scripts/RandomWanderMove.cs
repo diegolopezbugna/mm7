@@ -14,9 +14,12 @@ public class RandomWanderMove : MonoBehaviour {
 
     private IEnumerator runningCorroutine;
 
+    private float yOffsetFromTerrain;
+
 	// Use this for initialization
 	void Start () {
         initialPosition = transform.localPosition;
+        yOffsetFromTerrain = transform.position.y - Terrain.activeTerrain.SampleHeight(transform.position);
         StartMoving();
 	}
 	
@@ -66,7 +69,9 @@ public class RandomWanderMove : MonoBehaviour {
     Vector3 GetNewDestination() {
         var newX = Random.Range(initialPosition.x - maxdistance, initialPosition.x + maxdistance);
         var newZ = Random.Range(initialPosition.z - maxdistance, initialPosition.z + maxdistance);
-        return new Vector3(newX, initialPosition.y, newZ);  // TODO: ojo que no cambie la y... raycast con el terreno?
+        var newPositionBadY = new Vector3(newX, initialPosition.y, newZ);
+        var newY = Terrain.activeTerrain.SampleHeight(newPositionBadY) + yOffsetFromTerrain;
+        return new Vector3(newX, newY, newZ);
     }
 
 }

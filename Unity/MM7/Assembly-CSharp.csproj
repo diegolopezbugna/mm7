@@ -67,8 +67,8 @@
      <Compile Include="Assets\Scripts\Infrastruture\StringExtensions.cs" />
      <Compile Include="Assets\Scripts\MessagesScroller.cs" />
      <Compile Include="Assets\Scripts\Party.cs" />
+     <Compile Include="Assets\Scripts\PartyAttack.cs" />
      <Compile Include="Assets\Scripts\PartyHealth.cs" />
-     <Compile Include="Assets\Scripts\PartyRangedAttack.cs" />
      <Compile Include="Assets\Scripts\RandomWanderMove.cs" />
      <Compile Include="Assets\Scripts\Singleton.cs" />
      <Compile Include="Assets\Scripts\StreamVideo.cs" />

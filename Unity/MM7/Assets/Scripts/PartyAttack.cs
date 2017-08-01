@@ -4,18 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using Business;
 
-public class PartyAttack : MonoBehaviour {
+public class PartyAttack : MonoBehaviour, PartyAttacksViewInterface {
 
     private const int CHARS = 4;
 
     [SerializeField]
     private Rigidbody arrow;
-
-    [SerializeField]
-    private float mediumRangeSqrDistance = 20 * 20; // TODO: check distances
-
-    [SerializeField]
-    private float longRangeSqrDistance = 40 * 40; // TODO: check distances
 
     private float[] lastAttack;
     private int lastCharAttacker = -1;
@@ -38,11 +32,6 @@ public class PartyAttack : MonoBehaviour {
 	void Update () {
         if (Input.GetKeyDown("q"))
         {
-            foreach (var anim in weapons)
-            {
-                anim.SetTrigger("Attack");
-            }
-
             // TODO: select player
             var attackingChar = -1;
             var newCharAttacker = lastCharAttacker + 1;
@@ -58,69 +47,104 @@ public class PartyAttack : MonoBehaviour {
             if (attackingChar >= 0)
             {
                 lastCharAttacker = attackingChar;
-                DoThrowArrow(attackingChar, Party.Instance.CurrentTargetPoint, Party.Instance.CurrentTarget);
+                DoAttack(attackingChar, Party.Instance.CurrentTargetPoint, Party.Instance.CurrentTarget);
                 lastAttack[attackingChar] = Time.time;
             }
 
         }
 	}
 
-    void DoThrowArrow(int charIndex, Vector3? targetPoint, Transform targetTransform) {
-        var origin = transform.TransformPoint((charIndex - 1.5f) / 2f, 0.5f, 0);
-        var a = Instantiate(arrow);
-
+    void DoAttack(int charIndex, Vector3? targetPoint, Transform targetTransform) {
         var attackingChar = Game.Instance.PartyStats.Chars[charIndex];
-        // TODO: player attacking status
 
         if (targetTransform != null && targetTransform.tag.StartsWith("Enemy"))
         {
             var enemyAttackBehaviour = targetTransform.GetComponent<EnemyAttack>();
             if (enemyAttackBehaviour != null) // TODO: prevent attacking a dying enemy
             {
-                var monsterArmorClass = enemyAttackBehaviour.ArmorClass;
-                var toHitAttackNumber = attackingChar.RangedAttackBonus * 2f + monsterArmorClass + 30f;
-                var toHitDefenseNumber = (monsterArmorClass + 15f) * GetAttackDistanceMultiplier(targetTransform); 
-                var didHit = Random.Range(1f, toHitAttackNumber) > Random.Range(1f, toHitDefenseNumber);
-                if (!didHit)
-                {
-                    MessagesScroller.Instance.AddMessage(string.Format("{0} misses {1}", attackingChar.Name, targetTransform.tag.TagToDescription()));
-                }
-                a.GetComponent<ArrowMove>().SetTarget(targetTransform, didHit, () =>
-                    {
-                        var scriptHealth = targetTransform.GetComponent<EnemyHealth>();
-                        if (scriptHealth != null && scriptHealth.IsActive())
-                        {
-                            // TODO: physical resistance
-                            var damage = Random.Range(attackingChar.RangedDamageMin, attackingChar.RangedDamageMax + 1);
-                            MessagesScroller.Instance.AddMessage(string.Format("{0} hits {1} for {2} points", attackingChar.Name, targetTransform.tag.TagToDescription(), damage));
-                            enemyAttackBehaviour.AlertOthers();
-                            scriptHealth.TakeHit(damage);
-                        }
-                    });
+                var partyAttacksUseCase = new PartyAttacksUseCase(this, targetPoint, targetTransform, Party.Instance.transform);
+                partyAttacksUseCase.TryHit(attackingChar, enemyAttackBehaviour.ArmorClass);
             }
+        }
+        else
+        {
+            partyAttacksUseCase.HitNothing(attackingChar);
+        }
+    }
+
+    public void ThrowArrowToTarget(PlayingCharacter attackingChar, Transform targetTransform,  Vector3 targetPoint, bool didHit, int damage) {
+        int charIndex = Game.Instance.PartyStats.Chars.IndexOf(attackingChar);
+        var origin = transform.TransformPoint((charIndex - 1.5f) / 2f, 0.5f, 0);
+        var a = Instantiate(arrow);
+
+        var enemyAttackBehaviour = targetTransform.GetComponent<EnemyAttack>();
+        if (enemyAttackBehaviour != null) // TODO: prevent attacking a dying enemy
+        {
+            a.GetComponent<ArrowMove>().SetTarget(targetTransform, didHit, () =>
+                {
+                    var scriptHealth = targetTransform.GetComponent<EnemyHealth>();
+                    if (scriptHealth != null && scriptHealth.IsActive())
+                    {
+                        // TODO: move some of this logic to the useCase?
+                        enemyAttackBehaviour.AlertOthers();
+                        scriptHealth.TakeHit(damage);
+                    }
+                });
         }
 
         a.transform.position = origin;
-        if (targetPoint.HasValue)
-        {
-            a.transform.LookAt(targetPoint.Value);
-        }
-        else
-        {
-            a.transform.rotation = transform.rotation;
-        }
-
+        a.transform.LookAt(targetPoint);
         // TODO: if enemy is moving, calc rotation to catch it
+        a.velocity = a.transform.forward * 40f;
+
+        AddMessageToMessagesScroller(didHit, attackingChar, targetTransform, damage);
+    }
+
+    public void ThrowArrowToNonInteractiveObjects(PlayingCharacter attackingChar, Vector3? targetPoint) {
+        int charIndex = Game.Instance.PartyStats.Chars.IndexOf(attackingChar);
+        var origin = transform.TransformPoint((charIndex - 1.5f) / 2f, 0.5f, 0);
+        var a = Instantiate(arrow);
+
+        a.transform.position = origin;
+        if (targetPoint.HasValue)
+            a.transform.LookAt(targetPoint.Value);
+        else
+            a.transform.rotation = transform.rotation;
+
         a.velocity = a.transform.forward * 40f;
     }
 
-    private float GetAttackDistanceMultiplier(Transform target) {
-        var distanceToTarget = (target.position - transform.position).sqrMagnitude;
-        if (distanceToTarget > longRangeSqrDistance)
-            return 2f;
-        else if (distanceToTarget > mediumRangeSqrDistance)
-            return 1.5f;
-        else
-            return 1f;
+    public void HandToHandAttack(PlayingCharacter attackingChar, Transform targetTransform, bool didHit, int damage) {
+        int charIndex = Game.Instance.PartyStats.Chars.IndexOf(attackingChar);
+        weapons[charIndex].SetTrigger("Attack");
+
+        if (targetTransform != null)
+        {
+            if (didHit)
+            {
+                var scriptHealth = targetTransform.GetComponent<EnemyHealth>();
+                if (scriptHealth != null && scriptHealth.IsActive())
+                {
+                    // TODO: move some of this logic to the useCase?
+                    scriptHealth.TakeHit(damage);
+                }
+            }
+            
+            AddMessageToMessagesScroller(didHit, attackingChar, targetTransform, damage);
+        }
     }
+
+    public void AddMessage(string message) {
+        MessagesScroller.Instance.AddMessage(message);
+    }
+
+    private void AddMessageToMessagesScroller(bool didHit, PlayingCharacter attackingChar, Transform targetTransform, int damage) {
+        string message;
+        if (didHit)
+            message = string.Format("{0} misses {1}", attackingChar.Name, targetTransform.tag.TagToDescription());
+        else
+            message = string.Format("{0} hits {1} for {2} points", attackingChar.Name, targetTransform.tag.TagToDescription(), damage);
+        MessagesScroller.Instance.AddMessage(message);
+    }
+
 }

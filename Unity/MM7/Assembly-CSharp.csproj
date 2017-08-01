@@ -53,10 +53,13 @@
      <Compile Include="Assets\Scripts\Business\PartyStats.cs" />
      <Compile Include="Assets\Scripts\Business\PlayingCharacter.cs" />
      <Compile Include="Assets\Scripts\Business\Presenters\CreatePartyViewInterface.cs" />
+     <Compile Include="Assets\Scripts\Business\Presenters\PartyAttacksViewInterface.cs" />
      <Compile Include="Assets\Scripts\Business\Profession.cs" />
      <Compile Include="Assets\Scripts\Business\Race.cs" />
      <Compile Include="Assets\Scripts\Business\Skill.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\CreatePartyUseCase.cs" />
+     <Compile Include="Assets\Scripts\Business\UseCases\EnemyAttacksUseCase.cs" />
+     <Compile Include="Assets\Scripts\Business\UseCases\PartyAttacksUseCase.cs" />
      <Compile Include="Assets\Scripts\CharPortrait.cs" />
      <Compile Include="Assets\Scripts\CreateParty\CreateParty.cs" />
      <Compile Include="Assets\Scripts\CreateParty\CreatePartyChar.cs" />

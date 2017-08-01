@@ -144,7 +144,7 @@ public class Party : Singleton<Party> {
     }
 
     public void EnemyAttacks(EnemyAttack enemy, int charIndex) {
-
+        // TODO: move all this logic to business.EnemyAttacksUseCase!!!
         var ac = Game.Instance.PartyStats.Chars[charIndex].ArmorClass;
         var chanceToHit = (5f + enemy.MonsterLevel * 2f) / (10f + enemy.MonsterLevel * 2f + ac);
 

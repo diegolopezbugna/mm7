@@ -29,19 +29,20 @@ namespace Business
             var toHitAttackNumber = attackBonus * 2f + monsterArmorClass + 30f;
             var toHitDefenseNumber = (monsterArmorClass + 15f) * GetAttackDistanceMultiplier(distanceToTargetSqr); 
             bool didHit = Random.Range(1f, toHitAttackNumber) > Random.Range(1f, toHitDefenseNumber);
+            var damage = 0;
 
             if (handToHand)
             {
                 // TODO: physical resistance
-                var damage = Random.Range(attackingChar.DamageMin, attackingChar.DamageMax + 1);
-                View.HandToHandAttack(attackingChar, didHit, damage);
+                damage = Random.Range(attackingChar.DamageMin, attackingChar.DamageMax + 1);
+                View.HandToHandAttack(attackingChar, TargetTransform, didHit, damage);
             }
             else
             {
                 if (didHit)
                 {
                     // TODO: physical resistance
-                    var damage = Random.Range(attackingChar.RangedDamageMin, attackingChar.RangedDamageMax + 1);
+                    damage = Random.Range(attackingChar.RangedDamageMin, attackingChar.RangedDamageMax + 1);
                     View.ThrowArrowToTarget(attackingChar, TargetTransform, TargetPoint.Value, didHit, damage);
                 }
                 else
@@ -49,6 +50,11 @@ namespace Business
                     View.ThrowArrowToNonInteractiveObjects(attackingChar, TargetPoint);
                 }
             }
+
+            if (didHit)
+                View.AddMessage(string.Format("{0} hits {1} for {2} points", attackingChar.Name, TargetTransform.tag.TagToDescription(), damage));
+            else
+                View.AddMessage(string.Format("{0} misses {1}", attackingChar.Name, TargetTransform.tag.TagToDescription()));
         }
 
         public void HitNothing(PlayingCharacter attackingChar) {

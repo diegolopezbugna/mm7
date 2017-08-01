@@ -38,7 +38,8 @@ public class PartyAttack : MonoBehaviour, PartyAttacksViewInterface {
             for (int i = newCharAttacker; i < newCharAttacker + CHARS; i++)
             {
                 var j = i % 4;
-                if (Time.time - lastAttack[j] > Game.Instance.PartyStats.Chars[j].RecoveryTime)
+                if (Time.time - lastAttack[j] > Game.Instance.PartyStats.Chars[j].RecoveryTime && 
+                    Party.Instance.IsCharActive(j))
                 {
                     attackingChar = j;
                     break;
@@ -56,13 +57,13 @@ public class PartyAttack : MonoBehaviour, PartyAttacksViewInterface {
 
     void DoAttack(int charIndex, Vector3? targetPoint, Transform targetTransform) {
         var attackingChar = Game.Instance.PartyStats.Chars[charIndex];
+        var partyAttacksUseCase = new PartyAttacksUseCase(this, targetPoint, targetTransform, Party.Instance.transform);
 
         if (targetTransform != null && targetTransform.tag.StartsWith("Enemy"))
         {
             var enemyAttackBehaviour = targetTransform.GetComponent<EnemyAttack>();
             if (enemyAttackBehaviour != null) // TODO: prevent attacking a dying enemy
             {
-                var partyAttacksUseCase = new PartyAttacksUseCase(this, targetPoint, targetTransform, Party.Instance.transform);
                 partyAttacksUseCase.TryHit(attackingChar, enemyAttackBehaviour.ArmorClass);
             }
         }
@@ -96,8 +97,6 @@ public class PartyAttack : MonoBehaviour, PartyAttacksViewInterface {
         a.transform.LookAt(targetPoint);
         // TODO: if enemy is moving, calc rotation to catch it
         a.velocity = a.transform.forward * 40f;
-
-        AddMessageToMessagesScroller(didHit, attackingChar, targetTransform, damage);
     }
 
     public void ThrowArrowToNonInteractiveObjects(PlayingCharacter attackingChar, Vector3? targetPoint) {
@@ -129,22 +128,10 @@ public class PartyAttack : MonoBehaviour, PartyAttacksViewInterface {
                     scriptHealth.TakeHit(damage);
                 }
             }
-            
-            AddMessageToMessagesScroller(didHit, attackingChar, targetTransform, damage);
         }
     }
 
     public void AddMessage(string message) {
         MessagesScroller.Instance.AddMessage(message);
     }
-
-    private void AddMessageToMessagesScroller(bool didHit, PlayingCharacter attackingChar, Transform targetTransform, int damage) {
-        string message;
-        if (didHit)
-            message = string.Format("{0} misses {1}", attackingChar.Name, targetTransform.tag.TagToDescription());
-        else
-            message = string.Format("{0} hits {1} for {2} points", attackingChar.Name, targetTransform.tag.TagToDescription(), damage);
-        MessagesScroller.Instance.AddMessage(message);
-    }
-
 }

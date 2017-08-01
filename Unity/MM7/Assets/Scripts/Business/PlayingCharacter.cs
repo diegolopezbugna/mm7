@@ -75,14 +75,18 @@ namespace Business
         public int DamageMin {
             get {
                 // TODO: add items and skills
-                return GetAttributeTableValue(Might);
+                var d = GetAttributeTableValue(Might);
+                d += 4;
+                return d > 0 ? d : 0;
             }
         }
 
         public int DamageMax {
             get {
                 // TODO: add items and skills
-                return GetAttributeTableValue(Might);
+                var d = GetAttributeTableValue(Might);
+                d += 8;
+                return d > 0 ? d : 0;
             }
         }
 

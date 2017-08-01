@@ -35,6 +35,9 @@ public class EnemyHealth : MonoBehaviour {
 	}
 
     public void TakeHit(int damage) {
+        if (damage <= 0)
+            return;
+
         hitPoints -= damage; //other.getDamageFor(this.gameObject);
         blood.Play();
 

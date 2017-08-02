@@ -11,20 +11,20 @@ public class PartyAttack : MonoBehaviour, PartyAttacksViewInterface {
     [SerializeField]
     private Rigidbody arrow;
 
+    [SerializeField]
+    private GameObject[] weaponContainers;
+
     private float[] lastAttack;
     private int lastCharAttacker = -1;
-    private List<Animator> weapons = new List<Animator>();
+    private List<Animator> weaponAnimators = new List<Animator>();
 
 	// Use this for initialization
 	void Start () {
         lastAttack = new float[4];
 
-        foreach (var anim in transform.GetComponentsInChildren<Animator>())
+        foreach (var wc in weaponContainers)
         {
-            if (anim.tag == "Weapon")
-            {
-                weapons.Add(anim);
-            }
+            weaponAnimators.Add(wc.GetComponentInChildren<Animator>());
         }
     }
 	
@@ -115,7 +115,7 @@ public class PartyAttack : MonoBehaviour, PartyAttacksViewInterface {
 
     public void HandToHandAttack(PlayingCharacter attackingChar, Transform targetTransform, bool didHit, int damage) {
         int charIndex = Game.Instance.PartyStats.Chars.IndexOf(attackingChar);
-        weapons[charIndex].SetTrigger("Attack");
+        weaponAnimators[charIndex].SetTrigger("Attack");
 
         if (targetTransform != null)
         {

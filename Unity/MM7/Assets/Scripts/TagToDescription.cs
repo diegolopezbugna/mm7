@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace Business {
+
 public static class String {
 
     public static string TagToDescription(this string tag) {
@@ -13,5 +15,7 @@ public static class String {
 
         return tag;
     }
+
+}
 
 }

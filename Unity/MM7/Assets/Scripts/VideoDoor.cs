@@ -10,15 +10,11 @@ public class VideoDoor : MonoBehaviour {
 
     private Building building;
     private List<Npc> npcs;
-    private 
 
 	// Use this for initialization
 	void Start () {
-		
         npcs = Npc.GetByLocationCode(locationCode);
         building = Building.GetByLocationCode(locationCode);
-
-        //videoCanvas = GameObject.FindGameObjectWithTag("VideoBuildingCanvas");
 	}
 	
 	// Update is called once per frame
@@ -33,9 +29,9 @@ public class VideoDoor : MonoBehaviour {
     public string TryOpen() {
         // TODO: for shops check opening & closing hours
 
-
-
-
+        VideoBuilding.Instance.Npcs = npcs;
+        VideoBuilding.Instance.Building = building;
+        VideoBuilding.Instance.gameObject.SetActive(true);
 
         return "";
     }

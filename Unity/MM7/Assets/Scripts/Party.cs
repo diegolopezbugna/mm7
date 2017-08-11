@@ -93,6 +93,15 @@ public class Party : Singleton<Party> {
 
                 focussedText.text = hit.transform.gameObject.tag.TagToDescription() + " - " + hit.distance;
             }
+            else if (hit.transform.tag.StartsWith("VideoDoor") && hit.distance < 10)
+            {
+                var videoDoor = hit.transform.GetComponent<VideoDoor>();
+                focussedText.text = videoDoor.GetDescription();
+                if (Input.GetMouseButtonDown(0))
+                {
+                    focussedText.text = videoDoor.TryOpen(); // TODO: show result for X seconds
+                }
+            }
             else
             {
                 focussedText.text = "";
@@ -174,4 +183,5 @@ public class Party : Singleton<Party> {
     public bool IsCharActive(int charIndex) {
         return charsPortraits[charIndex].IsCharActive();
     }
+
 }

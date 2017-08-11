@@ -16,7 +16,7 @@ namespace Business
     public class Npc
     {
         public string Name { get; set; }
-        public string PictureCode { get; set; }
+        public int PictureCode { get; set; }
         public List<string> Greetings { get; set; }
         public List<NpcTopic> Topics { get; set; }
 
@@ -48,7 +48,7 @@ namespace Business
             {
                 var npc = new Npc() { 
                     Name = "Mia Lucille",
-                    PictureCode = "216", 
+                    PictureCode = 216, 
                     Greetings = new List<string>() { "Greetings, I'm Mia.  Do you need something?", "Yes?  What do you want?" },
                     Topics = new List<NpcTopic>() { 
                         new NpcTopic("Dragonflies", "Wild Dragonflies have infested the northwestern side of Emerald Island recently, making it dangerous to store things in our shed out there.  Dragonflies aren't terribly powerful, but they are fast and can even occasionally shoot fire at you.  Don't take them too lightly!"),

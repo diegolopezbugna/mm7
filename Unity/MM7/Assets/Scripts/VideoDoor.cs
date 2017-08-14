@@ -33,7 +33,6 @@ public class VideoDoor : MonoBehaviour {
         VideoBuilding.Instance.Building = building;
         VideoBuilding.Instance.Show();
 
-
         return "";
     }
 }

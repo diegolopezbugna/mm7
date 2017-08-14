@@ -97,7 +97,7 @@ public class Party : Singleton<Party> {
             {
                 var videoDoor = hit.transform.GetComponent<VideoDoor>();
                 focussedText.text = videoDoor.GetDescription();
-                if (Input.GetMouseButtonDown(0) && !VideoBuilding.Instance.isActiveAndEnabled)
+                if (Input.GetMouseButton(0) && !VideoBuilding.Instance.IsShowing)
                 {
                     focussedText.text = videoDoor.TryOpen(); // TODO: show result for X seconds
                 }

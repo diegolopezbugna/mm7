@@ -20,7 +20,15 @@ namespace Business
         public List<string> Greetings { get; set; }
         public List<NpcTopic> Topics { get; set; }
 
+        private int currentGreetingIndex = 0;
 
+        public string NextGreeting() {
+            var greeting = "";
+            greeting = Greetings[currentGreetingIndex];
+            if (currentGreetingIndex + 1 < Greetings.Count)
+                currentGreetingIndex += 1;
+            return greeting;
+        }
 
         public static List<Npc> GetByLocationCode(string locationCode) {
 

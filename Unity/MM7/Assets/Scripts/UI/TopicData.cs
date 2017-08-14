@@ -20,7 +20,7 @@ public class TopicData : MonoBehaviour {
 	}
 
     public void TopicClicked() {
-
+        VideoBuilding.Instance.OnTopicClicked(Npc, NpcTopic);
     }
 
 }

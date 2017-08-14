@@ -31,7 +31,8 @@ public class VideoDoor : MonoBehaviour {
 
         VideoBuilding.Instance.Npcs = npcs;
         VideoBuilding.Instance.Building = building;
-        VideoBuilding.Instance.gameObject.SetActive(true);
+        VideoBuilding.Instance.Show();
+
 
         return "";
     }

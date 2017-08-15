@@ -93,7 +93,7 @@ public class Party : Singleton<Party> {
 
                 focussedText.text = hit.transform.gameObject.tag.TagToDescription() + " - " + hit.distance;
             }
-            else if (hit.transform.tag.StartsWith("VideoDoor") && hit.distance < 10)
+            else if (hit.transform.tag.StartsWith("VideoDoor") && hit.distance < 5)
             {
                 var videoDoor = hit.transform.GetComponent<VideoDoor>();
                 focussedText.text = videoDoor.GetDescription();

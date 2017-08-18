@@ -3,16 +3,6 @@ using System.Collections.Generic;
 
 namespace Business
 {
-    public class NpcTopic {
-        public string Title { get; set; }
-        public string Description { get; set; }
-
-        public NpcTopic(string title, string description) {
-            Title = title;
-            Description = description;
-        }
-    }
-    
     public class Npc
     {
         public string Name { get; set; }
@@ -321,6 +311,63 @@ namespace Business
 
             return npcs;
         }
+
+
+        // TODO: Guardias
+        public static Npc GetByCode(string code) {
+            if (code == "4")
+            {
+                var npc = new Npc()
+                { 
+                    Name = "Ailyssa the Bard",
+                    PictureCode = 163, 
+                    Greetings = new List<string>() { "Hello, my name is Ailyssa.  I'm the Bard in charge of overseeing the entertainment on Emerald Island for the duration of the Scavenger Hunt.", "Hello again, how are you doing?" },
+                    Topics = new List<NpcTopic>()
+                    { 
+                        new NpcTopic("Scavenger Hunt", "Are you contestants in Lord Markham's Scavenger Hunt?  How neat!  I'm here to provide entertainment to Lord Markham's entourage, the contestants, and to anyone else that would like to hear a song."),
+                        new NpcTopic("Instruments", "I own a few instruments, but I only brought my lute with me.  Its old and not quite as well kept as some of the others, but I didn't want one of my good instruments stolen by pirates or damaged from exposure to the humid, salty air."),
+                        new NpcTopic("Lute", "You say you need an instrument for the Scavenger Hunt?  I suppose you could buy my lute, but I've had it for such a long time.  I guess I'd part with it for 500 gold.  Interested?", 
+                            new List<NpcTopic>() { new NpcTopic("Buy Lute for 500 gold") }), // TODO: complete, gold npc topics?
+                    }
+                };
+                return npc;
+            }
+            else if (code == "5")  // TODO: sally is near the dragon's cave
+            {
+                var npc = new Npc()
+                    { 
+                        Name = "Sally",
+                        PictureCode = 150, 
+                        Greetings = new List<string>() { "Hi there!  I'm Sally.  I don't usually see people this far from town, are you lost?", "Still out here?  Town's back a ways to the south." },
+                        Topics = new List<NpcTopic>()
+                            { 
+                                new NpcTopic("Ocean", "I love being out on this side of the island, the view of the ocean is much better than from town, don't you agree?"),
+                                new NpcTopic("Seashell", "I have some nice sea shells for sale, shells that you can only find on Emerald Island.  Can I sell one to you?  They're only a hundred gold pieces each.", 
+                                    new List<NpcTopic>() { new NpcTopic("Buy Seashell for 100 gold") }), // TODO: complete, gold npc topics?
+                            }
+                    };
+                return npc;
+            }
+            else if (code == "6")
+            {
+                var npc = new Npc()
+                    { 
+                        Name = "Mr. Malwick",
+                        PictureCode = 21, 
+                        Greetings = new List<string>() { "Pssst…  Come here, I have an offer for you.", "Ah, you've returned, no doubt to listen to my proposal." },
+                        Topics = new List<NpcTopic>()
+                            { 
+                                new NpcTopic("Harmondale", "We have reason to believe that whoever is in charge of Harmondale in the next few months will have an unprecedented opportunity to shape the future. That is why I am here today--to make sure the shape of the future is pleasing to my associates. I'm sure you understand."),
+                                new NpcTopic("Proposal", "Allow me to introduce myself.  My name is Mr. Malwick.  I represent a group of, shall we say, \"investors in the future\".  I have been observing you since you arrived on this island, and I believe your values and goals have much in common with ours.  I am empowered to grant you a fireball wand to help you win the Hunt today, in exchange for a favor in the future.  What do you say?",
+                                    new List<NpcTopic>() { new NpcTopic("Accept Wand"), new NpcTopic("Reject Wand") }), // TODO: complete, custom topics?
+                            }
+                    };
+                return npc;
+            }
+
+            return null;
+        }
+
 
     }
 }

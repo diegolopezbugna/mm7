@@ -59,7 +59,7 @@ public class EnemyAttack : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        float distanceToParty = (Party.Instance.transform.position - transform.position).sqrMagnitude;
+        float distanceToParty = Party.Instance.GetDistanceSqrTo(transform);
 
         if (distanceToParty > this.EngagingDistanceSqr && !isEngagingParty)
         {
@@ -124,7 +124,7 @@ public class EnemyAttack : MonoBehaviour {
 
     public void AlertOthers() {
         ForceEngageParty();
-        var distanceToPartySqr = (Party.Instance.transform.position - transform.position).sqrMagnitude;
+        var distanceToPartySqr = Party.Instance.GetDistanceSqrTo(transform);
         if (distanceToPartySqr > this.EngagingDistanceSqr)
         {
             var allEnemies = GameObject.FindObjectsOfType<EnemyAttack>();

@@ -102,6 +102,25 @@ public class Party : Singleton<Party> {
                     focussedText.text = videoDoor.TryOpen(); // TODO: show result for X seconds
                 }
             }
+            else if (hit.transform.tag.StartsWith("Npc") && hit.distance < 2)
+            {
+                var npcTalk = hit.transform.GetComponent<NpcTalk>();
+                if (npcTalk != null)
+                {
+                    focussedText.text = npcTalk.GetDescription();
+                    if (Input.GetMouseButton(0) && !NpcDialog.Instance.IsShowing)
+                    {
+                        npcTalk.Talk();
+                    }
+                }
+                var npcNews = hit.transform.GetComponent<NpcNews>();
+                if (npcNews != null)
+                {
+                    focussedText.text = npcNews.GetDescription();
+                    if (Input.GetMouseButton(0))
+                        npcNews.Talk();
+                }
+            }
             else
             {
                 focussedText.text = "";
@@ -184,4 +203,7 @@ public class Party : Singleton<Party> {
         return charsPortraits[charIndex].IsCharActive();
     }
 
+    public float GetDistanceSqrTo(Transform other) {
+        return (transform.position - other.position).sqrMagnitude;
+    }
 }

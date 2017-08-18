@@ -12,36 +12,43 @@ public class RandomWanderMove : MonoBehaviour {
 
     private Vector3 initialPosition;
 
-    private IEnumerator runningCorroutine;
+    private Coroutine runningCorroutine;
 
     private float yOffsetFromTerrain;
 
+    private Animator anim;
+
 	// Use this for initialization
 	void Start () {
-        initialPosition = transform.localPosition;
+        initialPosition = transform.position;
         yOffsetFromTerrain = transform.position.y - Terrain.activeTerrain.SampleHeight(transform.position);
+        anim = GetComponent<Animator>();
         StartMoving();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        if (anim == null)
+            anim = GetComponent<Animator>();
 	}
 
     public void StartMoving() {
         if (runningCorroutine == null)
         {
-            runningCorroutine = MoveArround();
-            StartCoroutine(runningCorroutine);
+            runningCorroutine = StartCoroutine(MoveArround());
         }
     }
 
     public void StopMoving() {
+        anim.SetBool("IsWalking", false);
         if (runningCorroutine != null)
             StopCoroutine(runningCorroutine);
         runningCorroutine = null;
     }
 
     IEnumerator MoveArround() {
+        if (anim != null)
+            anim.SetBool("IsWalking", false);
         yield return new WaitForSeconds(Random.Range(1f, 5f));
 
         if (enabled)
@@ -51,6 +58,7 @@ public class RandomWanderMove : MonoBehaviour {
             var lerpTime = 0f;
             while ((newDestination - transform.localPosition).sqrMagnitude > 1f)
             {
+                anim.SetBool("IsWalking", true);
                 lerpTime += Time.deltaTime * 2;
                 if (lerpTime < 1)
                 {
@@ -63,7 +71,7 @@ public class RandomWanderMove : MonoBehaviour {
             }
         }
 
-        StartCoroutine(MoveArround());
+        runningCorroutine = StartCoroutine(MoveArround());
     }
 
     Vector3 GetNewDestination() {

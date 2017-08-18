@@ -32,8 +32,8 @@ public class VideoBuilding : Singleton<VideoBuilding> {
     [SerializeField]
     private GameObject topicsContainer;
 
-    public Building Building { get; set; }
-    public List<Npc> Npcs { get; set; }
+    //public Building Building { get; set; }
+    //public List<Npc> Npcs { get; set; }
     public bool IsShowing { get; private set; }
 
     private Dictionary<string, int> CurrentGreeting = new Dictionary<string, int>();
@@ -64,13 +64,15 @@ public class VideoBuilding : Singleton<VideoBuilding> {
         }
 	}
 
-    public void Show() {
+    public void Show(Building building, List<Npc> npcs) {
+//        Building = building;
+//        Npcs = npcs;
         gameObject.SetActive(true);
         IsShowing = true;
         fpc.SetCursorLock(false);
-        StartCoroutine(PlayVideo("Assets/Resources/Videos/" + Building.VideoFilename + ".mp4"));
-        buildingNameText.text = Building.Name;
-        var npc = Npcs[0]; // TODO: more than 1
+        StartCoroutine(PlayVideo("Assets/Resources/Videos/" + building.VideoFilename + ".mp4"));
+        buildingNameText.text = building.Name;
+        var npc = npcs[0]; // TODO: more than 1
         dialogText.text = npc.NextGreeting();
         portraitTopicsPortraitImage.texture = Resources.Load(string.Format("NPC Pictures/NPC{0:D3}", npc.PictureCode)) as Texture;
         portraitTopicsPortraitText.text = npc.Name;

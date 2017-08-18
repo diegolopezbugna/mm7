@@ -29,9 +29,7 @@ public class VideoDoor : MonoBehaviour {
     public string TryOpen() {
         // TODO: for shops check opening & closing hours
 
-        VideoBuilding.Instance.Npcs = npcs;
-        VideoBuilding.Instance.Building = building;
-        VideoBuilding.Instance.Show();
+        VideoBuilding.Instance.Show(building, npcs);
 
         return "";
     }

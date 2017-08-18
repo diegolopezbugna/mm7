@@ -20,7 +20,7 @@ public class ArrowMove : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Target == null || !DidHit) {
-			var distanceToParty = (Party.Instance.transform.position - transform.position).sqrMagnitude;
+            var distanceToParty = Party.Instance.GetDistanceSqrTo(transform);
 			if (distanceToParty > destroyDistance) {
 				Destroy(this);
 				Destroy(this.gameObject);

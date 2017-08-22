@@ -105,6 +105,7 @@ public class VideoBuilding : Singleton<VideoBuilding> {
             topicText.GetComponent<TopicData>().NpcTopic = npc.Topics[i];
         }
 
+        LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)topicsContainer.transform);
     }
 
     public void OnTopicClicked(Npc npc, NpcTopic npcTopic) {

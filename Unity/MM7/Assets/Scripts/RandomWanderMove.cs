@@ -56,17 +56,17 @@ public class RandomWanderMove : MonoBehaviour {
             Vector3 newDestination = GetNewDestination();
 
             var lerpTime = 0f;
-            while ((newDestination - transform.localPosition).sqrMagnitude > 1f)
+            while ((newDestination - transform.position).sqrMagnitude > 1f)
             {
                 anim.SetBool("IsWalking", true);
                 lerpTime += Time.deltaTime * 2;
                 if (lerpTime < 1)
                 {
-                    var newRotation = Quaternion.LookRotation(newDestination - transform.localPosition);
-                    transform.localRotation = Quaternion.Lerp(transform.localRotation, newRotation, lerpTime);
+                    var newRotation = Quaternion.LookRotation(newDestination - transform.position);
+                    transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, lerpTime);
                 }
 
-                transform.localPosition = Vector3.MoveTowards(transform.position, newDestination, speed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, newDestination, speed * Time.deltaTime);
                 yield return null;
             }
         }

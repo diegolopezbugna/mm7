@@ -192,6 +192,7 @@
      <Compile Include="Assets\Scripts\NpcMove.cs" />
      <Compile Include="Assets\Scripts\NpcNews.cs" />
      <Compile Include="Assets\Scripts\NpcTalk.cs" />
+     <Compile Include="Assets\Scripts\NpcWeapon.cs" />
      <Compile Include="Assets\Scripts\Party.cs" />
      <Compile Include="Assets\Scripts\PartyAttack.cs" />
      <Compile Include="Assets\Scripts\PartyHealth.cs" />

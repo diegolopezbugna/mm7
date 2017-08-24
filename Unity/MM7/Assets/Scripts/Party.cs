@@ -68,7 +68,10 @@ public class Party : Singleton<Party> {
 	
 	// Update is called once per frame
 	void Update () {
-		
+        if (Input.GetKeyDown("i"))
+        {
+            CharDetailsUI.Instance.ShowInventory(Game.Instance.PartyStats.Chars[0]);  // TODO: selected char?
+        }
 	}
 
     void FixedUpdate() {
@@ -97,7 +100,7 @@ public class Party : Singleton<Party> {
             {
                 var videoDoor = hit.transform.GetComponent<VideoDoor>();
                 focussedText.text = videoDoor.GetDescription();
-                if (Input.GetMouseButton(0) && !VideoBuilding.Instance.IsShowing)
+                if (Input.GetMouseButton(0) && !VideoBuildingUI.Instance.IsShowing)
                 {
                     focussedText.text = videoDoor.TryOpen(); // TODO: show result for X seconds
                 }

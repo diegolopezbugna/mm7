@@ -29,7 +29,7 @@ public class VideoDoor : MonoBehaviour {
     public string TryOpen() {
         // TODO: for shops check opening & closing hours
 
-        VideoBuilding.Instance.Show(building, npcs);
+        VideoBuildingUI.Instance.Show(building, npcs);
 
         return "";
     }

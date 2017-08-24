@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Business;
 
+// TODO: remove, use lamda as NpcDialog
 public class TopicData : MonoBehaviour {
 
     public Npc Npc { get; set; }
@@ -19,8 +20,9 @@ public class TopicData : MonoBehaviour {
 		
 	}
 
+    // remove, use lamda as NpcDialog
     public void TopicClicked() {
-        VideoBuilding.Instance.OnTopicClicked(Npc, NpcTopic);
+        VideoBuildingUI.Instance.OnTopicClicked(Npc, NpcTopic);
     }
 
 }

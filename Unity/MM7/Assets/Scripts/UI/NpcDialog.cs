@@ -5,8 +5,8 @@ using UnityEngine.UI;
 using UnityStandardAssets.Characters.FirstPerson;
 using Business;
 
-// TODO: code repeated on this class and VideoBuilding!!!
-public class NpcDialog : Singleton<NpcDialog> {
+// TODO: code repeated on this class and VideoBuilding!!! Make it BaseUI
+public class NpcDialog : BaseUI<NpcDialog> {
 
     [SerializeField]
     private GameObject npcTextContainer;
@@ -17,38 +17,15 @@ public class NpcDialog : Singleton<NpcDialog> {
     [SerializeField]
     private GameObject topicsContainer;
 
-    private FirstPersonController fpc;
-
-    public bool IsShowing { get; private set; }
-
-    void Awake() {
-        fpc = FindObjectOfType<FirstPersonController>();
-    }
-
-	// Use this for initialization
-	void Start () {
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        if (Input.GetKeyUp(KeyCode.Escape))
-        {
-            Hide();
-        }
-	}
-
     public void Show(Npc npc) {
-        gameObject.SetActive(true);
-        IsShowing = true;
-        fpc.SetCursorLock(false);
+        base.Show();
         npcText.text = npc.NextGreeting();
         ShowTopics(npc);
         RepositionNpcText();
     }
 
     public void ShowNews(string news) {
-        gameObject.SetActive(true);
-        IsShowing = true;
+        base.Show(true);
         npcText.text = news;
         topicsContainer.SetActive(false);
         RepositionNpcText();
@@ -58,12 +35,6 @@ public class NpcDialog : Singleton<NpcDialog> {
     private IEnumerator DismissNpcText(float seconds) {
         yield return new WaitForSeconds(seconds);
         Hide();
-    }
-
-    private void Hide() {
-        fpc.SetCursorLock(true);
-        IsShowing = false;
-        gameObject.SetActive(false);
     }
 
     private void ShowTopics(Npc npc)

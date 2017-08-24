@@ -165,6 +165,7 @@
      <Compile Include="Assets\Scripts\Business\BonusCost.cs" />
      <Compile Include="Assets\Scripts\Business\Building.cs" />
      <Compile Include="Assets\Scripts\Business\Game.cs" />
+     <Compile Include="Assets\Scripts\Business\Item.cs" />
      <Compile Include="Assets\Scripts\Business\Npc.cs" />
      <Compile Include="Assets\Scripts\Business\NpcTopic.cs" />
      <Compile Include="Assets\Scripts\Business\PartyStats.cs" />
@@ -198,11 +199,14 @@
      <Compile Include="Assets\Scripts\PartyHealth.cs" />
      <Compile Include="Assets\Scripts\RandomWanderMove.cs" />
      <Compile Include="Assets\Scripts\SwitchingPositionsWanderEnemyMove.cs" />
+     <Compile Include="Assets\Scripts\UI\BaseUI.cs" />
+     <Compile Include="Assets\Scripts\UI\CharDetailsUI.cs" />
+     <Compile Include="Assets\Scripts\UI\InventoryUI.cs" />
      <Compile Include="Assets\Scripts\UI\NpcDialog.cs" />
      <Compile Include="Assets\Scripts\UI\ProfessionData.cs" />
      <Compile Include="Assets\Scripts\UI\SkillData.cs" />
      <Compile Include="Assets\Scripts\UI\TopicData.cs" />
-     <Compile Include="Assets\Scripts\UI\VideoBuilding.cs" />
+     <Compile Include="Assets\Scripts\UI\VideoBuildingUI.cs" />
      <Compile Include="Assets\Scripts\VideoDoor.cs" />
      <Compile Include="Assets\UMA\Content\UMA_Core\HumanFemale\DNA\HumanFemaleDNAConverterBehaviour.cs" />
      <Compile Include="Assets\UMA\Content\UMA_Core\HumanMale\DNA\HumanMaleDNAConverterBehaviour.cs" />

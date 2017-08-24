@@ -39,12 +39,15 @@ namespace Business
 
         // TODO: resistances
 
+        public Inventory Inventory { get; set; }
+
         public PlayingCharacter(string name, Race race, string portraitCode) {
             Name = name;
             Race = race;
             PortraitCode = portraitCode;
             Level = 1;
             Experience = 0;
+            Inventory = new Inventory(14, 9);
         }
 
         public int GetAttributeTableValue(int attributeValue) {

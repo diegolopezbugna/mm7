@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Business
 {
@@ -39,6 +40,8 @@ namespace Business
         public EquipStat EquipStat { get; set; }
         public float EquipX { get; set; }
         public float EquipY { get; set; }
+        public int InventorySlotsRequiredH { get; set; }
+        public int InventorySlotsRequiredV { get; set; }
 
         public Item()
         {
@@ -63,11 +66,14 @@ namespace Business
                     EquipStat = EquipStat.Weapon,
                     EquipX = 5,
                     EquipY = 120,
+                    InventorySlotsRequiredH = 1,
+                    InventorySlotsRequiredV = 4, // TODO: check
                 };
             }
 
             return null;
         }
     }
+
 }
 

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Business;
 
+// TODO: remove, use lamda as NpcDialog
 public class SkillData : MonoBehaviour {
 
     public Skill Skill { get; set; }

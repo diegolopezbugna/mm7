@@ -165,6 +165,7 @@
      <Compile Include="Assets\Scripts\Business\BonusCost.cs" />
      <Compile Include="Assets\Scripts\Business\Building.cs" />
      <Compile Include="Assets\Scripts\Business\Game.cs" />
+     <Compile Include="Assets\Scripts\Business\Inventory.cs" />
      <Compile Include="Assets\Scripts\Business\Item.cs" />
      <Compile Include="Assets\Scripts\Business\Npc.cs" />
      <Compile Include="Assets\Scripts\Business\NpcTopic.cs" />

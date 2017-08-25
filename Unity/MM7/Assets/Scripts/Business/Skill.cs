@@ -8,6 +8,7 @@ namespace Business
 {
     public enum SkillCode 
     {
+        None,
         Axe,
         Bow,
         Dagger,

@@ -186,6 +186,8 @@
      <Compile Include="Assets\Scripts\EnemyAttack.cs" />
      <Compile Include="Assets\Scripts\EnemyHealth.cs" />
      <Compile Include="Assets\Scripts\Infrastruture\Localization.cs" />
+     <Compile Include="Assets\Scripts\Infrastruture\Parsers\ItemsParser.cs" />
+     <Compile Include="Assets\Scripts\Infrastruture\Parsers\TxtParser.cs" />
      <Compile Include="Assets\Scripts\Infrastruture\Singleton.cs" />
      <Compile Include="Assets\Scripts\Infrastruture\StreamVideo.cs" />
      <Compile Include="Assets\Scripts\Infrastruture\StringExtensions.cs" />

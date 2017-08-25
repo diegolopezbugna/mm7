@@ -15,10 +15,8 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler {
     private int totalSlotsV;
     private float slotWidth;
     private float slotHeight;
-    private float marginLeft = 4f;
+    private float marginLeft = 7f;
     private float marginTop = 7f;
-    private float inventoryBgWidth = 450f;
-    private float inventoryBgHeight = 290f;
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -47,8 +45,8 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler {
     public void DrawInventory(Inventory inventory) {
         totalSlotsH = inventory.GetTotalSlotsH();
         totalSlotsV = inventory.GetTotalSlotsV();
-        slotWidth = inventoryBgWidth / totalSlotsH;
-        slotHeight = inventoryBgHeight / totalSlotsV;
+        slotWidth = inventory.SlotWidth;
+        slotHeight = inventory.SlotHeight;
 
         CleanInventory();
         var alreadyDrawnItems = new List<Item>();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Business
 {
@@ -28,7 +29,9 @@ namespace Business
     
     public class Item
     {
-        public int Code { get; private set; }
+        private static Dictionary<int, Item> allItems;
+
+        public int Code { get; set; }
         public string PictureFilename { get; set; }
         public string Name { get; set; }
         public string NotIdentifiedName { get; set; }
@@ -41,39 +44,30 @@ namespace Business
         public EquipStat EquipStat { get; set; }
         public float EquipX { get; set; }
         public float EquipY { get; set; }
-        public int InventorySlotsRequiredH { get; set; }
-        public int InventorySlotsRequiredV { get; set; }
 
-        public Item()
-        {
-            
+        private Texture texture;
+        public Texture Texture {
+            get {
+                if (texture == null)
+                {
+                    texture = Resources.Load("Items/" + PictureFilename) as Texture;
+                }
+                return texture;
+            }
         }
 
-        // TODO: read from items.txt
         public static Item GetByCode(int code) {
-            if (code == 1)
+            if (allItems == null)
             {
-                return new Item()
+                allItems = new Dictionary<int, Item>();
+                lock (allItems)
                 {
-                    Code = 1,
-                    PictureFilename = "item001",
-                    Name = "Crude Longsword",
-                    NotIdentifiedName = "Longsword",
-                    Description = "Though notched and dented, this longsword is still an effective weapon.",
-                    Value = 50,
-                    SkillGroup = SkillCode.Sword,
-                    Mod1 = "3d3",
-                    Mod2 = 0,
-                    IdItemRequiredLevel = 1,
-                    EquipStat = EquipStat.Weapon,
-                    EquipX = 5,
-                    EquipY = 120,
-                    InventorySlotsRequiredH = 1,
-                    InventorySlotsRequiredV = 5, // TODO: check
-                };
+                    var itemsParser = new ItemsParser("Assets/Resources/Data/ITEMS.TXT");
+                    foreach (var item in itemsParser.Entities)
+                        allItems.Add(item.Code, item);
+                }
             }
-
-            return null;
+            return allItems[code].MemberwiseClone() as Item;
         }
     }
 

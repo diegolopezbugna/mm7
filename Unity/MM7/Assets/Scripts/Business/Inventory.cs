@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Business
 {
@@ -10,9 +11,14 @@ namespace Business
 
         private Item[,] BagItems { get; set; }
 
-        public Inventory(int slotsH, int slotsV)
+        public float SlotWidth { get; private set; }
+        public float SlotHeight { get; private set; }
+
+        public Inventory(int slotsH, int slotsV, float slotWidth, float slotHeight)
         {
             BagItems = new Item[slotsH, slotsV];
+            SlotWidth = slotWidth;
+            SlotHeight = slotHeight;
         }
 
         public Item GetItemAt(int x, int y) {
@@ -35,18 +41,21 @@ namespace Business
         }
 
         public bool TryInsertItemAt(Item item, int x, int y) {
-            if (x + item.InventorySlotsRequiredH > BagItems.GetUpperBound(0) + 1)
+            var itemInventorySlotsRequiredH = GetSlotsNeeded(SlotWidth, item.Texture.width);
+            var itemInventorySlotsRequiredV = GetSlotsNeeded(SlotHeight, item.Texture.height);
+
+            if (x + itemInventorySlotsRequiredH > BagItems.GetUpperBound(0) + 1)
                 return false;
-            if (y + item.InventorySlotsRequiredV > BagItems.GetUpperBound(1) + 1)
+            if (y + itemInventorySlotsRequiredV > BagItems.GetUpperBound(1) + 1)
                 return false;
 
-            for (int i = x; i < x + item.InventorySlotsRequiredH; i++)
-                for (int j = y; j < y + item.InventorySlotsRequiredV; j++)
+            for (int i = x; i < x + itemInventorySlotsRequiredH; i++)
+                for (int j = y; j < y + itemInventorySlotsRequiredV; j++)
                     if (GetItemAt(i, j) != null)
                         return false; // occupied. TODO: exchange items
 
-            for (int i = x; i < x + item.InventorySlotsRequiredH; i++)
-                for (int j = y; j < y + item.InventorySlotsRequiredV; j++)
+            for (int i = x; i < x + itemInventorySlotsRequiredH; i++)
+                for (int j = y; j < y + itemInventorySlotsRequiredV; j++)
                     BagItems[i, j] = item;
 
             return true;
@@ -60,6 +69,15 @@ namespace Business
             return BagItems.GetUpperBound(1) + 1;
         }
 
+        private int GetSlotsNeeded(float slotSize, float itemSize)
+        {
+            var fraction = itemSize / slotSize;
+            var slotsRequired = Mathf.FloorToInt(fraction);
+            var remainder = fraction - slotsRequired * slotSize;
+            if (remainder > 0.2f)
+                slotsRequired += 1;
+            return slotsRequired;
+        }
     }
 }
 

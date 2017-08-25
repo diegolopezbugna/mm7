@@ -69,11 +69,12 @@ namespace Business
             var dummyParty = new PartyStats();
             dummyParty.Chars = new List<PlayingCharacter>();
             var pc = CreateDummyChar("Zoltan", Race.Goblin(), "18", Profession.Get(ProfessionCode.Knight), new int[] { 30, 5, 5, 13, 13, 20 });
+            // TODO: put the real items for the standard party
             pc.Inventory.TryInsertItemAt(Item.GetByCode(1), 0, 0);
-            pc.Inventory.TryInsertItemAt(Item.GetByCode(1), 1, 0);
-            pc.Inventory.TryInsertItemAt(Item.GetByCode(1), 2, 1);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(2), 1, 0);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(3), 2, 1);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(1), 3, 2);
-            pc.Inventory.TryInsertItemAt(Item.GetByCode(1), 4, 0);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(42), 4, 0);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(1), 12, 0);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(1), 13, 0);
             dummyParty.Chars.Add(pc);

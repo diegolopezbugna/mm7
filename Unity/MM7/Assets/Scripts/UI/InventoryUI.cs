@@ -18,6 +18,8 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler {
     private float marginLeft = 7f;
     private float marginTop = 7f;
 
+    private Inventory Inventory { get; set; }
+
     public void OnPointerDown(PointerEventData eventData)
     {
         Vector2 localPointerDownPosition;
@@ -31,6 +33,9 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler {
             return;
 
         Debug.LogFormat("X: {0} - Y: {1} -> SLOT ({2}, {3})", x, y, slotX, slotY);
+
+        //var itemClicked = Inventory.GetItemAt(slotX, slotY);
+
     }
 
 	// Use this for initialization
@@ -80,5 +85,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler {
         rawImage.rectTransform.anchoredPosition = new Vector2(marginLeft + x * slotWidth, -(marginTop + 2f + y * slotHeight)); // TODO: center items???
         rawImage.rectTransform.sizeDelta = new Vector2(texture.width, texture.height);
         rawImage.texture = texture;
+        itemGameObject.GetComponent<InventoryItem>().Item = item;
     }
+
 }

@@ -41,7 +41,7 @@ public class NpcDialog : BaseUI<NpcDialog> {
     {
         topicsContainer.SetActive(true);
 
-        // remove all but first
+        // remove all but first TODO: change to prefab and delete all
         var texts = topicsContainer.GetComponentsInChildren<Button>();
         for (int i = 1; i < texts.Length; i++)
         {

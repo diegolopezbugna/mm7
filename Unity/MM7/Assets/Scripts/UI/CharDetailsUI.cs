@@ -14,14 +14,14 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
     private GameObject skills;
 
     [SerializeField]
-    private GameObject inventory;
+    private InventoryUI inventory;
 
     public void ShowStats(PlayingCharacter character) {
         if (!IsShowing)
             Show();
         stats.SetActive(true);
         skills.SetActive(false);
-        inventory.SetActive(false);
+        inventory.gameObject.SetActive(false);
     }
 
     public void ShowSkills(PlayingCharacter character) {
@@ -29,7 +29,7 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
             Show();
         stats.SetActive(false);
         skills.SetActive(true);
-        inventory.SetActive(false);
+        inventory.gameObject.SetActive(false);
     }
 
     public void ShowInventory(PlayingCharacter character) {
@@ -37,7 +37,8 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
             Show();
         stats.SetActive(false);
         skills.SetActive(false);
-        inventory.SetActive(true);
+        inventory.gameObject.SetActive(true);
+        inventory.DrawInventory(character.Inventory);
     }
 
 }

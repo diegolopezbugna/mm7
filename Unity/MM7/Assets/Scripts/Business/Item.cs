@@ -28,7 +28,8 @@ namespace Business
     
     public class Item
     {
-        public string Code { get; private set; }
+        public int Code { get; private set; }
+        public string PictureFilename { get; set; }
         public string Name { get; set; }
         public string NotIdentifiedName { get; set; }
         public string Description { get; set; }
@@ -49,12 +50,13 @@ namespace Business
         }
 
         // TODO: read from items.txt
-        public static Item GetByCode(string code) {
-            if (code == "1")
+        public static Item GetByCode(int code) {
+            if (code == 1)
             {
                 return new Item()
                 {
-                    Code = "1",
+                    Code = 1,
+                    PictureFilename = "item001",
                     Name = "Crude Longsword",
                     NotIdentifiedName = "Longsword",
                     Description = "Though notched and dented, this longsword is still an effective weapon.",
@@ -67,7 +69,7 @@ namespace Business
                     EquipX = 5,
                     EquipY = 120,
                     InventorySlotsRequiredH = 1,
-                    InventorySlotsRequiredV = 4, // TODO: check
+                    InventorySlotsRequiredV = 5, // TODO: check
                 };
             }
 

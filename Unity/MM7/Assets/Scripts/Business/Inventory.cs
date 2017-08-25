@@ -52,6 +52,13 @@ namespace Business
             return true;
         }
 
+        public int GetTotalSlotsH() {
+            return BagItems.GetUpperBound(0) + 1;
+        }
+
+        public int GetTotalSlotsV() {
+            return BagItems.GetUpperBound(1) + 1;
+        }
 
     }
 }

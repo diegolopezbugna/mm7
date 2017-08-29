@@ -13,8 +13,6 @@ public class NpcWeapon : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        var umaDynamicAvatar = GetComponent<DynamicCharacterAvatar>();
-        umaData = umaDynamicAvatar.umaData;
     }
 	
 	// Update is called once per frame
@@ -24,6 +22,8 @@ public class NpcWeapon : MonoBehaviour {
 
     public void OnCharacterCreated()
     {
+        var umaDynamicAvatar = GetComponent<DynamicCharacterAvatar>();
+        umaData = umaDynamicAvatar.umaData;
         LoadRightHand();
     }
 

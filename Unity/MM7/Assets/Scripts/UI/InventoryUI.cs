@@ -15,8 +15,8 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler {
     private int totalSlotsV;
     private float slotWidth;
     private float slotHeight;
-    private float marginLeft = 7f;
-    private float marginTop = 7f;
+    private float marginLeft = 0f;
+    private float marginTop = 0f;
 
     private Inventory Inventory { get; set; }
 
@@ -82,10 +82,35 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler {
         var itemGameObject = Instantiate(itemTemplatePrefab, transform);
         var texture = Resources.Load("Items/" + item.PictureFilename) as Texture;
         var rawImage = itemGameObject.GetComponent<RawImage>();
-        rawImage.rectTransform.anchoredPosition = new Vector2(marginLeft + x * slotWidth, -(marginTop + 2f + y * slotHeight)); // TODO: center items???
+        rawImage.rectTransform.anchoredPosition = new Vector2(marginLeft + x * slotWidth, -(marginTop + y * slotHeight)); // TODO: center items???
         rawImage.rectTransform.sizeDelta = new Vector2(texture.width, texture.height);
         rawImage.texture = texture;
         itemGameObject.GetComponent<InventoryItem>().Item = item;
     }
+
+    public void OnItemSlotPointerDown(Item item, PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+        }
+        else if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            ShowItemDescription(item);
+        }
+    }
+
+    public void OnItemSlotPointerUp(Item item, PointerEventData eventData)
+    {
+//        if (eventData.button == PointerEventData.InputButton.Right)
+//        {
+//            
+//        }
+    }
+
+    private void ShowItemDescription(Item item) 
+    {
+        ItemInfoUI.Instance.Show(item);
+    }
+
 
 }

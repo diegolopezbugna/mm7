@@ -192,6 +192,7 @@
      <Compile Include="Assets\Scripts\Infrastruture\StreamVideo.cs" />
      <Compile Include="Assets\Scripts\Infrastruture\StringExtensions.cs" />
      <Compile Include="Assets\Scripts\Infrastruture\TagToDescription.cs" />
+     <Compile Include="Assets\Scripts\Infrastruture\UnityExtensions.cs" />
      <Compile Include="Assets\Scripts\MessagesScroller.cs" />
      <Compile Include="Assets\Scripts\NpcMove.cs" />
      <Compile Include="Assets\Scripts\NpcNews.cs" />
@@ -206,6 +207,7 @@
      <Compile Include="Assets\Scripts\UI\CharDetailsUI.cs" />
      <Compile Include="Assets\Scripts\UI\InventoryItem.cs" />
      <Compile Include="Assets\Scripts\UI\InventoryUI.cs" />
+     <Compile Include="Assets\Scripts\UI\ItemInfoUI.cs" />
      <Compile Include="Assets\Scripts\UI\NpcDialog.cs" />
      <Compile Include="Assets\Scripts\UI\ProfessionData.cs" />
      <Compile Include="Assets\Scripts\UI\SkillData.cs" />

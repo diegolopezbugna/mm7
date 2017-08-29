@@ -47,7 +47,7 @@ namespace Business
             PortraitCode = portraitCode;
             Level = 1;
             Experience = 0;
-            Inventory = new Inventory(14, 9, 446f / 14, 290f / 9);
+            Inventory = new Inventory(14, 9, 454f / 14, 293f / 9); // TODO: dimensions should be on InventoryUI
         }
 
         public int GetAttributeTableValue(int attributeValue) {

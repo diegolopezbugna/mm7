@@ -22,6 +22,10 @@ namespace Infrastructure
         public string Get(string localizationKey) {
             return localizationKey.ToSentenceCase();
         }
+
+        public string Get(string localizationKey, params object [] parameters) {
+            return string.Format(Get(localizationKey), parameters);
+        }
     }
 }
 

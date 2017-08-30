@@ -62,7 +62,7 @@ namespace Business
                 allItems = new Dictionary<int, Item>();
                 lock (allItems)
                 {
-                    var itemsParser = new ItemsParser("Assets/Resources/Data/ITEMS.TXT");
+                    var itemsParser = new ItemsParser("Data/ITEMS");
                     foreach (var item in itemsParser.Entities)
                         allItems.Add(item.Code, item);
                 }

@@ -84,7 +84,7 @@ namespace Business
             for (int i = x; i < x + itemInventorySlotsRequiredH; i++)
                 for (int j = y; j < y + itemInventorySlotsRequiredV; j++)
                     if (GetItemAt(i, j) != null)
-                        return false; // occupied. TODO: exchange items
+                        return false; // occupied
 
             for (int i = x; i < x + itemInventorySlotsRequiredH; i++)
                 for (int j = y; j < y + itemInventorySlotsRequiredV; j++)
@@ -102,6 +102,23 @@ namespace Business
             if (!canMoveIt)
                 TryInsertItemAt(item, originalPosition.x, originalPosition.y); // rollback
             return canMoveIt;
+        }
+
+        public bool TryExchangeItems(Item item1, Item item2)
+        {
+            var originalPosItem1 = RemoveItem(item1);
+            var originalPosItem2 = RemoveItem(item2);
+            if (TryInsertItemAt(item2, originalPosItem1.x, originalPosItem1.y))
+            {
+                if (TryInsertItemAt(item1, originalPosItem2.x, originalPosItem2.y))
+                    return true;
+                else
+                    RemoveItem(item2);
+            }
+            // rollback
+            TryInsertItemAt(item1, originalPosItem1.x, originalPosItem1.y);
+            TryInsertItemAt(item2, originalPosItem2.x, originalPosItem2.y);
+            return false;
         }
 
         public int GetTotalSlotsH() 

@@ -95,12 +95,13 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler {
 
     #region POINTER DOWN/UP
 
-    public void OnInventoryItemPointerDown(Item item, PointerEventData eventData)
+    public void OnInventoryItemPointerDown(Item item, PointerEventData eventData, InventoryItem inventoryItem)
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             if (DraggingItem == null)
             {
+                // begin drag
                 DraggingItem = item;
                 DraggingItemGameObject = new GameObject("draggingItem");
                 DraggingItemGameObject.transform.SetParent(canvas.transform, false);
@@ -111,6 +112,13 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler {
                 image.rectTransform.pivot = new Vector2(0, 1);
                 image.raycastTarget = false;
                 PositionDraggingItem();
+                inventoryItem.MakeImageTranslucent();
+            }
+            else
+            {
+                // exchange items
+                if (Inventory.TryExchangeItems(DraggingItem, item))
+                    EndDrag();
             }
         }
         else if (eventData.button == PointerEventData.InputButton.Right)
@@ -136,13 +144,16 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler {
         if (DraggingItem != null)
         {
             if (Inventory.TryMoveItem(DraggingItem, slotX, slotY))
-            {
-                DraggingItem = null;
-                Destroy(DraggingItemGameObject);
-                DraggingItemGameObject = null;
-                DrawInventory(Inventory); // TODO: don't redraw all
-            }
+                EndDrag();
         }
+    }
+
+    private void EndDrag()
+    {
+        DraggingItem = null;
+        Destroy(DraggingItemGameObject);
+        DraggingItemGameObject = null;
+        DrawInventory(Inventory); // TODO: don't redraw all
     }
 
     #endregion

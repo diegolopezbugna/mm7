@@ -12,6 +12,9 @@ public class InventoryItem : MonoBehaviour, IPointerDownHandler, IPointerEnterHa
     private RawImage rawImage;
     private InventoryUI inventoryUI;
 
+    [SerializeField]
+    private Color highlightedColor = new Color(0.8f, 0.8f, 0.8f);
+
 	// Use this for initialization
 	void Start () {
         rawImage = GetComponent<RawImage>();
@@ -22,12 +25,24 @@ public class InventoryItem : MonoBehaviour, IPointerDownHandler, IPointerEnterHa
 	void Update () {
 		
 	}
+
+    public void MakeImageTranslucent()
+    {
+        rawImage.raycastTarget = false;
+        rawImage.CrossFadeAlpha(0.5f, 0.1f, true);
+    }
         
+    public void MakeImageSolid()
+    {
+        rawImage.raycastTarget = true;
+        rawImage.CrossFadeAlpha(1f, 0.1f, true);
+    }
+
     #region POINTER DOWN/UP
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        inventoryUI.OnInventoryItemPointerDown(Item, eventData);
+        inventoryUI.OnInventoryItemPointerDown(Item, eventData, this);
     }
 
 
@@ -37,12 +52,14 @@ public class InventoryItem : MonoBehaviour, IPointerDownHandler, IPointerEnterHa
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        rawImage.color = Color.gray;
+        if (rawImage.raycastTarget)
+            rawImage.CrossFadeColor(highlightedColor, 0.1f, true, false);
     }
         
     public void OnPointerExit(PointerEventData eventData)
     {
-        rawImage.color = Color.white;
+        if (rawImage.raycastTarget)
+            rawImage.CrossFadeColor(Color.white, 0.1f, true, false);
     }
 
     #endregion

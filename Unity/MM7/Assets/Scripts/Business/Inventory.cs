@@ -5,6 +5,13 @@ using UnityEngine;
 
 namespace Business
 {
+    public class SlotPos
+    {
+        public int x;
+        public int y;
+        public SlotPos(int x, int y) { this.x = x; this.y = y; }
+    }
+    
     public class Inventory
     {
         //public List<EquippedItem> EquippedItems { get; set; }
@@ -21,26 +28,51 @@ namespace Business
             SlotHeight = slotHeight;
         }
 
-        public Item GetItemAt(int x, int y) {
+        public Item GetItemAt(int x, int y) 
+        {
             return BagItems[x, y];
         }
 
-        public Item RemoveItemAt(int x, int y) {
-            var item = GetItemAt(x, y);
-            if (item == null)
-                return null;
+        public SlotPos GetSlotPos(Item item) 
+        {
             for (int i = 0; i <= BagItems.GetUpperBound(0); i++)
             {
-                for (int j = 0; i <= BagItems.GetUpperBound(1); i++)
+                for (int j = 0; j <= BagItems.GetUpperBound(1); j++)
                 {
                     if (BagItems[i, j] == item) // items instances should be different!
-                        BagItems[i, j] = null;
+                        return new SlotPos(i, j);
                 }
             }
+            return null;
+        }
+
+        public Item RemoveItemAt(int x, int y) 
+        {
+            var item = GetItemAt(x, y);
+            RemoveItem(item);
             return item;
         }
 
-        public bool TryInsertItemAt(Item item, int x, int y) {
+        public SlotPos RemoveItem(Item item) 
+        {
+            SlotPos cornerPosition = null;
+            for (int i = 0; i <= BagItems.GetUpperBound(0); i++)
+            {
+                for (int j = 0; j <= BagItems.GetUpperBound(1); j++)
+                {
+                    if (BagItems[i, j] == item)  // items instances should be different!
+                    {
+                        BagItems[i, j] = null;
+                        if (cornerPosition == null)
+                            cornerPosition = new SlotPos(i, j);
+                    }
+                }
+            }
+            return cornerPosition;
+        }
+
+        public bool TryInsertItemAt(Item item, int x, int y) 
+        {
             var itemInventorySlotsRequiredH = GetSlotsNeeded(SlotWidth, item.Texture.width);
             var itemInventorySlotsRequiredV = GetSlotsNeeded(SlotHeight, item.Texture.height);
 
@@ -61,20 +93,33 @@ namespace Business
             return true;
         }
 
-        public int GetTotalSlotsH() {
+        public bool TryMoveItem(Item item, int x, int y) 
+        {
+            var originalPosition = RemoveItem(item);
+            if (originalPosition == null)
+                return false;
+            var canMoveIt = TryInsertItemAt(item, x, y);
+            if (!canMoveIt)
+                TryInsertItemAt(item, originalPosition.x, originalPosition.y); // rollback
+            return canMoveIt;
+        }
+
+        public int GetTotalSlotsH() 
+        {
             return BagItems.GetUpperBound(0) + 1;
         }
 
-        public int GetTotalSlotsV() {
+        public int GetTotalSlotsV() 
+        {
             return BagItems.GetUpperBound(1) + 1;
         }
 
-        private int GetSlotsNeeded(float slotSize, float itemSize)
+        public int GetSlotsNeeded(float slotSize, float itemSize)
         {
             var fraction = itemSize / slotSize;
             var slotsRequired = Mathf.FloorToInt(fraction);
-            var remainder = fraction - slotsRequired * slotSize;
-            if (remainder > 0.2f)
+            var remainder = itemSize - slotsRequired * slotSize;
+            if (remainder / slotSize > 0.2f)
                 slotsRequired += 1;
             return slotsRequired;
         }

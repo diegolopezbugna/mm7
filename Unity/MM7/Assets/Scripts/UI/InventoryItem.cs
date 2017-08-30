@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Business;
 
-public class InventoryItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler {
+public class InventoryItem : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler {
 
     public Item Item { get; set; }
 
@@ -23,35 +23,23 @@ public class InventoryItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 		
 	}
         
-    #region IPointerDownHandler implementation
+    #region POINTER DOWN/UP
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        inventoryUI.OnItemSlotPointerDown(Item, eventData);
+        inventoryUI.OnInventoryItemPointerDown(Item, eventData);
     }
+
 
     #endregion
 
-    #region IPointerUpHandler implementation
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        inventoryUI.OnItemSlotPointerUp(Item, eventData);
-    }
-
-    #endregion
-
-    #region IPointerEnterHandler implementation
+    #region POINTER EXIT/ENTER
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         rawImage.color = Color.gray;
     }
-
-    #endregion
-
-    #region IPointerExitHandler implementation
-
+        
     public void OnPointerExit(PointerEventData eventData)
     {
         rawImage.color = Color.white;

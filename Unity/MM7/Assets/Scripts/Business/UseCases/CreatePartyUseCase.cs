@@ -71,18 +71,21 @@ namespace Business
             var pc = CreateDummyChar("Zoltan", Race.Goblin(), "18", Profession.Get(ProfessionCode.Knight), new int[] { 30, 5, 5, 13, 13, 20 });
             // TODO: put the real items for the standard party
             pc.Inventory.TryInsertItemAt(Item.GetByCode(1), 0, 0);
-            pc.Inventory.TryInsertItemAt(Item.GetByCode(2), 1, 0);
-            pc.Inventory.TryInsertItemAt(Item.GetByCode(3), 2, 1);
-            pc.Inventory.TryInsertItemAt(Item.GetByCode(1), 3, 2);
-            pc.Inventory.TryInsertItemAt(Item.GetByCode(42), 4, 0);
-            pc.Inventory.TryInsertItemAt(Item.GetByCode(1), 12, 0);
-            pc.Inventory.TryInsertItemAt(Item.GetByCode(1), 13, 0);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(42), 1, 0);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(66), 3, 0);
             dummyParty.Chars.Add(pc);
             pc = CreateDummyChar("Roderick", Race.Human(), "04", Profession.Get(ProfessionCode.Thief), new int[] { 13, 9, 9, 13, 13, 13 });
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(15), 0, 0);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(66), 1, 0);
             dummyParty.Chars.Add(pc);
             pc = CreateDummyChar("Serena", Race.Dwarf(), "15", Profession.Get(ProfessionCode.Cleric), new int[] { 12, 9, 20, 20, 7, 11 });
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(50), 0, 0);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(71), 1, 0);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(79), 4, 0);
             dummyParty.Chars.Add(pc);
             pc = CreateDummyChar("Alexis", Race.Elf(), "11", Profession.Get(ProfessionCode.Sorcerer), new int[] { 5, 30, 9, 13, 13, 13 });
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(61), 0, 0);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(66), 1, 0);
             dummyParty.Chars.Add(pc);
             return dummyParty;
         }

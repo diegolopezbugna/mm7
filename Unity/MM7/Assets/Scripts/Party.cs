@@ -70,7 +70,7 @@ public class Party : Singleton<Party> {
 	void Update () {
         if (Input.GetKeyDown("i"))
         {
-            CharDetailsUI.Instance.ShowInventory(Game.Instance.PartyStats.Chars[0]);  // TODO: selected char?
+            CharDetailsUI.Instance.ShowInventory();
         }
 	}
 

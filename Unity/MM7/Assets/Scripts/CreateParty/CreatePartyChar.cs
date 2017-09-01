@@ -8,6 +8,7 @@ using System.Linq;
 
 public class CreatePartyChar : MonoBehaviour {
 
+    private string[] FemalePortraits = new string[] { "05", "06", "07", "08", "11", "12", "15", "16", "19", "20", "22", "25" };
     public Color YellowSelectedColor = new Color(255f / 255f, 240f / 255f, 41f / 255f);
 
     [SerializeField]
@@ -232,7 +233,9 @@ public class CreatePartyChar : MonoBehaviour {
     }
 
     public PlayingCharacter GetPlayingCaracter() {
-        PlayingCharacter pc = new PlayingCharacter(CharacterName, RaceSelected, PortraitSelected.ToString("D2"));
+        var portraitCode = PortraitSelected.ToString("D2");
+        var gender = FemalePortraits.Contains(portraitCode) ? Gender.Female : Gender.Male;
+        PlayingCharacter pc = new PlayingCharacter(CharacterName, RaceSelected, gender, portraitCode);
         pc.Profession = Profession;
 
         pc.Might = attributes[0].GetAttributeValue();

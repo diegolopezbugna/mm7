@@ -7,6 +7,7 @@ namespace Business
     {
         public string Name { get; private set; }
         public Race Race { get; private set; }
+        public Gender Gender { get; private set; }
         public string PortraitCode { get; private set; }
 
         public Profession Profession { get; set; }
@@ -40,14 +41,17 @@ namespace Business
         // TODO: resistances
 
         public Inventory Inventory { get; set; }
+        public EquippedItems EquippedItems { get; set; }
 
-        public PlayingCharacter(string name, Race race, string portraitCode) {
+        public PlayingCharacter(string name, Race race, Gender gender, string portraitCode) {
             Name = name;
             Race = race;
+            Gender = gender;
             PortraitCode = portraitCode;
             Level = 1;
             Experience = 0;
             Inventory = new Inventory(14, 9, 454f / 14, 293f / 9); // TODO: dimensions should be on InventoryUI
+            EquippedItems = new EquippedItems();
         }
 
         public int GetAttributeTableValue(int attributeValue) {
@@ -120,6 +124,16 @@ namespace Business
                 return 2f;
             }
         }
+
+        public Item GetItemEquipped(EquipSlot equipSlot) {
+            return EquippedItems.GetItemEquipped(equipSlot);
+        }
+
+        public void EquipItem(Item item) {
+            EquippedItems.EquipItem(item);
+        }
+
+
 
     }
 }

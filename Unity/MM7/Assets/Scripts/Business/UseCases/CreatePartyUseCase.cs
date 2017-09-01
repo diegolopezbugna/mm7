@@ -68,30 +68,38 @@ namespace Business
         public static PartyStats CreateDummyParty() {
             var dummyParty = new PartyStats();
             dummyParty.Chars = new List<PlayingCharacter>();
-            var pc = CreateDummyChar("Zoltan", Race.Goblin(), "18", Profession.Get(ProfessionCode.Knight), new int[] { 30, 5, 5, 13, 13, 20 });
+            var pc = CreateDummyChar("Zoltan", Race.Goblin(), Gender.Male, "18", Profession.Get(ProfessionCode.Knight), new int[] { 30, 5, 5, 13, 13, 20 });
             // TODO: put the real items for the standard party
             pc.Inventory.TryInsertItemAt(Item.GetByCode(1), 0, 0);
-            pc.Inventory.TryInsertItemAt(Item.GetByCode(42), 1, 0);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(47), 1, 0);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(66), 3, 0);
+            pc.EquipItem(Item.GetByCode(1));
+            pc.EquipItem(Item.GetByCode(42));
+            pc.EquipItem(Item.GetByCode(84));
+            pc.EquipItem(Item.GetByCode(66));
+            pc.EquipItem(Item.GetByCode(106));
+            pc.EquipItem(Item.GetByCode(104));
+            pc.EquipItem(Item.GetByCode(91));
+            pc.EquipItem(Item.GetByCode(115));
             dummyParty.Chars.Add(pc);
-            pc = CreateDummyChar("Roderick", Race.Human(), "04", Profession.Get(ProfessionCode.Thief), new int[] { 13, 9, 9, 13, 13, 13 });
+            pc = CreateDummyChar("Roderick", Race.Human(), Gender.Male, "04", Profession.Get(ProfessionCode.Thief), new int[] { 13, 9, 9, 13, 13, 13 });
             pc.Inventory.TryInsertItemAt(Item.GetByCode(15), 0, 0);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(66), 1, 0);
             dummyParty.Chars.Add(pc);
-            pc = CreateDummyChar("Serena", Race.Dwarf(), "15", Profession.Get(ProfessionCode.Cleric), new int[] { 12, 9, 20, 20, 7, 11 });
+            pc = CreateDummyChar("Serena", Race.Dwarf(), Gender.Female, "15", Profession.Get(ProfessionCode.Cleric), new int[] { 12, 9, 20, 20, 7, 11 });
             pc.Inventory.TryInsertItemAt(Item.GetByCode(50), 0, 0);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(71), 1, 0);
-            pc.Inventory.TryInsertItemAt(Item.GetByCode(79), 4, 0);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(84), 4, 0);
             dummyParty.Chars.Add(pc);
-            pc = CreateDummyChar("Alexis", Race.Elf(), "11", Profession.Get(ProfessionCode.Sorcerer), new int[] { 5, 30, 9, 13, 13, 13 });
+            pc = CreateDummyChar("Alexis", Race.Elf(), Gender.Female, "11", Profession.Get(ProfessionCode.Sorcerer), new int[] { 5, 30, 9, 13, 13, 13 });
             pc.Inventory.TryInsertItemAt(Item.GetByCode(61), 0, 0);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(66), 1, 0);
             dummyParty.Chars.Add(pc);
             return dummyParty;
         }
 
-        private static PlayingCharacter CreateDummyChar(string name, Race race, string portraitCode, Profession profession, int[] attributes) {
-            var pc = new PlayingCharacter(name, race, portraitCode);
+        private static PlayingCharacter CreateDummyChar(string name, Race race, Gender gender, string portraitCode, Profession profession, int[] attributes) {
+            var pc = new PlayingCharacter(name, race, gender, portraitCode);
             pc.Profession = profession;
             //pc.Skills
             pc.Might = attributes[0];

@@ -18,6 +18,9 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
     [SerializeField]
     private InventoryUI[] inventories;
 
+    [SerializeField]
+    private EquippedItemsUI[] equippedItemsRightPanels;
+
     private RectTransform rectTransform;
     private Canvas canvas;
 
@@ -30,6 +33,13 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
         base.Awake();
         rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
+    }
+
+    public override void Start()
+    {
+        base.Start();
+        for (int i = 0; i < equippedItemsRightPanels.Length; i++)
+            equippedItemsRightPanels[i].SetPlayingChar(Game.Instance.PartyStats.Chars[i]);
     }
 
     public override void Update()

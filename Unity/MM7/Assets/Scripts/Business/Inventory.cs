@@ -11,11 +11,9 @@ namespace Business
         public int y;
         public SlotPos(int x, int y) { this.x = x; this.y = y; }
     }
-    
+
     public class Inventory
     {
-        //public List<EquippedItem> EquippedItems { get; set; }
-
         private Item[,] BagItems { get; set; }
 
         public float SlotWidth { get; private set; }

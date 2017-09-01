@@ -22,9 +22,8 @@ namespace Business
                 item.PictureFilename = values[1];
                 item.Name = values[2];
                 item.Value = int.Parse(values[3]);
-                //TODO: item.EquipStat values[4]
+                item.EquipSlot = values[4].ToEnum<EquipSlot>(EquipSlot.None);
                 item.SkillGroup = values[5].ToEnum<SkillCode>(SkillCode.None);
-                //item.SkillGroup = ((SkillCode)Enum.Parse(typeof(SkillCode), values[5]));
                 item.Mod1 = values[6];
                 item.Mod2 = int.Parse(values[7]);
                 //TODO: material??

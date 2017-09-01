@@ -4,7 +4,8 @@ using UnityEngine;
 
 namespace Business
 {
-    public enum EquipStat {
+    public enum EquipSlot {
+        None,
         Weapon,
         Weapon2,
         Weapon1or2,
@@ -41,7 +42,7 @@ namespace Business
         public string Mod1 { get; set; }
         public int Mod2 { get; set; }
         public int IdItemRequiredLevel { get; set; }
-        public EquipStat EquipStat { get; set; }
+        public EquipSlot EquipSlot { get; set; }
         public float EquipX { get; set; }
         public float EquipY { get; set; }
 
@@ -68,6 +69,29 @@ namespace Business
                 }
             }
             return allItems[code].MemberwiseClone() as Item;
+        }
+
+        public bool IsEquipmentTextureVariant {
+            get {
+                return EquipSlot == EquipSlot.Armor ||
+                    EquipSlot == EquipSlot.Belt ||
+                    EquipSlot == EquipSlot.Helm ||
+                    EquipSlot == EquipSlot.Boots ||
+                    EquipSlot == EquipSlot.Cloak;
+            }
+        }
+
+        public Texture GetEquipmentTexture(PlayingCharacter playingCharacter) {
+            var suffix = "";
+            if (playingCharacter.Gender == Gender.Male && playingCharacter.Race.RaceCode != RaceCode.Dwarf)
+                suffix = "v1";
+            else if (playingCharacter.Gender == Gender.Female && playingCharacter.Race.RaceCode != RaceCode.Dwarf)
+                suffix = "v2";
+            else if (playingCharacter.Gender == Gender.Male)
+                suffix = "v3";
+            else
+                suffix = "v4";
+            return Resources.Load("Items/" + PictureFilename + suffix) as Texture; // TODO: variant NOT exists?
         }
     }
 

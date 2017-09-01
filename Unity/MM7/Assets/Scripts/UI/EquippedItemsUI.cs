@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using Business;
 
 public class EquippedItemsUI : MonoBehaviour {
@@ -55,13 +56,16 @@ public class EquippedItemsUI : MonoBehaviour {
     private string resourcesDirectory = "PcBodies";
     private float scale = 0.9f;
 
-	// Use this for initialization
+    private CharDetailsUI charDetailsUI; 
+
+    void Awake() {
+        charDetailsUI = GetComponentInParent<CharDetailsUI>();
+    }
+
 	void Start () {
 	}
 	
-	// Update is called once per frame
 	void Update () {
-		
 	}
 
     public void SetPlayingChar(PlayingCharacter playingChar) {
@@ -108,6 +112,7 @@ public class EquippedItemsUI : MonoBehaviour {
             image.gameObject.SetActive(true);
             image.texture = GetEquippmentTexture(item);
             Scale(image);
+            image.gameObject.GetComponent<EquippedItem>().Item = item;
         }
         else
             image.gameObject.SetActive(false);
@@ -122,6 +127,10 @@ public class EquippedItemsUI : MonoBehaviour {
             return item.GetEquipmentTexture(playingChar);
         else
             return item.Texture;
+    }
+
+    public void OnEquippedItemPointerDown(Item item, PointerEventData eventData, EquippedItem equippedItem) {
+        charDetailsUI.OnEquippedItemPointerDown(playingChar, item, eventData, equippedItem);
     }
 
 }

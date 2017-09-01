@@ -166,6 +166,43 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
 
     #endregion
 
+    #region EQUIPPED ITEMS
+
+    public void OnEquippedItemPointerDown(PlayingCharacter playingCharacter, Item item, PointerEventData eventData, EquippedItem equippedItem)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+//            if (DraggingItem == null)
+//            {
+//                // begin drag
+//                DraggingItem = item;
+//                DraggingFrom = inventory;
+//                DraggingItemGameObject = new GameObject("draggingItem");
+//                DraggingItemGameObject.transform.SetParent(canvas.transform, false);
+//                DraggingItemGameObject.transform.SetAsLastSibling();
+//                var image = DraggingItemGameObject.AddComponent<RawImage>();
+//                image.texture = item.Texture;
+//                image.SetNativeSize();
+//                image.rectTransform.pivot = new Vector2(0, 1);
+//                image.raycastTarget = false;
+//                PositionDraggingItem();
+//                inventoryItem.MakeImageTranslucent();
+//            }
+//            else
+//            {
+//                // exchange items
+//                if (TryExchangeItems(DraggingFrom, DraggingItem, inventory, item))
+//                    EndDrag();
+//            }
+        }
+        else if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            ItemInfoUI.Instance.Show(item);
+        }
+    }
+
+    #endregion
+
     #region SHOW PANELS
 
     public void ShowStats(PlayingCharacter character) {

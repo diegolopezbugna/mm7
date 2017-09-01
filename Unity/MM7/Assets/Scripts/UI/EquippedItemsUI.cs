@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Business;
 
-public class EquippedItemsUI : MonoBehaviour {
+public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHandler {
 
     [SerializeField]
     private RawImage body;
@@ -111,8 +111,11 @@ public class EquippedItemsUI : MonoBehaviour {
         {
             image.gameObject.SetActive(true);
             image.texture = GetEquippmentTexture(item);
+            image.raycastTarget = true;
             Scale(image);
-            image.gameObject.GetComponent<EquippedItem>().Item = item;
+            var inventoryItem = image.gameObject.GetComponent<InventoryItem>();
+            inventoryItem.Item = item;
+            inventoryItem.ItemsContainerUI = this;
         }
         else
             image.gameObject.SetActive(false);
@@ -129,8 +132,17 @@ public class EquippedItemsUI : MonoBehaviour {
             return item.Texture;
     }
 
-    public void OnEquippedItemPointerDown(Item item, PointerEventData eventData, EquippedItem equippedItem) {
+    public void OnInventoryItemPointerDown(Item item, PointerEventData eventData, InventoryItem equippedItem) {
         charDetailsUI.OnEquippedItemPointerDown(playingChar, item, eventData, equippedItem);
     }
+
+    #region IPointerDownHandler implementation
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        charDetailsUI.OnRightPanelPointerDown(playingChar, eventData);
+    }
+
+    #endregion
 
 }

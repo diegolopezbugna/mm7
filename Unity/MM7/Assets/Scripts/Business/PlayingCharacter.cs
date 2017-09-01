@@ -129,11 +129,17 @@ namespace Business
             return EquippedItems.GetItemEquipped(equipSlot);
         }
 
-        public void EquipItem(Item item) {
-            EquippedItems.EquipItem(item);
+        public Item EquipItem(Item item) {
+            return EquippedItems.EquipItem(item);
         }
 
+        public bool CanEquipItem(Item item) {
+            // TODO: check skills and requirements
+            return true;
+        }
 
-
+        public void UnequipItem(Item item) {
+            EquippedItems.UnequipItem(item);
+        }
     }
 }

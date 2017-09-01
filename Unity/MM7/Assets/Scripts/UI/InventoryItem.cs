@@ -8,9 +8,9 @@ using Business;
 public class InventoryItem : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler {
 
     public Item Item { get; set; }
+    public ItemsContainerUI ItemsContainerUI { get; set; }
 
     private RawImage rawImage;
-    private InventoryUI inventoryUI;
 
     [SerializeField]
     private Color highlightedColor = new Color(0.8f, 0.8f, 0.8f);
@@ -18,7 +18,6 @@ public class InventoryItem : MonoBehaviour, IPointerDownHandler, IPointerEnterHa
 	// Use this for initialization
 	void Start () {
         rawImage = GetComponent<RawImage>();
-        inventoryUI = GetComponentInParent<InventoryUI>();
 	}
 	
 	// Update is called once per frame
@@ -42,7 +41,7 @@ public class InventoryItem : MonoBehaviour, IPointerDownHandler, IPointerEnterHa
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        inventoryUI.OnInventoryItemPointerDown(Item, eventData, this);
+        ItemsContainerUI.OnInventoryItemPointerDown(Item, eventData, this);
     }
 
 

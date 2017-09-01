@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Business;
 
-public class InventoryUI : MonoBehaviour, IPointerDownHandler {
+public class InventoryUI : MonoBehaviour, ItemsContainerUI, IPointerDownHandler {
 
     [SerializeField]
     private GameObject itemTemplatePrefab;
@@ -57,7 +57,9 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler {
         var offsetX = charDetailsUI.GetOffsetForCenterItemInSlot(Inventory.SlotWidth, rawImage.texture.width);
         var offsetY = charDetailsUI.GetOffsetForCenterItemInSlot(Inventory.SlotHeight, rawImage.texture.height);
         rawImage.rectTransform.anchoredPosition = new Vector2((x * Inventory.SlotWidth) + offsetX, -((y * Inventory.SlotHeight) + offsetY));
-        itemGameObject.GetComponent<InventoryItem>().Item = item;
+        var inventoryItem = itemGameObject.GetComponent<InventoryItem>();
+        inventoryItem.Item = item;
+        inventoryItem.ItemsContainerUI = this;
     }
 
     #region POINTER DOWN/UP

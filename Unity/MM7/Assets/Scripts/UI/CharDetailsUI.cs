@@ -26,7 +26,7 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
 
     public Item DraggingItem { get; private set; }
     public GameObject DraggingItemGameObject { get; private set; }
-    public Inventory DraggingFrom { get; private set; }
+    public object DraggingFrom { get; private set; }
 
     public override void Awake()
     {
@@ -84,23 +84,15 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
     {
         if (DraggingItem != null)
         {
-            if (TryMoveItem(DraggingItem, slotX, slotY, DraggingFrom, inventory))
+            bool didMove = false;
+            if (DraggingFrom is Inventory)
+                didMove = TryMoveItem(DraggingItem, slotX, slotY, DraggingFrom as Inventory, inventory);
+            else if (DraggingFrom is PlayingCharacter)
+                didMove = TryUnequipItem(DraggingItem, DraggingFrom as PlayingCharacter, inventory, slotX, slotY);
+
+            if (didMove)
                 EndDrag();
         }
-    }
-
-    private void EndDrag()
-    {
-        DestroyDraggingItem();
-        foreach (var i in inventories)
-            i.DrawInventory(); // TODO: don't redraw all
-    }
-
-    private void DestroyDraggingItem()
-    {
-        DraggingItem = null;
-        Destroy(DraggingItemGameObject);
-        DraggingItemGameObject = null;
     }
 
     public void OnInventoryItemPointerDown(Inventory inventory, Item item, PointerEventData eventData, InventoryItem inventoryItem)
@@ -125,8 +117,10 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
             }
             else
             {
+                // TODO: y si viene de PlayingChar??
                 // exchange items
-                if (TryExchangeItems(DraggingFrom, DraggingItem, inventory, item))
+                if (DraggingFrom is Inventory &&
+                    TryExchangeItems(DraggingFrom as Inventory, DraggingItem, inventory, item))
                     EndDrag();
             }
         }
@@ -136,6 +130,7 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
         }
     }
 
+    // TODO: move to business use case
     private bool TryMoveItem(Item item, int x, int y, Inventory inventoryFrom, Inventory inventoryTo) 
     {
         var originalPosition = inventoryFrom.RemoveItem(item);
@@ -147,6 +142,7 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
         return canMoveIt;
     }
 
+    // TODO: move to business use case
     private bool TryExchangeItems(Inventory inventory1, Item item1, Inventory inventory2, Item item2)
     {
         var originalPosItem1 = inventory1.RemoveItem(item1);
@@ -166,39 +162,121 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
 
     #endregion
 
+    private void EndDrag()
+    {
+        DestroyDraggingItem();
+        foreach (var i in inventories)
+            i.DrawInventory(); // TODO: don't redraw all
+        foreach (var e in equippedItemsRightPanels) {
+            e.DrawBody(); // TODO: don't redraw all
+            e.DrawEqquipedItems();
+        }
+    }
+
+    private void DestroyDraggingItem()
+    {
+        DraggingItem = null;
+        Destroy(DraggingItemGameObject);
+        DraggingItemGameObject = null;
+        DraggingFrom = null;
+    }
+
     #region EQUIPPED ITEMS
 
-    public void OnEquippedItemPointerDown(PlayingCharacter playingCharacter, Item item, PointerEventData eventData, EquippedItem equippedItem)
+    public void OnRightPanelPointerDown(PlayingCharacter playingCharacter, PointerEventData eventData)
+    {
+        if (DraggingItem != null)
+        {
+            bool didMove = false;
+            Item oldEquippedItem = null;
+            if (DraggingFrom is Inventory)
+                didMove = TryEquipItem(playingCharacter, DraggingItem, DraggingFrom as Inventory, out oldEquippedItem);
+//            else if (DraggingFrom is PlayingCharacter)
+//                didMove = TryUnequipItem(DraggingItem, DraggingFrom as PlayingCharacter, inventory, slotX, slotY);
+            // TODO: move from another equipped player
+
+            if (didMove)
+            {
+                EndDrag();
+                if (oldEquippedItem != null)
+                    BeginEquippedItemDrag(playingCharacter, oldEquippedItem, null);
+            }
+        }
+    }
+
+    public void OnEquippedItemPointerDown(PlayingCharacter playingCharacter, Item item, PointerEventData eventData, InventoryItem equippedItem)
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-//            if (DraggingItem == null)
-//            {
-//                // begin drag
-//                DraggingItem = item;
-//                DraggingFrom = inventory;
-//                DraggingItemGameObject = new GameObject("draggingItem");
-//                DraggingItemGameObject.transform.SetParent(canvas.transform, false);
-//                DraggingItemGameObject.transform.SetAsLastSibling();
-//                var image = DraggingItemGameObject.AddComponent<RawImage>();
-//                image.texture = item.Texture;
-//                image.SetNativeSize();
-//                image.rectTransform.pivot = new Vector2(0, 1);
-//                image.raycastTarget = false;
-//                PositionDraggingItem();
-//                inventoryItem.MakeImageTranslucent();
-//            }
-//            else
-//            {
-//                // exchange items
+            if (DraggingItem == null)
+            {
+                // begin drag
+                BeginEquippedItemDrag(playingCharacter, item, equippedItem);
+            }
+            else
+            {
+                // TODO: y si ya tenemos uno?
+                // TODO: y si viene de otro player?
+                Item oldEquippedItem = null;
+                if (DraggingFrom is Inventory &&
+                    TryEquipItem(playingCharacter, DraggingItem, DraggingFrom as Inventory, out oldEquippedItem))
+                {
+                    EndDrag();
+                    if (oldEquippedItem != null)
+                        BeginEquippedItemDrag(playingCharacter, oldEquippedItem, null);
+                }
+
+//                if (DraggingFrom is Inventory)
+//                    TryEquipItem(DraggingItem, 
+//                else if (DraggingFrom is PlayingCharacter)
+                    
+                // exchange items
 //                if (TryExchangeItems(DraggingFrom, DraggingItem, inventory, item))
 //                    EndDrag();
-//            }
+            }
         }
         else if (eventData.button == PointerEventData.InputButton.Right)
         {
             ItemInfoUI.Instance.Show(item);
         }
+    }
+
+    private void BeginEquippedItemDrag(PlayingCharacter playingCharacter, Item item, InventoryItem equippedItem) {
+        DraggingItem = item;
+        DraggingFrom = playingCharacter;
+        DraggingItemGameObject = new GameObject("draggingItem");
+        DraggingItemGameObject.transform.SetParent(canvas.transform, false);
+        DraggingItemGameObject.transform.SetAsLastSibling();
+        var image = DraggingItemGameObject.AddComponent<RawImage>();
+        image.texture = item.Texture;
+        image.SetNativeSize();
+        image.rectTransform.pivot = new Vector2(0, 1);
+        image.raycastTarget = false;
+        PositionDraggingItem();
+        if (equippedItem != null)
+            equippedItem.MakeImageTranslucent();
+    }
+
+    // TODO: move to business use case
+    private bool TryEquipItem(PlayingCharacter playingCharacter, Item item, Inventory inventoryFrom, out Item oldEquipItem) 
+    {
+        oldEquipItem = null;
+        var canEquip = playingCharacter.CanEquipItem(item);
+        if (canEquip)
+        {
+            oldEquipItem = playingCharacter.EquipItem(item);
+            inventoryFrom.RemoveItem(item);
+        }
+        return canEquip;
+    }
+
+    // TODO: move to business use case
+    private bool TryUnequipItem(Item item, PlayingCharacter playingCharacterFrom, Inventory inventoryTo, int slotX, int slotY) 
+    {
+        var canMoveIt = inventoryTo.TryInsertItemAt(item, slotX, slotY);
+        if (canMoveIt)
+            playingCharacterFrom.UnequipItem(item);
+        return canMoveIt;
     }
 
     #endregion

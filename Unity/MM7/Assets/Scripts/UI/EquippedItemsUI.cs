@@ -7,59 +7,36 @@ using Business;
 
 public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHandler {
 
-    [SerializeField]
     private RawImage body;
-
-    [SerializeField]
     private RawImage rightHand;
-
-    [SerializeField]
     private RawImage leftArm;
-
-    [SerializeField]
     private RawImage leftHand;
-
-    [SerializeField]
     private RawImage leftArmUsed;
-
-    [SerializeField]
     private RawImage leftHandUsed;
 
-    [SerializeField]
     private RawImage weapon1;
-
-    [SerializeField]
     private RawImage weapon2;
-
-    [SerializeField]
     private RawImage missile;
-
-    [SerializeField]
     private RawImage shield;
-
-    [SerializeField]
     private RawImage cloak;
-
-    [SerializeField]
     private RawImage armor;
-
-    [SerializeField]
     private RawImage belt;
-
-    [SerializeField]
     private RawImage boots;
-
-    [SerializeField]
     private RawImage helm;
 
     private PlayingCharacter playingChar;
     private string resourcesDirectory = "PcBodies";
     private float scale = 0.9f;
+    private Vector2 centeredPivot = new Vector2(0.5f, 0.5f);
+    private Vector2 centeredBottomPivot = new Vector2(0.5f, 0f);
+    private Vector2 centeredTopPivot = new Vector2(0.5f, 1f);
 
     private CharDetailsUI charDetailsUI; 
+    private RectTransform rectTransform;
 
     void Awake() {
         charDetailsUI = GetComponentInParent<CharDetailsUI>();
+        rectTransform = GetComponent<RectTransform>();
     }
 
 	void Start () {
@@ -68,57 +45,80 @@ public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHand
 	void Update () {
 	}
 
-    public void SetPlayingChar(PlayingCharacter playingChar) {
-        this.playingChar = playingChar;
-        DrawBody();
-        DrawEqquipedItems();
-    }
-
-    public void DrawBody() {
-        body.texture = GetBodyPartTexture("bod");
-        Scale(body);
-        rightHand.texture = GetBodyPartTexture("rh");
-        Scale(rightHand);
-        leftArm.texture = GetBodyPartTexture("lad");
-        Scale(leftArm);
-        leftHand.texture = GetBodyPartTexture("lh");
-        Scale(leftHand);
-        leftArmUsed.texture = GetBodyPartTexture("lau");
-        Scale(leftArmUsed);
-        leftHandUsed.texture = GetBodyPartTexture("lhu");
-        Scale(leftHandUsed);
-    }
-
-    public void DrawEqquipedItems()
+    public void SetPlayingChar(PlayingCharacter playingChar) 
     {
-        CheckAndDrawEquippedItem(playingChar.EquippedItems.Weapon1, weapon1);
-        CheckAndDrawEquippedItem(playingChar.EquippedItems.Weapon2, weapon2);
-        CheckAndDrawEquippedItem(playingChar.EquippedItems.Missile, missile);
-        CheckAndDrawEquippedItem(playingChar.EquippedItems.Shield, shield);
-        CheckAndDrawEquippedItem(playingChar.EquippedItems.Helm, helm);
-        CheckAndDrawEquippedItem(playingChar.EquippedItems.Boots, boots);
-        CheckAndDrawEquippedItem(playingChar.EquippedItems.Armor, armor);
-        CheckAndDrawEquippedItem(playingChar.EquippedItems.Belt, belt);
-        CheckAndDrawEquippedItem(playingChar.EquippedItems.Cloak, cloak);
+        this.playingChar = playingChar;
+        Draw();
     }
 
-    private Texture GetBodyPartTexture(string bodyPart) {
+    private void Clean()
+    {
+        foreach (Transform child in transform)
+            Destroy(child.gameObject);
+    }
+
+    public void Draw() 
+    {
+        Clean(); // TODO: reuse gameobjects
+        missile = CheckAndDrawEquippedItem(playingChar.EquippedItems.Missile, centeredPivot, new Vector2(11f, 28f));
+        cloak = CheckAndDrawEquippedItem(playingChar.EquippedItems.Cloak, centeredBottomPivot, new Vector2(1.7f, 8f));
+        body = DrawBodyPart("bod", centeredBottomPivot, Vector2.zero);
+        leftArm = DrawBodyPart("lad", centeredPivot, new Vector2(34.8f, 21.9f));
+        armor = CheckAndDrawEquippedItem(playingChar.EquippedItems.Armor, centeredTopPivot, new Vector2(2f, -67f));
+        belt = CheckAndDrawEquippedItem(playingChar.EquippedItems.Belt, centeredPivot, new Vector2(3f, -6.85f));
+        weapon1 = CheckAndDrawEquippedItem(playingChar.EquippedItems.Weapon1, new Vector2(0.5f, 0.2f), new Vector2(-44.3f, 125f));
+        weapon2 = CheckAndDrawEquippedItem(playingChar.EquippedItems.Weapon2, new Vector2(0.5f, 0.2f), new Vector2(-44.3f, 120f));
+        rightHand = DrawBodyPart("rh", centeredPivot, new Vector2(-44.3f, 30.5f));
+        leftHand = DrawBodyPart("lh", centeredPivot, new Vector2(44.2f, -22.5f));
+        leftArmUsed = DrawBodyPart("lau", centeredPivot, new Vector2(-7.15f, 37.1f));
+        leftHandUsed = DrawBodyPart("lhu", centeredPivot, new Vector2(-44.83f, 37.1f));
+        shield = CheckAndDrawEquippedItem(playingChar.EquippedItems.Shield, centeredPivot, new Vector2(34.2f, -17.1f));
+        helm = CheckAndDrawEquippedItem(playingChar.EquippedItems.Helm, centeredTopPivot, new Vector2(-3.3f, -15.11f));
+        boots = CheckAndDrawEquippedItem(playingChar.EquippedItems.Boots, centeredBottomPivot, new Vector2(0f, 0f));
+    }
+
+    private RawImage DrawBodyPart(string bodyPart, Vector2 pivotAnchor, Vector2 anchoredPosition) 
+    {
+        var go = new GameObject(bodyPart);
+        go.transform.SetParent(rectTransform, false);
+        //go.transform.SetAsLastSibling();
+        var image = go.AddComponent<RawImage>();
+        image.texture = GetBodyPartTexture(bodyPart);
+        Scale(image);
+        image.rectTransform.pivot = pivotAnchor;
+        image.rectTransform.anchorMin = pivotAnchor;
+        image.rectTransform.anchorMax = pivotAnchor;
+        image.rectTransform.anchoredPosition = anchoredPosition;
+        image.raycastTarget = false;
+        return image;
+    }
+
+    private Texture GetBodyPartTexture(string bodyPart) 
+    {
         return Resources.Load(string.Format("{0}/PC{1}{2}", resourcesDirectory, playingChar.PortraitCode, bodyPart)) as Texture;
     }
 
-    private void CheckAndDrawEquippedItem(Item item, RawImage image) {
+    private RawImage CheckAndDrawEquippedItem(Item item, Vector2 pivotAnchor, Vector2 anchoredPosition) 
+    {
         if (item != null)
         {
-            image.gameObject.SetActive(true);
+            var go = new GameObject(item.PictureFilename);
+            go.transform.SetParent(rectTransform, false);
+            //go.transform.SetAsLastSibling();
+            var image = go.AddComponent<RawImage>();
             image.texture = GetEquippmentTexture(item);
             image.raycastTarget = true;
+            image.rectTransform.pivot = pivotAnchor;
+            image.rectTransform.anchorMin = pivotAnchor;
+            image.rectTransform.anchorMax = pivotAnchor;
+            image.rectTransform.anchoredPosition = anchoredPosition;
             Scale(image);
-            var inventoryItem = image.gameObject.GetComponent<InventoryItem>();
+            var inventoryItem = go.AddComponent<InventoryItem>();
             inventoryItem.Item = item;
             inventoryItem.ItemsContainerUI = this;
+            return image;
         }
-        else
-            image.gameObject.SetActive(false);
+        return null;
     }
 
     private void Scale(RawImage image) {

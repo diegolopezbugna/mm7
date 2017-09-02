@@ -73,8 +73,7 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
         foreach (var i in inventories)
             i.DrawInventory(); // TODO: don't redraw all
         foreach (var e in equippedItemsRightPanels) {
-            e.DrawBody(); // TODO: don't redraw all
-            e.DrawEqquipedItems();
+            e.Draw(); // TODO: don't redraw all
         }
     }
 

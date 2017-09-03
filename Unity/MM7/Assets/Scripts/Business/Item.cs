@@ -82,16 +82,16 @@ namespace Business
         }
 
         public Texture GetEquipmentTexture(PlayingCharacter playingCharacter) {
-            var suffix = "";
-            if (playingCharacter.Gender == Gender.Male && playingCharacter.Race.RaceCode != RaceCode.Dwarf)
-                suffix = "v1";
-            else if (playingCharacter.Gender == Gender.Female && playingCharacter.Race.RaceCode != RaceCode.Dwarf)
-                suffix = "v2";
-            else if (playingCharacter.Gender == Gender.Male)
-                suffix = "v3";
-            else
-                suffix = "v4";
-            return Resources.Load("Items/" + PictureFilename + suffix) as Texture; // TODO: variant NOT exists?
+            var variant = playingCharacter.Gender == Gender.Female ? 2 : 1;
+            if (playingCharacter.Race.RaceCode == RaceCode.Dwarf)
+                variant += 2;
+            var texture = Resources.Load(string.Format("Items/{0}v{1}", PictureFilename, variant)) as Texture;
+            if (texture == null)
+            {
+                variant -= 2;
+                texture = Resources.Load(string.Format("Items/{0}v{1}", PictureFilename, variant)) as Texture;
+            }
+            return texture ?? Texture;
         }
     }
 

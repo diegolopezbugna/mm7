@@ -68,7 +68,7 @@ public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHand
         if (!equippedItems.IsDualHandWeaponEquipped)
             leftArm = DrawBodyPart("lad", centeredPivot, GetLeftArmPosition());
 
-        armor = CheckAndDrawEquippedItem(equippedItems.Armor, centeredTopPivot, new Vector2(2f, -67f));
+        armor = CheckAndDrawEquippedItem(equippedItems.Armor, centeredTopPivot, new Vector2(2f, -67f)); // dwM: -103 -> 36
         belt = CheckAndDrawEquippedItem(equippedItems.Belt, centeredPivot, new Vector2(3f, -6.85f));
         weapon1 = CheckAndDrawEquippedItem(equippedItems.WeaponRight, new Vector2(0.5f, 0.2f), new Vector2(-44.3f, 125f));
         if (equippedItems.WeaponLeft != equippedItems.WeaponRight)

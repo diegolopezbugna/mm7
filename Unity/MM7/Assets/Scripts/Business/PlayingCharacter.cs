@@ -125,12 +125,13 @@ namespace Business
             }
         }
 
-        public Item GetItemEquipped(EquipSlot equipSlot) {
-            return EquippedItems.GetItemEquipped(equipSlot);
+        public void EquipItem(Item item) {
+            Item itemToBeLost = null;
+            EquippedItems.TryEquipItem(item, out itemToBeLost);
         }
 
-        public Item EquipItem(Item item) {
-            return EquippedItems.EquipItem(item);
+        public bool TryEquipItem(Item item, out Item oldEquippedItem) {
+            return EquippedItems.TryEquipItem(item, out oldEquippedItem);
         }
 
         public bool CanEquipItem(Item item) {

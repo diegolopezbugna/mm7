@@ -176,10 +176,13 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
     {
         if (playingCharacter.CanEquipItem(DraggingItem))
         {
-            var oldEquippedItem = playingCharacter.EquipItem(DraggingItem);
-            EndDragAndRefreshUI();
-            if (oldEquippedItem != null)
-                BeginDrag(oldEquippedItem);
+            Item oldEquippedItem = null;
+            if (playingCharacter.TryEquipItem(DraggingItem, out oldEquippedItem))
+            {
+                EndDragAndRefreshUI();
+                if (oldEquippedItem != null)
+                    BeginDrag(oldEquippedItem);
+            }
         }
         else
         {

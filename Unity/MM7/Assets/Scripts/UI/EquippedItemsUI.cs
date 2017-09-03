@@ -59,22 +59,81 @@ public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHand
 
     public void Draw() 
     {
+        var equippedItems = playingChar.EquippedItems;
         Clean(); // TODO: reuse gameobjects
-        missile = CheckAndDrawEquippedItem(playingChar.EquippedItems.Missile, centeredPivot, new Vector2(11f, 28f));
-        cloak = CheckAndDrawEquippedItem(playingChar.EquippedItems.Cloak, centeredBottomPivot, new Vector2(1.7f, 8f));
+        missile = CheckAndDrawEquippedItem(equippedItems.Missile, centeredPivot, new Vector2(11f, 28f));
+        cloak = CheckAndDrawEquippedItem(equippedItems.Cloak, centeredBottomPivot, new Vector2(1.7f, 8f));
         body = DrawBodyPart("bod", centeredBottomPivot, Vector2.zero);
-        leftArm = DrawBodyPart("lad", centeredPivot, new Vector2(34.8f, 21.9f));
-        armor = CheckAndDrawEquippedItem(playingChar.EquippedItems.Armor, centeredTopPivot, new Vector2(2f, -67f));
-        belt = CheckAndDrawEquippedItem(playingChar.EquippedItems.Belt, centeredPivot, new Vector2(3f, -6.85f));
-        weapon1 = CheckAndDrawEquippedItem(playingChar.EquippedItems.Weapon1, new Vector2(0.5f, 0.2f), new Vector2(-44.3f, 125f));
-        weapon2 = CheckAndDrawEquippedItem(playingChar.EquippedItems.Weapon2, new Vector2(0.5f, 0.2f), new Vector2(-44.3f, 120f));
-        rightHand = DrawBodyPart("rh", centeredPivot, new Vector2(-44.3f, 30.5f));
-        leftHand = DrawBodyPart("lh", centeredPivot, new Vector2(44.2f, -22.5f));
-        leftArmUsed = DrawBodyPart("lau", centeredPivot, new Vector2(-7.15f, 37.1f));
-        leftHandUsed = DrawBodyPart("lhu", centeredPivot, new Vector2(-44.83f, 37.1f));
-        shield = CheckAndDrawEquippedItem(playingChar.EquippedItems.Shield, centeredPivot, new Vector2(34.2f, -17.1f));
-        helm = CheckAndDrawEquippedItem(playingChar.EquippedItems.Helm, centeredTopPivot, new Vector2(-3.3f, -15.11f));
-        boots = CheckAndDrawEquippedItem(playingChar.EquippedItems.Boots, centeredBottomPivot, new Vector2(0f, 0f));
+
+        if (!equippedItems.IsDualHandWeaponEquipped)
+            leftArm = DrawBodyPart("lad", centeredPivot, GetLeftArmPosition());
+
+        armor = CheckAndDrawEquippedItem(equippedItems.Armor, centeredTopPivot, new Vector2(2f, -67f));
+        belt = CheckAndDrawEquippedItem(equippedItems.Belt, centeredPivot, new Vector2(3f, -6.85f));
+        weapon1 = CheckAndDrawEquippedItem(equippedItems.WeaponRight, new Vector2(0.5f, 0.2f), new Vector2(-44.3f, 125f));
+        if (equippedItems.WeaponLeft != equippedItems.WeaponRight)
+            weapon2 = CheckAndDrawEquippedItem(equippedItems.WeaponLeft, new Vector2(0.5f, 0.2f), new Vector2(-44.3f, 120f));
+
+        if (equippedItems.IsDualWeaponsWielding)
+            leftHand = DrawBodyPart("lh", centeredPivot, GetLeftHandPosition());
+
+        if (equippedItems.IsDualHandWeaponEquipped)
+            leftArmUsed = DrawBodyPart("lau", centeredPivot, GetLeftArmDualHandWeaponPosition());
+
+        rightHand = DrawBodyPart("rh", centeredPivot, GetRightHandPosition());
+
+//        if (equippedItems.IsDualHandWeaponEquipped)
+//            leftHandUsed = DrawBodyPart("lhu", centeredPivot, new Vector2(-44.83f, 37.1f)); // is it needed?
+
+        shield = CheckAndDrawEquippedItem(equippedItems.Shield, centeredPivot, new Vector2(34.2f, -17.1f));
+        helm = CheckAndDrawEquippedItem(equippedItems.Helm, centeredTopPivot, new Vector2(-3.3f, -15.11f));
+        boots = CheckAndDrawEquippedItem(equippedItems.Boots, centeredBottomPivot, new Vector2(0f, 0f));
+    }
+
+    private Vector2 GetRightHandPosition()
+    {
+        // female: -36.4 / 21.2  dwarfMale: -46.4 / -10.3   dwarfFemale: -39.8 / -7.34
+        if (playingChar.Race.RaceCode == RaceCode.Dwarf && playingChar.Gender == Gender.Male)
+            return new Vector2(-46.4f, -10.3f);
+        else if (playingChar.Race.RaceCode == RaceCode.Dwarf && playingChar.Gender == Gender.Female)
+            return new Vector2(-39.8f, -7.34f);
+        else if (playingChar.Gender == Gender.Female)
+            return new Vector2(-36.4f, 21.2f);
+        else
+            return new Vector2(-43.6f, 29.9f);
+    }
+
+    private Vector2 GetLeftArmPosition()
+    {
+        // dwarfFemale: 41.8/-1.52 dwM: 43.4/1.1
+        if (playingChar.Race.RaceCode == RaceCode.Dwarf && playingChar.Gender == Gender.Male)
+            return new Vector2(43.3f, 1.1f);
+        else if (playingChar.Race.RaceCode == RaceCode.Dwarf && playingChar.Gender == Gender.Female)
+            return new Vector2(41.8f, -1.52f);
+        else
+            return new Vector2(34.8f, 21.9f);
+    }
+
+    private Vector2 GetLeftArmDualHandWeaponPosition()
+    {
+        if (playingChar.Race.RaceCode == RaceCode.Dwarf && playingChar.Gender == Gender.Male)
+            return new Vector2(-8.58f, 5.78f);
+        else if (playingChar.Race.RaceCode == RaceCode.Dwarf && playingChar.Gender == Gender.Female)
+            return new Vector2(-7.66f, 1.83f);
+        else
+            return new Vector2(-7.15f, 37.1f);
+    }
+
+    private Vector2 GetLeftHandPosition()
+    {
+        if (playingChar.Race.RaceCode == RaceCode.Dwarf && playingChar.Gender == Gender.Male)
+            return new Vector2(49.6f, -33.4f);
+        else if (playingChar.Race.RaceCode == RaceCode.Dwarf && playingChar.Gender == Gender.Female)
+            return new Vector2(43.7f, -32.9f);
+        else if (playingChar.Gender == Gender.Female)
+            return new Vector2(48.2f, -20.1f);
+        else
+            return new Vector2(44.2f, -22.5f);
     }
 
     private RawImage DrawBodyPart(string bodyPart, Vector2 pivotAnchor, Vector2 anchoredPosition) 

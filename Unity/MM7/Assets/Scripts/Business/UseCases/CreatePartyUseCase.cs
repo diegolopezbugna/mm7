@@ -73,6 +73,7 @@ namespace Business
             pc.Inventory.TryInsertItemAt(Item.GetByCode(1), 0, 0);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(47), 1, 0);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(66), 3, 0);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(91), 0, 7);
             dummyParty.Chars.Add(pc);
             //pc = CreateDummyChar("Roderick", Race.Human(), Gender.Male, "04", Profession.Get(ProfessionCode.Thief), new int[] { 13, 9, 9, 13, 13, 13 });
             pc = CreateDummyChar("Roderick", Race.Dwarf(), Gender.Male, "13", Profession.Get(ProfessionCode.Thief), new int[] { 13, 9, 9, 13, 13, 13 });

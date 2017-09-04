@@ -78,6 +78,9 @@ public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHand
         if (equippedItems.Armor != null)
             armor = DrawEquippedItem(equippedItems.Armor, centeredTopPivot, GetArmorPosition());
 
+        if (playingChar.Race.RaceCode == RaceCode.Dwarf && playingChar.Gender == Gender.Male)
+            DrawBodyPart("brd", centeredTopPivot, new Vector2(-6.8f, playingChar.PortraitCode == "14" ? -99.5f : -91.1f));
+
         if (equippedItems.Belt != null)
             belt = DrawEquippedItem(equippedItems.Belt, centeredPivot, GetBeltPosition());
 

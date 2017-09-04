@@ -62,23 +62,32 @@ public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHand
         var equippedItems = playingChar.EquippedItems;
         Clean(); // TODO: reuse gameobjects
 
-        missile = CheckAndDrawEquippedItem(equippedItems.Missile, centeredPivot, new Vector2(11f, 28f));
+        if (equippedItems.Missile != null)
+            missile = DrawEquippedItem(equippedItems.Missile, centeredPivot, new Vector2(11f, 28f));
 
-        cloak = CheckAndDrawEquippedItem(equippedItems.Cloak, centeredBottomPivot, new Vector2(1.7f, 8f));
+        if (equippedItems.Cloak != null)
+            cloak = DrawEquippedItem(equippedItems.Cloak, centeredBottomPivot, new Vector2(1.7f, 8f));
 
         body = DrawBodyPart("bod", centeredBottomPivot, Vector2.zero);
 
         if (!equippedItems.IsDualHandWeaponEquipped)
             leftArm = DrawBodyPart("lad", centeredPivot, GetLeftArmPosition());
 
-        armor = CheckAndDrawEquippedItem(equippedItems.Armor, centeredTopPivot, GetArmorPosition());
+        rightHand = DrawBodyPart("rh", Vector2.up, GetRightHandPosition());
 
-        belt = CheckAndDrawEquippedItem(equippedItems.Belt, centeredPivot, GetBeltPosition());
+        if (equippedItems.Armor != null)
+            armor = DrawEquippedItem(equippedItems.Armor, centeredTopPivot, GetArmorPosition());
 
-        weapon1 = CheckAndDrawEquippedItem(equippedItems.WeaponRight, new Vector2(0.5f, 0.2f), new Vector2(-44.3f, 125f));
+        if (equippedItems.Belt != null)
+            belt = DrawEquippedItem(equippedItems.Belt, centeredPivot, GetBeltPosition());
 
-        if (equippedItems.WeaponLeft != equippedItems.WeaponRight)
-            weapon2 = CheckAndDrawEquippedItem(equippedItems.WeaponLeft, new Vector2(0.5f, 0.2f), new Vector2(-44.3f, 120f));
+        if (equippedItems.WeaponRight != null)
+            weapon1 = DrawEquippedItem(equippedItems.WeaponRight, Vector2.up, GetWeaponRightPosition(equippedItems.WeaponRight));
+
+        if (equippedItems.IsDualWeaponsWielding)
+            weapon2 = DrawEquippedItem(equippedItems.WeaponLeft, Vector2.up, GetWeaponRightPosition(equippedItems.WeaponLeft)); // TODO: dual wielding position
+
+        rightHand.transform.SetAsLastSibling();
 
         if (equippedItems.IsDualWeaponsWielding)
             leftHand = DrawBodyPart("lh", centeredPivot, GetLeftHandPosition());
@@ -86,34 +95,33 @@ public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHand
         if (equippedItems.IsDualHandWeaponEquipped)
             leftArmUsed = DrawBodyPart("lau", centeredPivot, GetLeftArmDualHandWeaponPosition());
 
-        rightHand = DrawBodyPart("rh", centeredPivot, GetRightHandPosition());
-
 //        if (equippedItems.IsDualHandWeaponEquipped)
 //            leftHandUsed = DrawBodyPart("lhu", centeredPivot, new Vector2(-44.83f, 37.1f)); // is it needed?
 
-        shield = CheckAndDrawEquippedItem(equippedItems.Shield, centeredPivot, new Vector2(34.2f, -17.1f));
+        if (equippedItems.Shield != null)
+            shield = DrawEquippedItem(equippedItems.Shield, centeredPivot, new Vector2(34.2f, -17.1f));
 
-        helm = CheckAndDrawEquippedItem(equippedItems.Helm, centeredTopPivot, GetHelmPosition());
+        if (equippedItems.Helm != null)
+            helm = DrawEquippedItem(equippedItems.Helm, centeredTopPivot, GetHelmPosition());
 
-        boots = CheckAndDrawEquippedItem(equippedItems.Boots, centeredBottomPivot, Vector2.zero);
+        if (equippedItems.Boots != null)
+            boots = DrawEquippedItem(equippedItems.Boots, centeredBottomPivot, Vector2.zero);
     }
 
     private Vector2 GetRightHandPosition()
     {
-        // female: -36.4 / 21.2  dwarfMale: -46.4 / -10.3   dwarfFemale: -39.8 / -7.34
         if (playingChar.Race.RaceCode == RaceCode.Dwarf && playingChar.Gender == Gender.Male)
-            return new Vector2(-46.4f, -10.3f);
+            return new Vector2(19.25f, -146.95f);
         else if (playingChar.Race.RaceCode == RaceCode.Dwarf && playingChar.Gender == Gender.Female)
-            return new Vector2(-39.8f, -7.34f);
+            return new Vector2(25.4f, -143.54f);
         else if (playingChar.Gender == Gender.Female)
-            return new Vector2(-36.4f, 21.2f);
+            return new Vector2(27.9f, -117.7f);
         else
-            return new Vector2(-43.6f, 29.9f);
+            return new Vector2(23.85f, -106.75f);
     }
 
     private Vector2 GetLeftArmPosition()
     {
-        // dwarfFemale: 41.8/-1.52 dwM: 43.4/1.1
         if (playingChar.Race.RaceCode == RaceCode.Dwarf && playingChar.Gender == Gender.Male)
             return new Vector2(43.3f, 1.1f);
         else if (playingChar.Race.RaceCode == RaceCode.Dwarf && playingChar.Gender == Gender.Female)
@@ -176,14 +184,16 @@ public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHand
             return new Vector2(1.12f, -6.85f);
     }
 
-
-
+    private Vector2 GetWeaponRightPosition(Item item)
+    {
+        var rightHandPos = GetRightHandPosition();
+        return new Vector2(rightHandPos.x + rightHand.texture.width - 19f - item.EquipX * scale, rightHandPos.y + item.EquipY * scale);
+    }
 
     private RawImage DrawBodyPart(string bodyPart, Vector2 pivotAnchor, Vector2 anchoredPosition) 
     {
         var go = new GameObject(bodyPart);
         go.transform.SetParent(rectTransform, false);
-        //go.transform.SetAsLastSibling();
         var image = go.AddComponent<RawImage>();
         image.texture = GetBodyPartTexture(bodyPart);
         Scale(image);
@@ -197,30 +207,26 @@ public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHand
 
     private Texture GetBodyPartTexture(string bodyPart) 
     {
+        // TODO: cache body parts
         return Resources.Load(string.Format("{0}/PC{1}{2}", resourcesDirectory, playingChar.PortraitCode, bodyPart)) as Texture;
     }
 
-    private RawImage CheckAndDrawEquippedItem(Item item, Vector2 pivotAnchor, Vector2 anchoredPosition) 
+    private RawImage DrawEquippedItem(Item item, Vector2 pivotAnchor, Vector2 anchoredPosition) 
     {
-        if (item != null)
-        {
-            var go = new GameObject(item.PictureFilename);
-            go.transform.SetParent(rectTransform, false);
-            //go.transform.SetAsLastSibling();
-            var image = go.AddComponent<RawImage>();
-            image.texture = GetEquippmentTexture(item);
-            image.raycastTarget = true;
-            image.rectTransform.pivot = pivotAnchor;
-            image.rectTransform.anchorMin = pivotAnchor;
-            image.rectTransform.anchorMax = pivotAnchor;
-            image.rectTransform.anchoredPosition = anchoredPosition;
-            Scale(image);
-            var inventoryItem = go.AddComponent<InventoryItem>();
-            inventoryItem.Item = item;
-            inventoryItem.ItemsContainerUI = this;
-            return image;
-        }
-        return null;
+        var go = new GameObject(item.PictureFilename);
+        go.transform.SetParent(rectTransform, false);
+        var image = go.AddComponent<RawImage>();
+        image.texture = GetEquippmentTexture(item);
+        image.raycastTarget = true;
+        image.rectTransform.pivot = pivotAnchor;
+        image.rectTransform.anchorMin = pivotAnchor;
+        image.rectTransform.anchorMax = pivotAnchor;
+        image.rectTransform.anchoredPosition = anchoredPosition;
+        Scale(image);
+        var inventoryItem = go.AddComponent<InventoryItem>();
+        inventoryItem.Item = item;
+        inventoryItem.ItemsContainerUI = this;
+        return image;
     }
 
     private void Scale(RawImage image) {

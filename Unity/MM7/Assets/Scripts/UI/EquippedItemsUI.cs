@@ -70,13 +70,11 @@ public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHand
 
         body = DrawBodyPart("bod", centeredBottomPivot, Vector2.zero);
 
+        if (equippedItems.Armor != null)
+            armor = DrawEquippedItem(equippedItems.Armor, Vector2.one, GetArmorPosition());
+
         if (!equippedItems.IsDualHandWeaponEquipped)
             leftArm = DrawBodyPart("lad", centeredPivot, GetLeftArmPosition());
-
-        rightHand = DrawBodyPart("rh", Vector2.up, GetRightHandPosition());
-
-        if (equippedItems.Armor != null)
-            armor = DrawEquippedItem(equippedItems.Armor, centeredTopPivot, GetArmorPosition());
 
         if (playingChar.Race.RaceCode == RaceCode.Dwarf && playingChar.Gender == Gender.Male)
             DrawBodyPart("brd", centeredTopPivot, new Vector2(-6.8f, playingChar.PortraitCode == "14" ? -99.5f : -91.1f));
@@ -90,7 +88,7 @@ public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHand
         if (equippedItems.IsDualWeaponsWielding)
             weapon2 = DrawEquippedItem(equippedItems.WeaponLeft, Vector2.up, GetWeaponRightPosition(equippedItems.WeaponLeft)); // TODO: dual wielding position
 
-        rightHand.transform.SetAsLastSibling();
+        rightHand = DrawBodyPart("rh", Vector2.up, GetRightHandPosition());
 
         if (equippedItems.IsDualWeaponsWielding)
             leftHand = DrawBodyPart("lh", centeredPivot, GetLeftHandPosition());
@@ -108,7 +106,7 @@ public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHand
             helm = DrawEquippedItem(equippedItems.Helm, centeredTopPivot, GetHelmPosition());
 
         if (equippedItems.Boots != null)
-            boots = DrawEquippedItem(equippedItems.Boots, centeredBottomPivot, Vector2.zero);
+            boots = DrawEquippedItem(equippedItems.Boots, centeredBottomPivot, GetBootsPosition());
     }
 
     private Vector2 GetRightHandPosition()
@@ -158,11 +156,13 @@ public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHand
     private Vector2 GetArmorPosition()
     {
         if (playingChar.Race.RaceCode == RaceCode.Dwarf && playingChar.Gender == Gender.Male)
-            return new Vector2(0f, -99.8f);
+            return new Vector2(-GetLeftArmPosition().x + 5f, -99.8f);
         else if (playingChar.Race.RaceCode == RaceCode.Dwarf && playingChar.Gender == Gender.Female)
-            return new Vector2(0f, -103f);
+            return new Vector2(-GetLeftArmPosition().x + 2f, -103f);
+        else if (playingChar.Gender == Gender.Female)
+            return new Vector2(-GetLeftArmPosition().x - 13f, -67f);
         else
-            return new Vector2(2f, -67f);
+            return new Vector2(-GetLeftArmPosition().x + 2f, -67f);
     }
 
     private Vector2 GetHelmPosition()
@@ -191,6 +191,14 @@ public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHand
     {
         var rightHandPos = GetRightHandPosition();
         return new Vector2(rightHandPos.x + rightHand.texture.width - 19f - item.EquipX * scale, rightHandPos.y + item.EquipY * scale);
+    }
+
+    private Vector2 GetBootsPosition()
+    {
+        if (playingChar.Race.RaceCode == RaceCode.Dwarf && playingChar.Gender == Gender.Male)
+            return new Vector2(-3f, 0f);
+        else
+            return Vector2.zero;
     }
 
     private RawImage DrawBodyPart(string bodyPart, Vector2 pivotAnchor, Vector2 anchoredPosition) 

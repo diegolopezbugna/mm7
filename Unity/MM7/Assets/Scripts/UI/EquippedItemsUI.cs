@@ -103,7 +103,7 @@ public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHand
             shield = DrawEquippedItem(equippedItems.Shield, centeredPivot, new Vector2(34.2f, -17.1f));
 
         if (equippedItems.Helm != null)
-            helm = DrawEquippedItem(equippedItems.Helm, centeredTopPivot, GetHelmPosition());
+            helm = DrawEquippedItem(equippedItems.Helm, centeredBottomPivot, GetHelmPosition(equippedItems.Helm));
 
         if (equippedItems.Boots != null)
             boots = DrawEquippedItem(equippedItems.Boots, centeredBottomPivot, GetBootsPosition());
@@ -165,14 +165,18 @@ public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHand
             return new Vector2(-GetLeftArmPosition().x + 2f, -67f);
     }
 
-    private Vector2 GetHelmPosition()
+    private Vector2 GetHelmPosition(Item item)
     {
+        Vector2 pos;
         if (playingChar.Race.RaceCode == RaceCode.Dwarf && playingChar.Gender == Gender.Male)
-            return new Vector2(-2f, -56.4f);
+            pos = new Vector2(-1f, 209.62f);
         else if (playingChar.Race.RaceCode == RaceCode.Dwarf && playingChar.Gender == Gender.Female)
-            return new Vector2(-2f, -54.2f);
+            pos = new Vector2(1.92f, 211.73f);
         else
-            return new Vector2(-4.3f, -16.34f);
+            pos = new Vector2(-2f, 248f);
+        pos.x += item.EquipX * scale;
+        pos.y += item.EquipY * scale;
+        return pos;
     }
 
     private Vector2 GetBeltPosition()

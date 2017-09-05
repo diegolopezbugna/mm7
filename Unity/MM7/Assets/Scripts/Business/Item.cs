@@ -93,6 +93,53 @@ namespace Business
             }
             return texture ?? Texture;
         }
+
+        public bool IsHandToHandWeapon {
+            get {
+                return EquipSlot == EquipSlot.Weapon || EquipSlot == EquipSlot.Weapon1or2 || EquipSlot == EquipSlot.Weapon2;
+            }
+        }
+
+        public bool IsLongRangeWeapon {
+            get {
+                return EquipSlot == EquipSlot.Missile;
+            }
+        }
+
+        public bool IsWandWeapon {
+            get {
+                return EquipSlot == EquipSlot.WeaponW;
+            }
+        }
+
+        public bool IsArmor {
+            get {
+                return EquipSlot == EquipSlot.Armor || 
+                    EquipSlot == EquipSlot.Helm || 
+                    EquipSlot == EquipSlot.Shield || 
+                    EquipSlot == EquipSlot.Gauntlets || 
+                    EquipSlot == EquipSlot.Boots ||
+                    EquipSlot == EquipSlot.Cloak;
+            }
+        }
+
+        public int GetArmorBonus() {
+            return int.Parse(Mod1) + Mod2;
+        }
+
+        public int GetAttackBonus() {
+            return Mod2;
+        }
+
+        public int GetShootBonus() {
+            return Mod2;
+        }
+
+        public int GetChargesLeft() {
+            // TODO: use wand, control charges
+            return Mod2;
+        }
+
     }
 
 }

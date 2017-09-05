@@ -26,6 +26,9 @@ public class ItemInfoUI : Singleton<ItemInfoUI> {
     private Text modificatorsText;
 
     [SerializeField]
+    private Text specialBonusText;
+
+    [SerializeField]
     private Text descriptionText;
 
     [SerializeField]
@@ -59,10 +62,11 @@ public class ItemInfoUI : Singleton<ItemInfoUI> {
         //StartCoroutine(canvasGroup.Fade(0f, 1f, 0.2f));
 
         titleText.text = item.Name;
-        typeText.text = Localization.Instance.Get("Type: {0}", item.SkillGroup); // TODO: localization
-        modificatorsText.text = GetModificatorsText(item);
+        typeText.text = string.Format("{0}: {1}", Localization.Instance.Get("type"), item.NotIdentifiedName);
+        ShowHideText(modificatorsText, GetModificatorsText(item));
+        ShowHideText(specialBonusText, GetSpecialBonusText(item));
         descriptionText.text = item.Description;
-        valueText.text = Localization.Instance.Get("Value: {0}", item.Value); // TODO: localization
+        valueText.text = string.Format("{0}: {1}", Localization.Instance.Get("value"), item.Value);
         itemImage.rectTransform.sizeDelta = new Vector2(item.Texture.width, item.Texture.height);
         itemImage.texture = item.Texture;
         RedimensionPanel();
@@ -76,9 +80,36 @@ public class ItemInfoUI : Singleton<ItemInfoUI> {
         gameObject.SetActive(false);
     }
 
+    private void ShowHideText(Text textObject, string textToShow) {
+        if (!string.IsNullOrEmpty(textToShow))
+        {
+            textObject.gameObject.SetActive(true);
+            textObject.text = textToShow;
+        }
+        else
+        {
+            textObject.gameObject.SetActive(false);
+        }
+    }
+
     private string GetModificatorsText(Item item)
     {
-        return "Attack: +" + item.Mod2 + "  Damage: " + item.Mod1; // TODO: modificators 
+        if (item.IsHandToHandWeapon)
+            return string.Format("{0}: +{1}  {2}: {3}", Localization.Instance.Get("attack"), item.GetAttackBonus(), Localization.Instance.Get("damage"), item.Mod1);
+        else if (item.IsLongRangeWeapon)
+            return string.Format("{0}: +{1}  {2}: {3}", Localization.Instance.Get("shoot"), item.GetShootBonus(), Localization.Instance.Get("damage"), item.Mod1);
+        else if (item.IsWandWeapon)
+            return string.Format("{0}: {1}", Localization.Instance.Get("charges"), item.GetChargesLeft());
+        else if (item.EquipSlot == EquipSlot.Reagent || item.EquipSlot == EquipSlot.Bottle)
+            return string.Format("{0}: {1}", Localization.Instance.Get("power"), 0);  //TODO: alchemy potions
+        else if (item.IsArmor)
+            return string.Format("{0}: {1}", Localization.Instance.Get("armor"), item.GetArmorBonus());
+        return null;
+    }
+
+    private string GetSpecialBonusText(Item item)
+    {
+        return null; // TODO: special item bonus
     }
 
     private void RedimensionPanel()

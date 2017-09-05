@@ -92,6 +92,11 @@ namespace Business
             pc.Inventory.TryInsertItemAt(Item.GetByCode(66), 1, 0);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(29), 4, 0);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(37), 6, 0);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(100), 12, 0);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(101), 12, 1);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(102), 12, 2);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(103), 12, 3);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(104), 12, 4);
             dummyParty.Chars.Add(pc);
             pc = CreateDummyChar("Serena", Race.Dwarf(), Gender.Female, "15", Profession.Get(ProfessionCode.Cleric), new int[] { 12, 9, 20, 20, 7, 11 });
             pc.Inventory.TryInsertItemAt(Item.GetByCode(50), 0, 0);

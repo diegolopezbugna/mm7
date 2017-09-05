@@ -107,6 +107,8 @@ public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHand
 
         if (equippedItems.Boots != null)
             boots = DrawEquippedItem(equippedItems.Boots, centeredBottomPivot, GetBootsPosition());
+
+        // TODO: gauntlets, rings!!!
     }
 
     private Vector2 GetRightHandPosition()

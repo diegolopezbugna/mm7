@@ -10,7 +10,7 @@ using UnityStandardAssets.Characters.FirstPerson;
 public class CharDetailsUI : BaseUI<CharDetailsUI> {
 
     [SerializeField]
-    private GameObject stats;
+    private StatsUI[] stats;
 
     [SerializeField]
     private GameObject skills;
@@ -70,10 +70,18 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
 
     private void RefreshUI() 
     {
-        foreach (var i in inventories)
-            i.DrawInventory(); // TODO: don't redraw all
+        // TODO: dont redraw all
+        if (inventories[0].gameObject.activeSelf) {
+            ShowInventory();
+        }
+
         foreach (var e in equippedItemsRightPanels) {
             e.Draw(); // TODO: don't redraw all
+        }
+
+        // TODO: dont redraw all
+        if (stats[0].gameObject.activeSelf) {
+            ShowStats();
         }
     }
 
@@ -192,31 +200,33 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
 
     #region SHOW PANELS
 
-    public void ShowStats(PlayingCharacter character) {
+    public void ShowStats() {
         if (!IsShowing)
             Show();
-        stats.SetActive(true);
+
         skills.SetActive(false);
-        foreach (var i in inventories)
-            i.gameObject.SetActive(false);
+        for (int i = 0; i < Game.Instance.PartyStats.Chars.Count; i++)
+        {
+            stats[i].gameObject.SetActive(true);
+            stats[i].ShowStats(Game.Instance.PartyStats.Chars[i]);
+            inventories[i].gameObject.SetActive(false);
+        }
     }
 
     public void ShowSkills(PlayingCharacter character) {
         if (!IsShowing)
             Show();
-        stats.SetActive(false);
-        skills.SetActive(true);
-        foreach (var i in inventories)
-            i.gameObject.SetActive(false);
+
     }
 
     public void ShowInventory() {
         if (!IsShowing)
             Show();
-        stats.SetActive(false);
+
         skills.SetActive(false);
-        for (int i = 0; i < inventories.Length; i++)
+        for (int i = 0; i < Game.Instance.PartyStats.Chars.Count; i++)
         {
+            stats[i].gameObject.SetActive(false);
             inventories[i].gameObject.SetActive(true);
             inventories[i].Inventory = Game.Instance.PartyStats.Chars[i].Inventory;
             inventories[i].DrawInventory();

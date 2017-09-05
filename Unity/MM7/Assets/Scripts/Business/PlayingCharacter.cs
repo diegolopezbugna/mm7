@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Business
 {
@@ -11,7 +12,9 @@ namespace Business
         public string PortraitCode { get; private set; }
 
         public Profession Profession { get; set; }
+        public int Age { get; set; }
         public int Level { get; set; }
+        public int SkillPointsLeft { get; private set; }
         public long Experience { get; set; }
 
         public int HitPoints { get; set; }
@@ -48,6 +51,7 @@ namespace Business
             Race = race;
             Gender = gender;
             PortraitCode = portraitCode;
+            Age = Random.Range(18, 22);
             Level = 1;
             Experience = 0;
             Inventory = new Inventory(14, 9, 454f / 14, 293f / 9); // TODO: dimensions should be on InventoryUI
@@ -67,54 +71,91 @@ namespace Business
 
         public int ArmorClass {
             get {
-                // TODO: add items and skills
-                return GetAttributeTableValue(Speed);
+                // TODO: add skills, spell bonus
+                var ac = GetAttributeTableValue(Speed);
+                if (EquippedItems.Armor != null)
+                    ac += EquippedItems.Armor.GetArmorBonus();
+                if (EquippedItems.Helm != null)
+                    ac += EquippedItems.Helm.GetArmorBonus();
+                if (EquippedItems.Cloak != null)
+                    ac += EquippedItems.Cloak.GetArmorBonus();
+                if (EquippedItems.Gauntlets[0] != null)
+                    ac += EquippedItems.Gauntlets[0].GetArmorBonus();
+                if (EquippedItems.Gauntlets[1] != null)
+                    ac += EquippedItems.Gauntlets[1].GetArmorBonus();
+                if (EquippedItems.Shield != null)
+                    ac += EquippedItems.Shield.GetArmorBonus();
+                if (EquippedItems.Boots != null)
+                    ac += EquippedItems.Boots.GetArmorBonus();
+                // TODO: rings?
+                return ac;
             }
         }
 
         public int AttackBonus {
             get {
-                // TODO: add items and skills
-                return GetAttributeTableValue(Accuracy);
+                // TODO: add skills, spell bonus
+                var b = GetAttributeTableValue(Accuracy);
+                if (EquippedItems.WeaponRight != null)
+                    b += EquippedItems.WeaponRight.GetAttackBonus();
+                if (EquippedItems.IsDualWeaponsWielding)
+                    b += EquippedItems.WeaponLeft.GetAttackBonus();
+                return b;
             }
         }
 
         public int DamageMin {
             get {
-                // TODO: add items and skills
+                // TODO: add skills, spell bonus
                 var d = GetAttributeTableValue(Might);
-                d += 4;
+                if (EquippedItems.WeaponRight != null)
+                    d += EquippedItems.WeaponRight.GetMinDamage();
+                if (EquippedItems.IsDualWeaponsWielding)
+                    d += EquippedItems.WeaponLeft.GetMinDamage();
+                // TODO: weapon1or2 dual handed
                 return d > 0 ? d : 0;
             }
         }
 
         public int DamageMax {
             get {
-                // TODO: add items and skills
+                // TODO: add skills, spell bonus
                 var d = GetAttributeTableValue(Might);
-                d += 8;
+                if (EquippedItems.WeaponRight != null)
+                    d += EquippedItems.WeaponRight.GetMaxDamage();
+                if (EquippedItems.IsDualWeaponsWielding)
+                    d += EquippedItems.WeaponLeft.GetMaxDamage();
                 return d > 0 ? d : 0;
             }
         }
 
         public int RangedAttackBonus {
             get {
-                // TODO: add items and skills
-                return GetAttributeTableValue(Accuracy);
+                // TODO: add skills, spell bonus
+                var b = GetAttributeTableValue(Accuracy);
+                if (EquippedItems.Missile != null)
+                    b += EquippedItems.Missile.GetAttackBonus();
+                return b;
             }
         }
 
         public int RangedDamageMin {
             get {
-                // TODO: add items and skills
-                return 4;
+                // TODO: add skills, spell bonus
+                if (EquippedItems.Missile != null)
+                    return EquippedItems.Missile.GetMinDamage();
+                else
+                    return 0;
             }
         }
 
         public int RangedDamageMax {
             get {
-                // TODO: add items and skills
-                return 8;
+                // TODO: add skills
+                if (EquippedItems.Missile != null)
+                    return EquippedItems.Missile.GetMaxDamage();
+                else
+                    return 0;
             }
         }
 

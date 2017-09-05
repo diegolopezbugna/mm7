@@ -72,6 +72,10 @@ public class Party : Singleton<Party> {
         {
             CharDetailsUI.Instance.ShowInventory();
         }
+        else if (Input.GetKeyDown("s"))
+        {
+            CharDetailsUI.Instance.ShowStats();
+        }
 	}
 
     void FixedUpdate() {

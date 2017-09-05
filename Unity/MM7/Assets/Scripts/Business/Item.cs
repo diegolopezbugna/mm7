@@ -135,6 +135,26 @@ namespace Business
             return Mod2;
         }
 
+        public int GetMinDamage() {
+            if (string.IsNullOrEmpty(Mod1))
+                return 0;
+            if (Mod1.Length < 3)
+                return 0;
+            var dices = int.Parse(Mod1.Substring(0, 1));
+            //var diceFaces = int.Parse(Mod1.Substring(2));
+            return dices;
+        }
+
+        public int GetMaxDamage() {
+            if (string.IsNullOrEmpty(Mod1))
+                return 0;
+            if (Mod1.Length < 3)
+                return 0;
+            var dices = int.Parse(Mod1.Substring(0, 1));
+            var diceFaces = int.Parse(Mod1.Substring(2));
+            return dices * diceFaces;
+        }
+
         public int GetChargesLeft() {
             // TODO: use wand, control charges
             return Mod2;

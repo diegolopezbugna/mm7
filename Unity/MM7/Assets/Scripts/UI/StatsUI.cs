@@ -33,16 +33,6 @@ public class StatsUI : MonoBehaviour {
 
     public PlayingCharacter PlayingCharacter { get; set; }
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
     public void ShowStats(PlayingCharacter playingCharacter)
     {
         PlayingCharacter = playingCharacter;

@@ -76,6 +76,10 @@ public class Party : Singleton<Party> {
         {
             CharDetailsUI.Instance.ShowStats();
         }
+        else if (Input.GetKeyDown("k"))
+        {
+            CharDetailsUI.Instance.ShowSkills();
+        }
 	}
 
     void FixedUpdate() {

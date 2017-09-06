@@ -235,7 +235,8 @@ public class CreatePartyChar : MonoBehaviour {
     public PlayingCharacter GetPlayingCaracter() {
         var portraitCode = PortraitSelected.ToString("D2");
         var gender = FemalePortraits.Contains(portraitCode) ? Gender.Female : Gender.Male;
-        PlayingCharacter pc = new PlayingCharacter(CharacterName, RaceSelected, gender, portraitCode);
+        var skillCodes = SkillsDefault.Union(SkillsSelected).Select(s => s.SkillCode).ToArray();
+        PlayingCharacter pc = new PlayingCharacter(CharacterName, RaceSelected, gender, portraitCode, skillCodes);
         pc.Profession = Profession;
 
         pc.Might = attributes[0].GetAttributeValue();

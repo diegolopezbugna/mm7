@@ -46,15 +46,22 @@ namespace Business
         Stealing,
     }
 
+    public enum SkillGroup
+    {
+        Weapons,
+        Magic,
+        Armor,
+        Misc,
+    }
+
     public enum SkillLevel
     {
-        None,
         Normal,
         Expert,
         Master,
-        Grandmaster,
+        GrandMaster,
     }
-    
+
 //    public interface Skill
 //    {
 //        SkillCode SkillCode { get; }
@@ -65,10 +72,45 @@ namespace Business
     public class Skill {
         
         public SkillCode SkillCode { get; set; }
+        public SkillGroup SkillGroup { get; set; }
         public string Name { get; set; }
-        public string Descrition { get; set; }
+        public string Description { get; set; }
 
         private static object allLocker = new Object();
+
+        private static List<SkillCode> WeaponSkillCodes = new List<SkillCode>() {
+            SkillCode.Axe,
+            SkillCode.Bow,
+            SkillCode.Dagger,
+            SkillCode.Mace,
+            SkillCode.Spear,
+            SkillCode.Staff,
+            SkillCode.Sword,
+            SkillCode.Unarmed,
+            SkillCode.Blaster,
+        };
+
+        private static List<SkillCode> ArmorSkillCodes = new List<SkillCode>()
+        {
+            SkillCode.Leather,
+            SkillCode.Chain,
+            SkillCode.Plate,
+            SkillCode.Shield,
+            SkillCode.Dodging,
+        };
+
+        private static List<SkillCode> MagicSkillCodes = new List<SkillCode>()
+        {
+            SkillCode.FireMagic,
+            SkillCode.AirMagic,
+            SkillCode.WaterMagic,
+            SkillCode.EarthMagic,
+            SkillCode.SpiritMagic,
+            SkillCode.MindMagic,
+            SkillCode.BodyMagic,
+            SkillCode.LightMagic,
+            SkillCode.DarkMagic,
+        };
 
         private static IList<Skill> _all;
         public static IList<Skill> All() {
@@ -79,7 +121,9 @@ namespace Business
                     _all = new List<Skill>();
                     foreach (var s in Enum.GetNames(typeof(SkillCode)))
                     {
-                        _all.Add(new Skill() { SkillCode = (SkillCode)Enum.Parse(typeof(SkillCode), s), Name = Localization.Instance.Get(s) });
+                        var skill = new Skill() { SkillCode = (SkillCode)Enum.Parse(typeof(SkillCode), s), Name = Localization.Instance.Get(s) };
+                        skill.SkillGroup = GetSkillGroup(skill.SkillCode);
+                        _all.Add(skill);
                     }
                 }
 
@@ -94,6 +138,16 @@ namespace Business
             return null;
         }
 
+        public static SkillGroup GetSkillGroup(SkillCode skillCode) {
+            if (WeaponSkillCodes.Contains(skillCode))
+                return SkillGroup.Weapons;
+            else if (ArmorSkillCodes.Contains(skillCode))
+                return SkillGroup.Armor;
+            else if (MagicSkillCodes.Contains(skillCode))
+                return SkillGroup.Magic;
+            else
+                return SkillGroup.Misc;
+        }
     }
 
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Business
 {
-    // TODO: EQUIPPED RINGS AND AMULETS
+    // TODO: EQUIPPED RINGS AND AMULETS BONUSES
     public class PlayingCharacter
     {
         public string Name { get; private set; }
@@ -17,6 +17,8 @@ namespace Business
         public int Level { get; set; }
         public int SkillPointsLeft { get; private set; }
         public long Experience { get; set; }
+
+        public Dictionary<SkillCode, SkillStatus> Skills { get; private set; }
 
         public int HitPoints { get; set; }
         public int MaxHitPoints { 
@@ -47,13 +49,16 @@ namespace Business
         public Inventory Inventory { get; set; }
         public EquippedItems EquippedItems { get; set; }
 
-        public PlayingCharacter(string name, Race race, Gender gender, string portraitCode) {
+        public PlayingCharacter(string name, Race race, Gender gender, string portraitCode, SkillCode[] startingSkills) {
             Name = name;
             Race = race;
             Gender = gender;
             PortraitCode = portraitCode;
             Age = Random.Range(18, 22);
             Level = 1;
+            Skills = new Dictionary<SkillCode, SkillStatus>();
+            foreach (var s in startingSkills)
+                Skills.Add(s, new SkillStatus(s));
             Experience = 0;
             Inventory = new Inventory(14, 9, 454f / 14, 293f / 9); // TODO: dimensions should be on InventoryUI
             EquippedItems = new EquippedItems();
@@ -183,5 +188,6 @@ namespace Business
         public void UnequipItem(Item item) {
             EquippedItems.UnequipItem(item);
         }
+
     }
 }

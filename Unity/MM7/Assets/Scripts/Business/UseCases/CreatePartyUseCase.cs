@@ -68,7 +68,8 @@ namespace Business
         public static PartyStats CreateDummyParty() {
             var dummyParty = new PartyStats();
             dummyParty.Chars = new List<PlayingCharacter>();
-            var pc = CreateDummyChar("Zoltan", Race.Goblin(), Gender.Male, "18", Profession.Get(ProfessionCode.Knight), new int[] { 30, 5, 5, 13, 13, 20 });
+            var pc = CreateDummyChar("Zoltan", Race.Goblin(), Gender.Male, "18", Profession.Get(ProfessionCode.Knight), new int[] { 30, 5, 5, 13, 13, 20 },
+                new SkillCode[] { SkillCode.Sword, SkillCode.Leather, SkillCode.Bow, SkillCode.Armsmaster });
             // TODO: put the real items for the standard party
             pc.Inventory.TryInsertItemAt(Item.GetByCode(1), 0, 0);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(47), 1, 0);
@@ -86,8 +87,9 @@ namespace Business
             pc.Inventory.TryInsertItemAt(Item.GetByCode(98), 10, 2);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(99), 10, 4);
             dummyParty.Chars.Add(pc);
-            //pc = CreateDummyChar("Roderick", Race.Human(), Gender.Male, "04", Profession.Get(ProfessionCode.Thief), new int[] { 13, 9, 9, 13, 13, 13 });
-            pc = CreateDummyChar("Roderick", Race.Dwarf(), Gender.Male, "13", Profession.Get(ProfessionCode.Thief), new int[] { 13, 9, 9, 13, 13, 13 });
+            pc = CreateDummyChar("Roderick", Race.Human(), Gender.Male, "04", Profession.Get(ProfessionCode.Thief), new int[] { 13, 9, 9, 13, 13, 13 },
+            //pc = CreateDummyChar("Roderick", Race.Dwarf(), Gender.Male, "13", Profession.Get(ProfessionCode.Thief), new int[] { 13, 9, 9, 13, 13, 13 },
+                new SkillCode[] { SkillCode.Dagger, SkillCode.Stealing, SkillCode.Leather, SkillCode.DisarmTrap });
             pc.Inventory.TryInsertItemAt(Item.GetByCode(15), 0, 0);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(1), 1, 0);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(2), 2, 0);
@@ -104,7 +106,8 @@ namespace Business
             pc.Inventory.TryInsertItemAt(Item.GetByCode(103), 12, 3);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(104), 12, 4);
             dummyParty.Chars.Add(pc);
-            pc = CreateDummyChar("Serena", Race.Dwarf(), Gender.Female, "15", Profession.Get(ProfessionCode.Cleric), new int[] { 12, 9, 20, 20, 7, 11 });
+            pc = CreateDummyChar("Serena", Race.Dwarf(), Gender.Female, "15", Profession.Get(ProfessionCode.Cleric), new int[] { 12, 9, 20, 20, 7, 11 },
+                new SkillCode[] { SkillCode.Mace, SkillCode.BodyMagic, SkillCode.Leather, SkillCode.Alchemy });
             pc.Inventory.TryInsertItemAt(Item.GetByCode(50), 0, 0);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(71), 1, 0);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(76), 6, 0);
@@ -116,7 +119,8 @@ namespace Business
             pc.Inventory.TryInsertItemAt(Item.GetByCode(400), 12, 4);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(401), 0, 5);
             dummyParty.Chars.Add(pc);
-            pc = CreateDummyChar("Alexis", Race.Elf(), Gender.Female, "11", Profession.Get(ProfessionCode.Sorcerer), new int[] { 5, 30, 9, 13, 13, 13 });
+            pc = CreateDummyChar("Alexis", Race.Elf(), Gender.Female, "11", Profession.Get(ProfessionCode.Sorcerer), new int[] { 5, 30, 9, 13, 13, 13 },
+                new SkillCode[] { SkillCode.Staff, SkillCode.FireMagic, SkillCode.Leather, SkillCode.AirMagic });
             pc.Inventory.TryInsertItemAt(Item.GetByCode(61), 0, 0);
 //            pc.Inventory.TryInsertItemAt(Item.GetByCode(66), 1, 0);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(119), 2, 5);
@@ -141,10 +145,9 @@ namespace Business
             return dummyParty;
         }
 
-        private static PlayingCharacter CreateDummyChar(string name, Race race, Gender gender, string portraitCode, Profession profession, int[] attributes) {
-            var pc = new PlayingCharacter(name, race, gender, portraitCode);
+        private static PlayingCharacter CreateDummyChar(string name, Race race, Gender gender, string portraitCode, Profession profession, int[] attributes, SkillCode[] skills) {
+            var pc = new PlayingCharacter(name, race, gender, portraitCode, skills);
             pc.Profession = profession;
-            //pc.Skills
             pc.Might = attributes[0];
             pc.Intellect = attributes[1];
             pc.Personality = attributes[2];

@@ -7,23 +7,6 @@ using Business;
 
 public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHandler {
 
-    private RawImage body;
-    private RawImage rightHand;
-    private RawImage leftArm;
-    private RawImage leftHand;
-    private RawImage leftArmUsed;
-    private RawImage leftHandUsed;
-
-    private RawImage weapon1;
-    private RawImage weapon2;
-    private RawImage missile;
-    private RawImage shield;
-    private RawImage cloak;
-    private RawImage armor;
-    private RawImage belt;
-    private RawImage boots;
-    private RawImage helm;
-
     private PlayingCharacter playingChar;
     private string resourcesDirectory = "PcBodies";
     private float scale = 0.9f;
@@ -63,52 +46,73 @@ public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHand
         Clean(); // TODO: reuse gameobjects
 
         if (equippedItems.Missile != null)
-            missile = DrawEquippedItem(equippedItems.Missile, centeredPivot, new Vector2(11f, 28f));
+            DrawEquippedItem(equippedItems.Missile, centeredPivot, new Vector2(11f, 28f));
 
         if (equippedItems.Cloak != null)
-            cloak = DrawEquippedItem(equippedItems.Cloak, centeredBottomPivot, new Vector2(1.7f, 8f));
+            DrawEquippedItem(equippedItems.Cloak, centeredBottomPivot, new Vector2(1.7f, 8f));
 
-        body = DrawBodyPart("bod", centeredBottomPivot, Vector2.zero);
+        DrawBodyPart("bod", centeredBottomPivot, Vector2.zero);
 
         if (equippedItems.Armor != null)
-            armor = DrawEquippedItem(equippedItems.Armor, Vector2.one, GetArmorPosition());
+            DrawEquippedItem(equippedItems.Armor, Vector2.one, GetArmorPosition());
 
         if (!equippedItems.IsDualHandWeaponEquipped)
-            leftArm = DrawBodyPart("lad", centeredPivot, GetLeftArmPosition());
+            DrawBodyPart("lad", centeredPivot, GetLeftArmPosition());
 
         if (playingChar.Race.RaceCode == RaceCode.Dwarf && playingChar.Gender == Gender.Male)
             DrawBodyPart("brd", centeredTopPivot, new Vector2(-6.8f, playingChar.PortraitCode == "14" ? -99.5f : -91.1f));
 
         if (equippedItems.Belt != null)
-            belt = DrawEquippedItem(equippedItems.Belt, centeredPivot, GetBeltPosition());
+            DrawEquippedItem(equippedItems.Belt, centeredPivot, GetBeltPosition());
+
+        var rightHand = DrawBodyPart("rh", Vector2.up, GetRightHandPosition());
 
         if (equippedItems.WeaponRight != null)
-            weapon1 = DrawEquippedItem(equippedItems.WeaponRight, Vector2.up, GetWeaponRightPosition(equippedItems.WeaponRight));
+            DrawEquippedItem(equippedItems.WeaponRight, Vector2.up, GetWeaponRightPosition(equippedItems.WeaponRight, rightHand.texture.width));
 
         if (equippedItems.IsDualWeaponsWielding)
-            weapon2 = DrawEquippedItem(equippedItems.WeaponLeft, Vector2.up, GetWeaponRightPosition(equippedItems.WeaponLeft)); // TODO: dual wielding position
+            DrawEquippedItem(equippedItems.WeaponLeft, Vector2.up, GetWeaponRightPosition(equippedItems.WeaponLeft, rightHand.texture.width)); // TODO: dual wielding position
 
-        rightHand = DrawBodyPart("rh", Vector2.up, GetRightHandPosition());
+        rightHand.transform.SetAsLastSibling();
 
         if (equippedItems.IsDualWeaponsWielding)
-            leftHand = DrawBodyPart("lh", centeredPivot, GetLeftHandPosition());
+            DrawBodyPart("lh", centeredPivot, GetLeftHandPosition());
 
         if (equippedItems.IsDualHandWeaponEquipped)
-            leftArmUsed = DrawBodyPart("lau", centeredPivot, GetLeftArmDualHandWeaponPosition());
+            DrawBodyPart("lau", centeredPivot, GetLeftArmDualHandWeaponPosition());
 
 //        if (equippedItems.IsDualHandWeaponEquipped)
 //            leftHandUsed = DrawBodyPart("lhu", centeredPivot, new Vector2(-44.83f, 37.1f)); // is it needed?
 
         if (equippedItems.Shield != null)
-            shield = DrawEquippedItem(equippedItems.Shield, centeredPivot, new Vector2(34.2f, -17.1f));
+            DrawEquippedItem(equippedItems.Shield, centeredPivot, new Vector2(34.2f, -17.1f));
 
         if (equippedItems.Helm != null)
-            helm = DrawEquippedItem(equippedItems.Helm, centeredBottomPivot, GetHelmPosition(equippedItems.Helm));
+            DrawEquippedItem(equippedItems.Helm, centeredBottomPivot, GetHelmPosition(equippedItems.Helm));
 
         if (equippedItems.Boots != null)
-            boots = DrawEquippedItem(equippedItems.Boots, centeredBottomPivot, GetBootsPosition());
+            DrawEquippedItem(equippedItems.Boots, centeredBottomPivot, GetBootsPosition());
 
-        // TODO: gauntlets, rings!!!
+        if (equippedItems.Amulet != null)
+            DrawEquippedItem(equippedItems.Amulet, Vector2.one, Vector2.zero);
+
+        if (equippedItems.Gauntlets[0] != null)
+            DrawEquippedItem(equippedItems.Gauntlets[0], Vector2.zero, new Vector2(0f,  90f * scale));
+        if (equippedItems.Gauntlets[1] != null)
+            DrawEquippedItem(equippedItems.Gauntlets[1], Vector2.right, new Vector2(0f,  90f * scale));
+
+        if (equippedItems.Rings[0] != null)
+            DrawEquippedItem(equippedItems.Rings[0], Vector2.zero, Vector2.zero);
+        if (equippedItems.Rings[1] != null)
+            DrawEquippedItem(equippedItems.Rings[1], Vector2.right, Vector2.zero);
+        if (equippedItems.Rings[2] != null)
+            DrawEquippedItem(equippedItems.Rings[2], Vector2.zero, new Vector2(0f,  30f * scale));
+        if (equippedItems.Rings[3] != null)
+            DrawEquippedItem(equippedItems.Rings[3], Vector2.right, new Vector2(0f, 30f * scale));
+        if (equippedItems.Rings[4] != null)
+            DrawEquippedItem(equippedItems.Rings[4], Vector2.zero, new Vector2(0f, 60f * scale));
+        if (equippedItems.Rings[5] != null)
+            DrawEquippedItem(equippedItems.Rings[5], Vector2.right, new Vector2(0f, 60f * scale));
     }
 
     private Vector2 GetRightHandPosition()
@@ -193,10 +197,10 @@ public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHand
             return new Vector2(1.12f, -6.85f);
     }
 
-    private Vector2 GetWeaponRightPosition(Item item)
+    private Vector2 GetWeaponRightPosition(Item item, float rightHandWidth)
     {
         var rightHandPos = GetRightHandPosition();
-        return new Vector2(rightHandPos.x + rightHand.texture.width - 19f - item.EquipX * scale, rightHandPos.y + item.EquipY * scale);
+        return new Vector2(rightHandPos.x + rightHandWidth - 19f - item.EquipX * scale, rightHandPos.y + item.EquipY * scale);
     }
 
     private Vector2 GetBootsPosition()

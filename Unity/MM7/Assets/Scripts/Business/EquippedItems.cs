@@ -21,6 +21,10 @@ namespace Business
             get { return WeaponRight != null && WeaponRight == WeaponLeft; }
         }
 
+        public bool IsDualHandWeapon1or2Equipped {
+            get { return WeaponRight != null && WeaponRight == WeaponLeft && WeaponRight.EquipSlot == EquipSlot.Weapon1or2; }
+        }
+
         public bool IsDualWeaponsWielding {
             get { return WeaponRight != null && WeaponLeft != null && WeaponRight != WeaponLeft; }
         }
@@ -30,8 +34,8 @@ namespace Business
             Rings = new Item[6];
         }
 
-
-        public bool TryEquipItem(Item item, out Item oldEquippedItem) {
+        public bool TryEquipItem(Item item, out Item oldEquippedItem) 
+        {
             oldEquippedItem = null;
 
             if (item.EquipSlot == EquipSlot.None)
@@ -53,7 +57,7 @@ namespace Business
                         WeaponLeft = null;
                     oldEquippedItem = WeaponRight;
                     WeaponRight = item;
-                    if (Shield != null)
+                    if (Shield == null)
                         WeaponLeft = item;
                     break;
 
@@ -81,10 +85,14 @@ namespace Business
                     break;
 
                 case EquipSlot.Shield:
-                    if (IsDualHandWeaponEquipped)
+                    if (IsDualHandWeaponEquipped && WeaponRight.EquipSlot != EquipSlot.Weapon1or2)
                     {
                         oldEquippedItem = WeaponRight;
                         WeaponRight = null;
+                        WeaponLeft = null;
+                    }
+                    else if (IsDualHandWeaponEquipped && WeaponRight.EquipSlot == EquipSlot.Weapon1or2)
+                    {
                         WeaponLeft = null;
                     }
                     else if (IsDualWeaponsWielding)
@@ -119,20 +127,53 @@ namespace Business
                     Cloak = item;
                     break;
 
-                    // TODO: others RINGS GAUNTLETS
+                case EquipSlot.Amulet:
+                    oldEquippedItem = Amulet;
+                    Amulet = item;
+                    break;
+
+                case EquipSlot.Gauntlets:
+                    if (Gauntlets[0] != null && Gauntlets[1] != null)
+                        return false;
+                    if (Gauntlets[0] == null)
+                        Gauntlets[0] = item;
+                    else if (Gauntlets[1] == null)
+                        Gauntlets[1] = item;
+                    break;
+
+                case EquipSlot.Ring:
+                    if (Rings[0] != null && Rings[1] != null && Rings[2] != null && Rings[3] != null && Rings[4] != null && Rings[5] != null) // fast and furious code!
+                        return false;
+                    if (Rings[0] == null)
+                        Rings[0] = item;
+                    else if (Rings[1] == null)
+                        Rings[1] = item;
+                    else if (Rings[2] == null)
+                        Rings[2] = item;
+                    else if (Rings[3] == null)
+                        Rings[3] = item;
+                    else if (Rings[4] == null)
+                        Rings[4] = item;
+                    else if (Rings[5] == null)
+                        Rings[5] = item;
+                    break;
             }
 
             return true;
         }
 
-        public void UnequipItem(Item item) {
-            // TODO: rings? gauntlets?
+        public void UnequipItem(Item item) 
+        {
             if (Missile == item)
                 Missile = null;
             else if (Armor == item)
                 Armor = null;
             else if (Shield == item)
+            {
                 Shield = null;
+                if (WeaponRight.EquipSlot == EquipSlot.Weapon1or2)
+                    WeaponLeft = WeaponRight;
+            }
             else if (Helm == item)
                 Helm = null;
             else if (Belt == item)
@@ -141,6 +182,24 @@ namespace Business
                 Boots = null;
             else if (Cloak == item)
                 Cloak = null;
+            else if (Amulet == item)
+                Amulet = null;
+            else if (Gauntlets[0] == item)
+                Gauntlets[0] = null;
+            else if (Gauntlets[1] == item)
+                Gauntlets[1] = null;
+            else if (Rings[0] == item)  // nasty fast and fourious code!
+                Rings[0] = null;
+            else if (Rings[1] == item)
+                Rings[1] = null;
+            else if (Rings[2] == item)
+                Rings[2] = null;
+            else if (Rings[3] == item)
+                Rings[3] = null;
+            else if (Rings[4] == item)
+                Rings[4] = null;
+            else if (Rings[5] == item)
+                Rings[5] = null;
             else
             {
                 if (WeaponRight == item) WeaponRight = null;

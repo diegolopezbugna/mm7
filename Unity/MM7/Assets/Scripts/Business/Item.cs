@@ -135,23 +135,27 @@ namespace Business
             return Mod2;
         }
 
-        public int GetMinDamage() {
+        public int GetMinDamage(bool shouldAddOneDice = false) {
             if (string.IsNullOrEmpty(Mod1))
                 return 0;
             if (Mod1.Length < 3)
                 return 0;
             var dices = int.Parse(Mod1.Substring(0, 1));
+            if (shouldAddOneDice)
+                dices++;
             //var diceFaces = int.Parse(Mod1.Substring(2));
             return dices;
         }
 
-        public int GetMaxDamage() {
+        public int GetMaxDamage(bool shouldAddOneDice = false) {
             if (string.IsNullOrEmpty(Mod1))
                 return 0;
             if (Mod1.Length < 3)
                 return 0;
             var dices = int.Parse(Mod1.Substring(0, 1));
             var diceFaces = int.Parse(Mod1.Substring(2));
+            if (shouldAddOneDice)
+                dices++;
             return dices * diceFaces;
         }
 

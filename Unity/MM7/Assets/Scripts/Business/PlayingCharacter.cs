@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Business
 {
+    // TODO: EQUIPPED RINGS AND AMULETS
     public class PlayingCharacter
     {
         public string Name { get; private set; }
@@ -109,10 +110,9 @@ namespace Business
                 // TODO: add skills, spell bonus
                 var d = GetAttributeTableValue(Might);
                 if (EquippedItems.WeaponRight != null)
-                    d += EquippedItems.WeaponRight.GetMinDamage();
+                    d += EquippedItems.WeaponRight.GetMinDamage(EquippedItems.IsDualHandWeapon1or2Equipped);
                 if (EquippedItems.IsDualWeaponsWielding)
                     d += EquippedItems.WeaponLeft.GetMinDamage();
-                // TODO: weapon1or2 dual handed
                 return d > 0 ? d : 0;
             }
         }
@@ -122,7 +122,7 @@ namespace Business
                 // TODO: add skills, spell bonus
                 var d = GetAttributeTableValue(Might);
                 if (EquippedItems.WeaponRight != null)
-                    d += EquippedItems.WeaponRight.GetMaxDamage();
+                    d += EquippedItems.WeaponRight.GetMaxDamage(EquippedItems.IsDualHandWeapon1or2Equipped);
                 if (EquippedItems.IsDualWeaponsWielding)
                     d += EquippedItems.WeaponLeft.GetMaxDamage();
                 return d > 0 ? d : 0;

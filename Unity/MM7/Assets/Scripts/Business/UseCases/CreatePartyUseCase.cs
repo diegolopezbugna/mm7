@@ -89,9 +89,15 @@ namespace Business
             //pc = CreateDummyChar("Roderick", Race.Human(), Gender.Male, "04", Profession.Get(ProfessionCode.Thief), new int[] { 13, 9, 9, 13, 13, 13 });
             pc = CreateDummyChar("Roderick", Race.Dwarf(), Gender.Male, "13", Profession.Get(ProfessionCode.Thief), new int[] { 13, 9, 9, 13, 13, 13 });
             pc.Inventory.TryInsertItemAt(Item.GetByCode(15), 0, 0);
-            pc.Inventory.TryInsertItemAt(Item.GetByCode(66), 1, 0);
-            pc.Inventory.TryInsertItemAt(Item.GetByCode(29), 4, 0);
-            pc.Inventory.TryInsertItemAt(Item.GetByCode(37), 6, 0);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(1), 1, 0);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(2), 2, 0);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(3), 3, 0);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(4), 4, 0);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(24), 5, 0);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(54), 5, 5);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(66), 11, 5); // 1,0
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(29), 7, 0);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(37), 9, 0);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(100), 12, 0);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(101), 12, 1);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(102), 12, 2);
@@ -116,9 +122,11 @@ namespace Business
             pc.Inventory.TryInsertItemAt(Item.GetByCode(119), 2, 5);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(73), 1, 0);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(74), 6, 0);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(110), 12, 6);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(111), 12, 0);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(112), 12, 2);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(122), 12, 4);
+            pc.Inventory.TryInsertItemAt(Item.GetByCode(129), 5, 8);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(123), 6, 8);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(124), 7, 8);
             pc.Inventory.TryInsertItemAt(Item.GetByCode(125), 8, 8);

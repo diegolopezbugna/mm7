@@ -8,7 +8,7 @@ using UnityStandardAssets.Characters.FirstPerson;
 using Business;
 using Infrastructure;
 
-public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuyItemViewInterface {
+public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface {
 
     [SerializeField]
     private RawImage videoImage;
@@ -49,6 +49,8 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuyItemViewInterface {
     [SerializeField]
     private ItemInfoUI itemInfoUI;
 
+    [SerializeField]
+    private GameObject inventoryPrefab;
 
     //public Building Building { get; set; }
     //public List<Npc> Npcs { get; set; }
@@ -193,7 +195,15 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuyItemViewInterface {
         }
         else if (shopActionType == ShopActionType.Sell)
         {
-            
+            var inventoryGameObject = Instantiate(inventoryPrefab, videoImage.transform);
+            inventoryGameObject.SetActive(true);
+            ((RectTransform)inventoryGameObject.transform).anchoredPosition = new Vector2(-227f, 147f);
+            var inventoryUI = inventoryGameObject.GetComponent<InventoryUI>();
+            inventoryUI.OnInventoryItemPointerDown = OnSellingItemFromInventoryPointerDown;
+            inventoryUI.OnInventoryItemPointerEnter = OnSellingItemFromInventoryPointerEnter;
+            inventoryUI.OnInventoryItemPointerExit = OnSellingItemFromInventoryPointerExit;
+            inventoryUI.Inventory = Game.Instance.PartyStats.Chars[0].Inventory; // TODO: selected char
+            inventoryUI.DrawInventory();
         }
     }
 
@@ -211,7 +221,7 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuyItemViewInterface {
         inventoryItem.Item = item;
         inventoryItem.OnItemPointerEnter = ShowItemPrice;
         inventoryItem.OnItemPointerExit = HideItemPrice;
-        inventoryItem.OnItemPointerDown = OnSellingItemPointerDown;
+        inventoryItem.OnItemPointerDown = OnBuyingItemPointerDown;
     }
 
     private void ShowItemPrice(Item item, PointerEventData eventData) {
@@ -223,7 +233,7 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuyItemViewInterface {
         dialogText.text = "";
     }
 
-    private void OnSellingItemPointerDown(Item item, PointerEventData eventData) {
+    private void OnBuyingItemPointerDown(Item item, PointerEventData eventData) {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             var buyItemUseCase = new BuyItemUseCase(this);
@@ -235,7 +245,28 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuyItemViewInterface {
         }
     }
 
-    #region BuyItemViewInterface implementation
+    private void OnSellingItemFromInventoryPointerDown(Inventory inventory, Item item, PointerEventData eventData) {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            var sellItemUseCase = new SellItemUseCase(this);
+            sellItemUseCase.SellItem(item, Game.Instance.PartyStats.Chars[0], 1.5f); // TODO: selling char, value multiplier
+        }
+        else if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            itemInfoUI.Show(item);
+        }
+    }
+
+    private void OnSellingItemFromInventoryPointerEnter(Inventory inventory, Item item, PointerEventData eventData) {
+        var sellItemUseCase = new SellItemUseCase(this);
+        sellItemUseCase.AskItemPrice(item, Game.Instance.PartyStats.Chars[0], 1.5f); // TODO: selling char, value multiplier
+    }
+
+    private void OnSellingItemFromInventoryPointerExit(Inventory inventory, Item item, PointerEventData eventData) {
+        dialogText.text = "";
+    }
+
+    #region BuySellItemViewInterface implementation
     public void ShowError(PlayingCharacter buyer, string errorText)
     {
         // TODO: portrait sad face
@@ -252,7 +283,7 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuyItemViewInterface {
         // TODO: refresh gold
     }
 
-    public void NotifySuccessfulBuy(Item item, PlayingCharacter buyer)
+    public void NotifySuccessfulOperation(Item item, PlayingCharacter buyerSeller)
     {
         // TODO: gold sound
         // TODO: portrait happy face

@@ -5,6 +5,9 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Business;
 
+public delegate void InventorySlotPointerDownDelegate(Inventory inventory, int slotX, int slotY);
+public delegate void InventoryItemPointerDownDelegate(Inventory inventory, Item item, PointerEventData eventData);
+
 public class InventoryUI : MonoBehaviour, IPointerDownHandler {
 
     [SerializeField]
@@ -12,12 +15,15 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler {
 
     public Inventory Inventory { get; set; }
 
+    public InventorySlotPointerDownDelegate OnInventorySlotPointerDown { get; set; }
+    public InventoryItemPointerDownDelegate OnInventoryItemPointerDown { get; set; }
+    public InventoryItemPointerDownDelegate OnInventoryItemPointerEnter { get; set; }
+    public InventoryItemPointerDownDelegate OnInventoryItemPointerExit { get; set; }
+
     private RectTransform rectTransform;
-    private CharDetailsUI charDetailsUI; 
 
 	void Awake() {
         rectTransform = GetComponent<RectTransform>();
-        charDetailsUI = GetComponentInParent<CharDetailsUI>();
 	}
 	
 	void Update() {
@@ -54,19 +60,22 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler {
         var rawImage = itemGameObject.GetComponent<RawImage>();
         rawImage.texture = item.Texture;
         rawImage.SetNativeSize();
-        var offsetX = charDetailsUI.GetOffsetForCenterItemInSlot(Inventory.SlotWidth, rawImage.texture.width);
-        var offsetY = charDetailsUI.GetOffsetForCenterItemInSlot(Inventory.SlotHeight, rawImage.texture.height);
+        var offsetX = CharDetailsUI.GetOffsetForCenterItemInSlot(Inventory.SlotWidth, rawImage.texture.width);
+        var offsetY = CharDetailsUI.GetOffsetForCenterItemInSlot(Inventory.SlotHeight, rawImage.texture.height);
         rawImage.rectTransform.anchoredPosition = new Vector2((x * Inventory.SlotWidth) + offsetX, -((y * Inventory.SlotHeight) + offsetY));
         var inventoryItem = itemGameObject.GetComponent<InventoryItem>();
         inventoryItem.Item = item;
-        inventoryItem.OnItemPointerDown = OnInventoryItemPointerDown;
+        inventoryItem.OnItemPointerDown = OnItemPointerDown;
+        inventoryItem.OnItemPointerEnter = OnItemPointerEnter;
+        inventoryItem.OnItemPointerExit = OnItemPointerExit;
     }
 
     #region POINTER DOWN/UP
 
-    public void OnInventoryItemPointerDown(Item item, PointerEventData eventData)
+    public void OnItemPointerDown(Item item, PointerEventData eventData)
     {
-        charDetailsUI.OnInventoryItemPointerDown(Inventory, item, eventData);
+        if (OnInventoryItemPointerDown != null)
+            OnInventoryItemPointerDown(Inventory, item, eventData);
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -81,9 +90,21 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler {
         if (slotX < 0 || slotX >= Inventory.GetTotalSlotsH() || slotY < 0 || slotY >= Inventory.GetTotalSlotsV())
             return;
 
-        charDetailsUI.OnInventoryPointerDown(Inventory, slotX, slotY);
+        if (OnInventorySlotPointerDown != null)
+            OnInventorySlotPointerDown(Inventory, slotX, slotY);
     }
 
     #endregion
 
+    public void OnItemPointerEnter(Item item, PointerEventData eventData)
+    {
+        if (OnInventoryItemPointerEnter != null)
+            OnInventoryItemPointerEnter(Inventory, item, eventData);
+    }
+
+    public void OnItemPointerExit(Item item, PointerEventData eventData)
+    {
+        if (OnInventoryItemPointerExit != null)
+            OnInventoryItemPointerExit(Inventory, item, eventData);
+    }
 }

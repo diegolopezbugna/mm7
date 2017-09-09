@@ -41,7 +41,11 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
     {
         base.Start();
         for (int i = 0; i < equippedItemsRightPanels.Length; i++)
+        {
             equippedItemsRightPanels[i].SetPlayingChar(Game.Instance.PartyStats.Chars[i]);
+            inventories[i].OnInventoryItemPointerDown = OnInventoryItemPointerDown;
+            inventories[i].OnInventorySlotPointerDown = OnInventorySlotPointerDown;
+        }
     }
 
     public override void Update()
@@ -113,14 +117,14 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
         }
     }
 
-    public float GetOffsetForCenterItemInSlot(float slotSize, float itemSize)
+    public static float GetOffsetForCenterItemInSlot(float slotSize, float itemSize)
     {
         var slotsNeeded = Game.Instance.PartyStats.Chars[0].Inventory.GetSlotsNeeded(slotSize, itemSize);
         var extraSpace = slotsNeeded * slotSize - itemSize;
         return extraSpace / 2;
     }
 
-    public void OnInventoryPointerDown(Inventory inventory, int slotX, int slotY)
+    public void OnInventorySlotPointerDown(Inventory inventory, int slotX, int slotY)
     {
         if (DraggingItem != null)
         {

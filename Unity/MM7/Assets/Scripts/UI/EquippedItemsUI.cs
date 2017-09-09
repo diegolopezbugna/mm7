@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Business;
 
-public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHandler {
+public class EquippedItemsUI : MonoBehaviour, IPointerDownHandler {
 
     private PlayingCharacter playingChar;
     private string resourcesDirectory = "PcBodies";
@@ -246,7 +246,7 @@ public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHand
         Scale(image);
         var inventoryItem = go.AddComponent<InventoryItem>();
         inventoryItem.Item = item;
-        inventoryItem.ItemsContainerUI = this;
+        inventoryItem.OnItemPointerDown = OnInventoryItemPointerDown;
         return image;
     }
 
@@ -261,8 +261,8 @@ public class EquippedItemsUI : MonoBehaviour, ItemsContainerUI, IPointerDownHand
             return item.Texture;
     }
 
-    public void OnInventoryItemPointerDown(Item item, PointerEventData eventData, InventoryItem equippedItem) {
-        charDetailsUI.OnEquippedItemPointerDown(playingChar, item, eventData, equippedItem);
+    public void OnInventoryItemPointerDown(Item item, PointerEventData eventData) {
+        charDetailsUI.OnEquippedItemPointerDown(playingChar, item, eventData);
     }
 
     #region IPointerDownHandler implementation

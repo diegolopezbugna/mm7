@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
+using UnityEngine.EventSystems;
 using UnityStandardAssets.Characters.FirstPerson;
 using Business;
+using Infrastructure;
 
-public class VideoBuildingUI : BaseUI<VideoBuildingUI> {
+public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuyItemViewInterface {
 
     [SerializeField]
     private RawImage videoImage;
@@ -32,6 +34,22 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI> {
     [SerializeField]
     private GameObject topicsContainer;
 
+    [SerializeField]
+    private Texture textureWeaponShop;
+
+    [SerializeField]
+    private Texture textureArmorWeapon;
+
+    [SerializeField]
+    private Texture textureMagicWeapon;
+
+    [SerializeField]
+    private GameObject itemTemplatePrefab;
+
+    [SerializeField]
+    private ItemInfoUI itemInfoUI;
+
+
     //public Building Building { get; set; }
     //public List<Npc> Npcs { get; set; }
 
@@ -45,6 +63,12 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI> {
         videoPlayer = gameObject.AddComponent<VideoPlayer>();
         audioSource = gameObject.AddComponent<AudioSource>();
         canvas = GetComponent<Canvas>();
+    }
+
+    public override void Start()
+    {
+        base.Start();
+        Show(Building.GetByLocationCode("1"), Npc.GetByLocationCode("1"));
     }
 
 	public override void Update () {
@@ -97,8 +121,20 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI> {
         LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)topicsContainer.transform);
     }
 
-    public void OnTopicClicked(Npc npc, NpcTopic npcTopic) {
-        dialogText.text = npcTopic.Description;
+    public void OnTopicClicked(Npc npc, NpcTopic npcTopic) 
+    {
+        foreach (Transform child in videoImage.transform)
+            Destroy(child.gameObject);
+
+        if (npcTopic.ShopActionType != ShopActionType.None)
+        {
+            if (npc.ShopType == ShopType.WeaponSmith)
+                ShowWeaponShop(npcTopic.ShopActionType);
+        }
+        else
+        {
+            dialogText.text = npcTopic.Description;
+        }
     }
         
     IEnumerator PlayVideo(string url)
@@ -139,4 +175,91 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI> {
         audioSource.Play();
     }
 
+    // TODO: move all the shopping functionality to another class
+    // TODO: qué significan los valores de A y C???
+    public void ShowWeaponShop(ShopActionType shopActionType)
+    {
+        if (shopActionType == ShopActionType.BuyStandard || shopActionType == ShopActionType.BuySpecial)
+        {
+            videoImage.texture = textureWeaponShop;
+            // TODO: don't refresh items each time you enter shop
+            var items = Item.GetStandardItemsToBuyAt(ShopType.WeaponSmith, shopActionType == ShopActionType.BuySpecial ? 2 : 1); // TODO: treasure level??
+            var x = 30;
+            foreach (var i in items)
+            {
+                DrawItem(i, new Vector2(x, (textureWeaponShop.height - i.Texture.height) / 2));
+                x += (textureWeaponShop.width - 30) / (items.Count);
+            }
+        }
+        else if (shopActionType == ShopActionType.Sell)
+        {
+            
+        }
+    }
+
+    private void DrawItem(Item item, Vector2 positionFromZero)
+    {
+        var itemGameObject = Instantiate(itemTemplatePrefab, videoImage.transform);
+        var rawImage = itemGameObject.GetComponent<RawImage>();
+        rawImage.texture = item.Texture;
+        rawImage.SetNativeSize();
+        rawImage.rectTransform.anchorMin = Vector2.zero;
+        rawImage.rectTransform.anchorMax = Vector2.zero;
+        rawImage.rectTransform.pivot = Vector2.zero;
+        rawImage.rectTransform.anchoredPosition = positionFromZero;
+        var inventoryItem = itemGameObject.GetComponent<InventoryItem>();
+        inventoryItem.Item = item;
+        inventoryItem.OnItemPointerEnter = ShowItemPrice;
+        inventoryItem.OnItemPointerExit = HideItemPrice;
+        inventoryItem.OnItemPointerDown = OnSellingItemPointerDown;
+    }
+
+    private void ShowItemPrice(Item item, PointerEventData eventData) {
+        var buyItemUseCase = new BuyItemUseCase(this);
+        buyItemUseCase.AskItemPrice(item, Game.Instance.PartyStats.Chars[0], 1.5f); // TODO: buying char, value multiplier
+    }
+
+    private void HideItemPrice(Item item, PointerEventData eventData) {
+        dialogText.text = "";
+    }
+
+    private void OnSellingItemPointerDown(Item item, PointerEventData eventData) {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            var buyItemUseCase = new BuyItemUseCase(this);
+            buyItemUseCase.BuyItem(item, Game.Instance.PartyStats.Chars[0], 1.5f); // TODO: buying char, value multiplier
+        }
+        else if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            itemInfoUI.Show(item);
+        }
+    }
+
+    #region BuyItemViewInterface implementation
+    public void ShowError(PlayingCharacter buyer, string errorText)
+    {
+        // TODO: portrait sad face
+        dialogText.text = errorText;
+    }
+
+    public void ShowItemPrice(string priceText)
+    {
+        dialogText.text = priceText;
+    }
+
+    public void RefreshGold()
+    {
+        // TODO: refresh gold
+    }
+
+    public void NotifySuccessfulBuy(Item item, PlayingCharacter buyer)
+    {
+        // TODO: gold sound
+        // TODO: portrait happy face
+        dialogText.text = "";
+        foreach (var ii in videoImage.transform.GetComponentsInChildren<InventoryItem>())
+            if (ii.Item == item)
+                Destroy(ii.gameObject);
+    }
+    #endregion
 }

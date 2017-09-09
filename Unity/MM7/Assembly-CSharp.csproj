@@ -173,12 +173,14 @@
      <Compile Include="Assets\Scripts\Business\NpcTopic.cs" />
      <Compile Include="Assets\Scripts\Business\PartyStats.cs" />
      <Compile Include="Assets\Scripts\Business\PlayingCharacter.cs" />
+     <Compile Include="Assets\Scripts\Business\Presenters\BuyItemViewInterface.cs" />
      <Compile Include="Assets\Scripts\Business\Presenters\CreatePartyViewInterface.cs" />
      <Compile Include="Assets\Scripts\Business\Presenters\PartyAttacksViewInterface.cs" />
      <Compile Include="Assets\Scripts\Business\Profession.cs" />
      <Compile Include="Assets\Scripts\Business\Race.cs" />
      <Compile Include="Assets\Scripts\Business\Skill.cs" />
      <Compile Include="Assets\Scripts\Business\SkillStatus.cs" />
+     <Compile Include="Assets\Scripts\Business\UseCases\BuyItemUseCase.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\CreatePartyUseCase.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\EnemyAttacksUseCase.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\PartyAttacksUseCase.cs" />
@@ -212,7 +214,6 @@
      <Compile Include="Assets\Scripts\UI\InventoryItem.cs" />
      <Compile Include="Assets\Scripts\UI\InventoryUI.cs" />
      <Compile Include="Assets\Scripts\UI\ItemInfoUI.cs" />
-     <Compile Include="Assets\Scripts\UI\ItemsContainerUI.cs" />
      <Compile Include="Assets\Scripts\UI\NpcDialog.cs" />
      <Compile Include="Assets\Scripts\UI\ProfessionData.cs" />
      <Compile Include="Assets\Scripts\UI\SkillData.cs" />
@@ -460,6 +461,7 @@
      <None Include="Assets\UMA\Examples\Main Examples\Assets\Shaders\Debug_Tangents.shader" />
      <None Include="Assets\UMA\Examples\Extensions Examples\DynamicCharacterSystem\Assets\Resources\CharacterRecipes\HumanMale2.txt" />
      <None Include="Assets\Standard Assets\Effects\Projectors\Shaders\ProjectorLight.shader" />
+     <None Include="Assets\Resources\Data\LocalizedStrings.txt" />
      <None Include="Assets\Standard Assets\Environment\Water\Water\Shaders\FXWaterPro.shader" />
      <None Include="Assets\Gaia\Documentation\Release Notes v1_6_0.txt" />
      <None Include="Assets\UMA\Examples\Extensions Examples\DynamicCharacterSystem\Assets\Resources\CharacterRecipes\Gobs.txt" />

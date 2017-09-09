@@ -31,7 +31,10 @@ namespace Business
                 item.NotIdentifiedName = values[10];
                 item.EquipX = float.Parse(values[14]);
                 item.EquipY = float.Parse(values[15]);
-                item.Description = values[16].TrimStart('\"').TrimEnd('\r', '\"');
+                item.RandomItemGenerationChanceByTreasureLevel = new int[6];
+                for (int i=0; i<6; i++)
+                    int.TryParse(values[16 + i], out item.RandomItemGenerationChanceByTreasureLevel[i]);
+                item.Description = values[22];//.TrimEnd('\r');
                 return item;
             }
             catch (Exception ex)

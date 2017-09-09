@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using Business;
 using Infrastructure;
 
-public class ItemInfoUI : Singleton<ItemInfoUI> {
+public class ItemInfoUI : MonoBehaviour {
 
     [SerializeField]
     private HorizontalLayoutGroup mainHorizontalLayoutGroup;

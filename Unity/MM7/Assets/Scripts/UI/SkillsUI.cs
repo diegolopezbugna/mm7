@@ -32,7 +32,7 @@ public class SkillsUI : MonoBehaviour {
     {
         PlayingCharacter = playingCharacter;
 
-        nameText.text = Localization.Instance.Get("Skills for: {0}", PlayingCharacter.Name); // TODO: localization
+        nameText.text = Localization.Instance.Get("SkillsFor", PlayingCharacter.Name); // TODO: localization
         skillPointsText.text = string.Format("{0}: {1}", Localization.Instance.Get("SkillPoints"), PlayingCharacter.SkillPointsLeft);
 
         foreach (Transform child in LeftContainer.transform)
@@ -60,7 +60,7 @@ public class SkillsUI : MonoBehaviour {
     private void AddSkillGroup(Transform parentTransform, string localizationKey)
     {
         var skillGroup = Instantiate(SkillGroupPrefab, parentTransform);
-        skillGroup.GetComponent<Text>().text = Localization.Instance.Get(localizationKey);
+        skillGroup.GetComponent<Text>().text = Localization.Instance.Get(localizationKey); // TODO: localization
         skillGroup.transform.GetChild(0).GetComponent<Text>().text = Localization.Instance.Get("Level");
     }
 

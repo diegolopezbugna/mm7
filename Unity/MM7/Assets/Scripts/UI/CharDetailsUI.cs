@@ -21,6 +21,9 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
     [SerializeField]
     private EquippedItemsUI[] equippedItemsRightPanels;
 
+    [SerializeField]
+    private ItemInfoUI itemInfoUI;
+
     private RectTransform rectTransform;
     private Canvas canvas;
 
@@ -126,7 +129,7 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
         }
     }
 
-    public void OnInventoryItemPointerDown(Inventory inventory, Item item, PointerEventData eventData, InventoryItem inventoryItem)
+    public void OnInventoryItemPointerDown(Inventory inventory, Item item, PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
@@ -152,7 +155,7 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
         }
         else if (eventData.button == PointerEventData.InputButton.Right)
         {
-            ItemInfoUI.Instance.Show(item);
+            itemInfoUI.Show(item);
         }
     }
 
@@ -164,7 +167,7 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
         }
     }
 
-    public void OnEquippedItemPointerDown(PlayingCharacter playingCharacter, Item item, PointerEventData eventData, InventoryItem equippedItem)
+    public void OnEquippedItemPointerDown(PlayingCharacter playingCharacter, Item item, PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
@@ -181,7 +184,7 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
         }
         else if (eventData.button == PointerEventData.InputButton.Right)
         {
-            ItemInfoUI.Instance.Show(item);
+            itemInfoUI.Show(item);
         }
     }
 

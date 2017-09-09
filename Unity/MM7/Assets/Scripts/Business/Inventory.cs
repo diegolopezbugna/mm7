@@ -91,6 +91,19 @@ namespace Business
             return true;
         }
 
+        public bool TryInsertItem(Item item)
+        {
+            for (int i = 0; i <= BagItems.GetUpperBound(0); i++)
+            {
+                for (int j = 0; j <= BagItems.GetUpperBound(1); j++)
+                {
+                    if (TryInsertItemAt(item, i, j))
+                        return true;
+                }
+            }
+            return false;
+        }
+
         public bool TryMoveItem(Item item, int x, int y) 
         {
             var originalPosition = RemoveItem(item);

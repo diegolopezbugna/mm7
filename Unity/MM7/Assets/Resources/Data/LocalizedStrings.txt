@@ -1,0 +1,9 @@
+MerchantSellText1	An excellent choice! This {0} is of the finest quality. I am willing to virtually give it away for {1} gold.
+MerchantSellText2	Ordinarily I sell things like this {0} for {1} gold.  But you drive a hard bargain-- I'll sell it to you for {2}.
+MerchantSellText3	I try to sell things like this {0} for {1} gold.  But we both know it's really worth {2}. So that's my price.
+ImSorryButYouDontHaveEnoughMoney	I'm sorry, {0}, but you don't have enough money.
+YourPacksAreFull	You packs are full.
+SkillsFor	Skills for: {0}
+SkillPoints	Skill points
+DontCauseAnyTrouble	Don't cause any trouble
+GoodLuckInTheContest	Good luck in the contest!

@@ -189,5 +189,9 @@ namespace Business
             EquippedItems.UnequipItem(item);
         }
 
+        public int GetTotalMerchantBonus() {
+            // TODO: merchant bonus + NPCs
+            return 0;
+        }
     }
 }

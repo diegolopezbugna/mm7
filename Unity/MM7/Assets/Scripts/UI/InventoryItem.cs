@@ -5,10 +5,15 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Business;
 
+public delegate void ItemDelegate(Item item, PointerEventData eventData);
+
 public class InventoryItem : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler {
 
     public Item Item { get; set; }
-    public ItemsContainerUI ItemsContainerUI { get; set; }
+
+    public ItemDelegate OnItemPointerDown { get; set; }
+    public ItemDelegate OnItemPointerEnter { get; set; }
+    public ItemDelegate OnItemPointerExit { get; set; }
 
     private RawImage rawImage;
 
@@ -41,7 +46,8 @@ public class InventoryItem : MonoBehaviour, IPointerDownHandler, IPointerEnterHa
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        ItemsContainerUI.OnInventoryItemPointerDown(Item, eventData, this);
+        if (OnItemPointerDown != null)
+            OnItemPointerDown(Item, eventData);
     }
 
 
@@ -53,12 +59,18 @@ public class InventoryItem : MonoBehaviour, IPointerDownHandler, IPointerEnterHa
     {
         if (rawImage.raycastTarget)
             rawImage.CrossFadeColor(highlightedColor, 0.1f, true, false);
+
+        if (OnItemPointerEnter != null)
+            OnItemPointerEnter(Item, eventData);
     }
         
     public void OnPointerExit(PointerEventData eventData)
     {
         if (rawImage.raycastTarget)
             rawImage.CrossFadeColor(Color.white, 0.1f, true, false);
+
+        if (OnItemPointerExit != null)
+            OnItemPointerExit(Item, eventData);
     }
 
     #endregion

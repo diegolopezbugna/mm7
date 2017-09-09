@@ -3,10 +3,12 @@ using System.Collections.Generic;
 
 namespace Business
 {
-    public class NpcTopic {
+    public class NpcTopic 
+    {
         public List<NpcTopic> Subtopics { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+        public ShopActionType ShopActionType { get; set; }
 
         public NpcTopic() {
             Subtopics = new List<NpcTopic>();
@@ -24,6 +26,11 @@ namespace Business
 
         public NpcTopic(string title, string description, List<NpcTopic> subtopics) : this(title, description) {
             Subtopics = subtopics;
+        }
+
+        public NpcTopic(string title, ShopActionType shopActionType) : this() {
+            Title = title;
+            ShopActionType = shopActionType;
         }
     }
 }

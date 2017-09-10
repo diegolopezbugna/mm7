@@ -3,42 +3,13 @@ using System.Collections.Generic;
 
 namespace Business
 {
-    public enum ShopType
-    {
-        None,
-        Armory,
-        WeaponSmith,
-        MagicShop,
-        Alchemist,
-        FireGuild,
-        AirGuild,
-        WaterGuild,
-        EarthGuild,
-        MindGuild,
-        BodyGuild,
-        SpiritGuild,
-        LightMagicGuild,
-        DarkMagicGuild,
-    }
-
-    public enum ShopActionType
-    {
-        None,
-        BuyStandard,
-        BuySpecial,
-        Sell,
-        IdentifyItem,
-        RepairItem,
-        LearnSkills,
-    }
-
     public class Npc
     {
         public string Name { get; set; }
         public int PictureCode { get; set; }
         public List<string> Greetings { get; set; }
+        public Shop Shop { get; set; }
         public List<NpcTopic> Topics { get; set; }
-        public ShopType ShopType { get; set; }
 
         private int currentGreetingIndex = 0;
 
@@ -48,19 +19,6 @@ namespace Business
             if (currentGreetingIndex + 1 < Greetings.Count)
                 currentGreetingIndex += 1;
             return greeting;
-        }
-
-        private static List<NpcTopic> GetCommonShopTopics()
-        {
-            return new List<NpcTopic>()
-            { 
-                new NpcTopic("Buy standard", ShopActionType.BuyStandard),
-                new NpcTopic("Buy special", ShopActionType.BuySpecial),
-                new NpcTopic("Sell", ShopActionType.Sell),
-                new NpcTopic("Identify Item", ShopActionType.IdentifyItem),
-                new NpcTopic("Repair Item", ShopActionType.RepairItem),
-                new NpcTopic("Learn skills", ShopActionType.LearnSkills),
-            };
         }
 
         public static List<Npc> GetByLocationCode(string locationCode) {
@@ -92,8 +50,8 @@ namespace Business
                         Name = "Tor the Blacksmith",
                         PictureCode = 705, 
                         Greetings = new List<string>() { "" },
-                        ShopType = ShopType.WeaponSmith,
-                        Topics = GetCommonShopTopics(),
+                        Shop = new Shop(ShopType.WeaponSmith, 1, 2),
+                        Topics = Shop.GetCommonShopTopics(),
                     };
                 npcs.Add(npc);
             }
@@ -104,13 +62,8 @@ namespace Business
                         Name = "Erik the Armorsmith",
                         PictureCode = 704, 
                         Greetings = new List<string>() { "" },
-                        Topics = new List<NpcTopic>()
-                            { 
-                                new NpcTopic("Buy standard", ""),
-                                new NpcTopic("Buy special", ""),
-                                new NpcTopic("Display inventory", ""),
-                                new NpcTopic("Learn skills", ""),
-                            }
+                        Shop = new Shop(ShopType.Armory, 1, 2),
+                        Topics = Shop.GetCommonShopTopics(),
                     };
                 npcs.Add(npc);
             }
@@ -121,13 +74,8 @@ namespace Business
                         Name = "Thurston the Magician",
                         PictureCode = 712, 
                         Greetings = new List<string>() { "" },
-                        Topics = new List<NpcTopic>()
-                            { 
-                                new NpcTopic("Buy standard", ""),
-                                new NpcTopic("Buy special", ""),
-                                new NpcTopic("Display inventory", ""),
-                                new NpcTopic("Learn skills", ""),
-                            }
+                        Shop = new Shop(ShopType.MagicShop, 1, 2),
+                        Topics = Shop.GetCommonShopTopics(),
                     };
                 npcs.Add(npc);
             }
@@ -138,13 +86,8 @@ namespace Business
                         Name = "Kethry the Alchemist",
                         PictureCode = 702, 
                         Greetings = new List<string>() { "" },
-                        Topics = new List<NpcTopic>()
-                            { 
-                                new NpcTopic("Buy standard", ""),
-                                new NpcTopic("Buy special", ""),
-                                new NpcTopic("Display inventory", ""),
-                                new NpcTopic("Learn skills", ""),
-                            }
+                        Shop = new Shop(ShopType.Alchemist, 1, 2),
+                        Topics = Shop.GetCommonShopTopics(),
                     };
                 npcs.Add(npc);
             }

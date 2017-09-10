@@ -60,8 +60,8 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler {
         var rawImage = itemGameObject.GetComponent<RawImage>();
         rawImage.texture = item.Texture;
         rawImage.SetNativeSize();
-        var offsetX = CharDetailsUI.GetOffsetForCenterItemInSlot(Inventory.SlotWidth, rawImage.texture.width);
-        var offsetY = CharDetailsUI.GetOffsetForCenterItemInSlot(Inventory.SlotHeight, rawImage.texture.height);
+        var offsetX = GetOffsetForCenterItemInSlot(Inventory.SlotWidth, rawImage.texture.width);
+        var offsetY = GetOffsetForCenterItemInSlot(Inventory.SlotHeight, rawImage.texture.height);
         rawImage.rectTransform.anchoredPosition = new Vector2((x * Inventory.SlotWidth) + offsetX, -((y * Inventory.SlotHeight) + offsetY));
         var inventoryItem = itemGameObject.GetComponent<InventoryItem>();
         inventoryItem.Item = item;
@@ -70,7 +70,14 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler {
         inventoryItem.OnItemPointerExit = OnItemPointerExit;
     }
 
-    #region POINTER DOWN/UP
+    public static float GetOffsetForCenterItemInSlot(float slotSize, float itemSize)
+    {
+        var slotsNeeded = Game.Instance.PartyStats.Chars[0].Inventory.GetSlotsNeeded(slotSize, itemSize);
+        var extraSpace = slotsNeeded * slotSize - itemSize;
+        return extraSpace / 2;
+    }
+
+    #region POINTER EVENTS
 
     public void OnItemPointerDown(Item item, PointerEventData eventData)
     {
@@ -94,8 +101,6 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler {
             OnInventorySlotPointerDown(Inventory, slotX, slotY);
     }
 
-    #endregion
-
     public void OnItemPointerEnter(Item item, PointerEventData eventData)
     {
         if (OnInventoryItemPointerEnter != null)
@@ -107,4 +112,6 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler {
         if (OnInventoryItemPointerExit != null)
             OnInventoryItemPointerExit(Inventory, item, eventData);
     }
+
+    #endregion
 }

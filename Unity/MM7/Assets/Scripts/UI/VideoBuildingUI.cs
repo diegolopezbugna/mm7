@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -38,10 +39,10 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
     private Texture textureWeaponShop;
 
     [SerializeField]
-    private Texture textureArmorWeapon;
+    private Texture textureArmorShop;
 
     [SerializeField]
-    private Texture textureMagicWeapon;
+    private Texture textureMagicShop;
 
     [SerializeField]
     private GameObject itemTemplatePrefab;
@@ -67,12 +68,6 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
         canvas = GetComponent<Canvas>();
     }
 
-    public override void Start()
-    {
-        base.Start();
-        Show(Building.GetByLocationCode("1"), Npc.GetByLocationCode("1"));
-    }
-
 	public override void Update () {
         base.Update();
         if (Input.GetKeyUp(KeyCode.Escape))
@@ -92,6 +87,13 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
         portraitTopicsPortraitImage.texture = Resources.Load(string.Format("NPC Pictures/NPC{0:D3}", npc.PictureCode)) as Texture;
         portraitTopicsPortraitText.text = npc.Name;
         ShowTopics(npc);
+    }
+
+    public override void Hide()
+    {
+        foreach (Transform child in videoImage.transform)
+            Destroy(child.gameObject);
+        base.Hide();
     }
 
     private void OnVideoPrepared() {
@@ -127,11 +129,34 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
     {
         foreach (Transform child in videoImage.transform)
             Destroy(child.gameObject);
+        var centeredBottomPivot = new Vector2(0.5f, 0f);
+        var centeredTopPivot = new Vector2(0.5f, 1f);
 
-        if (npcTopic.ShopActionType != ShopActionType.None)
+        if (npcTopic.ShopActionType != ShopActionType.None && npc.Shop != null)
         {
-            if (npc.ShopType == ShopType.WeaponSmith)
-                ShowWeaponShop(npcTopic.ShopActionType);
+            if (npc.Shop.ShopType == ShopType.WeaponSmith)
+                ShowShop(npcTopic.ShopActionType, npc.Shop, textureWeaponShop, (List<Item> items) => {
+                    for (int i = 0; i < items.Count; i++)
+                        DrawItem(items[i], new Vector2(0, 0.5f), new Vector2(30f + i * ((textureWeaponShop.width - 30f) / (items.Count)), 0f));
+                });
+            else if (npc.Shop.ShopType == ShopType.Armory)
+                ShowShop(npcTopic.ShopActionType, npc.Shop, textureArmorShop, (List<Item> items) => {
+                    DrawItem(items[0], centeredBottomPivot, new Vector2(-145f, 255f)); 
+                    DrawItem(items[1], centeredBottomPivot, new Vector2(-42f, 255f)); 
+                    DrawItem(items[2], centeredBottomPivot, new Vector2(62f, 255f)); 
+                    DrawItem(items[3], centeredBottomPivot, new Vector2(163f, 255f)); 
+                    DrawItem(items[4], centeredTopPivot, new Vector2(-145f, -120f)); 
+                    DrawItem(items[5], centeredTopPivot, new Vector2(-42f, -120f)); 
+                    DrawItem(items[6], centeredTopPivot, new Vector2(62f, -120f)); 
+                    DrawItem(items[7], centeredTopPivot, new Vector2(163f, -120f)); 
+                });
+            else
+                ShowShop(npcTopic.ShopActionType, npc.Shop, textureMagicShop, (List<Item> items) => {
+                    for (int i = 0; i < 6; i++)
+                        DrawItem(items[i], centeredBottomPivot, new Vector2(-170f + i * 70, 199f)); 
+                    for (int i = 6; i < 12; i++)
+                        DrawItem(items[i], centeredBottomPivot, new Vector2(-170f + (i-6) * 70, 46f)); 
+                });
         }
         else
         {
@@ -179,19 +204,16 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
 
     // TODO: move all the shopping functionality to another class
     // TODO: qué significan los valores de A y C???
-    public void ShowWeaponShop(ShopActionType shopActionType)
+    private void ShowShop(ShopActionType shopActionType, Shop shop, Texture bgTexture, Action<List<Item>> drawItems) 
     {
         if (shopActionType == ShopActionType.BuyStandard || shopActionType == ShopActionType.BuySpecial)
         {
-            videoImage.texture = textureWeaponShop;
+            videoImage.texture = bgTexture;
             // TODO: don't refresh items each time you enter shop
-            var items = Item.GetStandardItemsToBuyAt(ShopType.WeaponSmith, shopActionType == ShopActionType.BuySpecial ? 2 : 1); // TODO: treasure level??
-            var x = 30;
-            foreach (var i in items)
-            {
-                DrawItem(i, new Vector2(x, (textureWeaponShop.height - i.Texture.height) / 2));
-                x += (textureWeaponShop.width - 30) / (items.Count);
-            }
+            var items = Item.GetStandardItemsToBuyAt(shop.ShopType, 
+                shopActionType == ShopActionType.BuySpecial ? shop.TreasureLevelSpecial : shop.TreasureLevelStandard);
+            
+            drawItems(items);
         }
         else if (shopActionType == ShopActionType.Sell)
         {
@@ -207,16 +229,16 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
         }
     }
 
-    private void DrawItem(Item item, Vector2 positionFromZero)
+    private void DrawItem(Item item, Vector2 anchorPivot, Vector2 anchoredPosition)
     {
         var itemGameObject = Instantiate(itemTemplatePrefab, videoImage.transform);
         var rawImage = itemGameObject.GetComponent<RawImage>();
         rawImage.texture = item.Texture;
         rawImage.SetNativeSize();
-        rawImage.rectTransform.anchorMin = Vector2.zero;
-        rawImage.rectTransform.anchorMax = Vector2.zero;
-        rawImage.rectTransform.pivot = Vector2.zero;
-        rawImage.rectTransform.anchoredPosition = positionFromZero;
+        rawImage.rectTransform.anchorMin = anchorPivot;
+        rawImage.rectTransform.anchorMax = anchorPivot;
+        rawImage.rectTransform.pivot = anchorPivot;
+        rawImage.rectTransform.anchoredPosition = anchoredPosition;
         var inventoryItem = itemGameObject.GetComponent<InventoryItem>();
         inventoryItem.Item = item;
         inventoryItem.OnItemPointerEnter = ShowItemPrice;

@@ -167,16 +167,6 @@ namespace Business
             return allItems[code].MemberwiseClone() as Item;
         }
 
-        // FROM MM7!!!
-        //shopWeap_variation_ord = 1,1,2,2,4,4,3,2,3,3,2,3,2,2
-        //shopWeap_variation_spc = 2,2,3,3,5,5,4,3,4,4,4,4,4,4
-        //shopArmr_variation_ord = 1,1,2,2,4,4,3,2,3,3,3,3,3,4
-        //shopArmr_variation_spc = 2,2,3,3,5,5,4,3,4,4,4,4,4,5
-        //shopMagic_treasure_lvl =    1, 1, 2, 2, 4, 4, 3, 2, 2, 2, 2, 2, 2
-        //shopMagicSpc_treasure_lvl = 2, 2, 3, 3, 5, 5, 4, 3, 3, 3, 3, 3, 3
-        //shopAlch_treasure_lvl =     1, 1, 2, 2, 3, 3, 4, 4, 2, 2, 2, 2
-        //shopAlchSpc_treasure_lvl =  2, 2, 3, 3, 4, 4, 5, 5, 3, 2, 2, 2
-
         public static List<Item> GetStandardItemsToBuyAt(ShopType shopType, int treasureLevel) 
         {
             var items = new List<Item>();

@@ -109,19 +109,12 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
         Vector2 globalMousePos;
         if (RectTransformUtility.ScreenPointToLocalPointInRectangle((RectTransform)canvas.transform, Input.mousePosition, null, out globalMousePos))
         {
-            var offsetX = GetOffsetForCenterItemInSlot(Game.Instance.PartyStats.Chars[0].Inventory.SlotWidth, DraggingItem.Texture.width);
-            var offsetY = GetOffsetForCenterItemInSlot(Game.Instance.PartyStats.Chars[0].Inventory.SlotHeight, DraggingItem.Texture.height);
+            var offsetX = InventoryUI.GetOffsetForCenterItemInSlot(Game.Instance.PartyStats.Chars[0].Inventory.SlotWidth, DraggingItem.Texture.width);
+            var offsetY = InventoryUI.GetOffsetForCenterItemInSlot(Game.Instance.PartyStats.Chars[0].Inventory.SlotHeight, DraggingItem.Texture.height);
             DraggingItemGameObject.transform.localPosition = new Vector2(
                 globalMousePos.x - Game.Instance.PartyStats.Chars[0].Inventory.SlotWidth/2 + offsetX, 
                 globalMousePos.y + Game.Instance.PartyStats.Chars[0].Inventory.SlotHeight/2 - offsetY);
         }
-    }
-
-    public static float GetOffsetForCenterItemInSlot(float slotSize, float itemSize)
-    {
-        var slotsNeeded = Game.Instance.PartyStats.Chars[0].Inventory.GetSlotsNeeded(slotSize, itemSize);
-        var extraSpace = slotsNeeded * slotSize - itemSize;
-        return extraSpace / 2;
     }
 
     public void OnInventorySlotPointerDown(Inventory inventory, int slotX, int slotY)

@@ -178,6 +178,7 @@
      <Compile Include="Assets\Scripts\Business\Presenters\PartyAttacksViewInterface.cs" />
      <Compile Include="Assets\Scripts\Business\Profession.cs" />
      <Compile Include="Assets\Scripts\Business\Race.cs" />
+     <Compile Include="Assets\Scripts\Business\Shop.cs" />
      <Compile Include="Assets\Scripts\Business\Skill.cs" />
      <Compile Include="Assets\Scripts\Business\SkillStatus.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\BuyItemUseCase.cs" />

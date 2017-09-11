@@ -167,7 +167,7 @@ namespace Business
             return allItems[code].MemberwiseClone() as Item;
         }
 
-        public static List<Item> GetStandardItemsToBuyAt(ShopType shopType, int treasureLevel) 
+        public static List<Item> GetItemsToBuyAt(ShopType shopType, int treasureLevel) 
         {
             var items = new List<Item>();
 
@@ -195,11 +195,22 @@ namespace Business
                 for (int i = 0; i < 6; i++) // TODO: remove hardcoding
                     items.Add(GenerateItem(new List<EquipSlot>() { EquipSlot.Reagent }, treasureLevel));
             }
-            // TODO: guild shops
 
             return items;
         }
 
+        public static List<Item> GetBooksToBuyAt(ShopType shopType, GuildLevel guildLevel) 
+        {
+            var numberOfBooksByGuildLevel = Shop.GetNumberOfBooksByGuildLevel(guildLevel);
+            var booksFromThisGuild = allItems.Values.Where(i => i.SkillGroup == (SkillCode)(Enum.Parse(typeof(SkillCode), shopType.ToString().Replace("Guild", "Magic"))));
+            var booksFromThisGuildLevel = booksFromThisGuild.Take(numberOfBooksByGuildLevel).ToList();
+
+            var books = new List<Item>();
+            for (int i = 0; i < 12; i++) // TODO: remove hardcoding
+                books.Add(booksFromThisGuildLevel[UnityEngine.Random.Range(0, booksFromThisGuildLevel.Count)].MemberwiseClone() as Item);
+            return books;
+        }
+            
         public static Item GenerateItem(int treasureLevel) 
         {
             return GenerateItem(allItems.Values, treasureLevel);

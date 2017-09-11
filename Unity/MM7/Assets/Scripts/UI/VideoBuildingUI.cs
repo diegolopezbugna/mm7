@@ -210,8 +210,8 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
         {
             videoImage.texture = bgTexture;
             // TODO: don't refresh items each time you enter shop
-            var items = Item.GetStandardItemsToBuyAt(shop.ShopType, 
-                shopActionType == ShopActionType.BuySpecial ? shop.TreasureLevelSpecial : shop.TreasureLevelStandard);
+            var items = Item.GetItemsToBuyAt(shop.ShopType, 
+                            shopActionType == ShopActionType.BuySpecial ? shop.TreasureLevelSpecial : shop.TreasureLevelStandard);
             
             drawItems(items);
         }
@@ -226,6 +226,15 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
             inventoryUI.OnInventoryItemPointerExit = OnSellingItemFromInventoryPointerExit;
             inventoryUI.Inventory = Game.Instance.PartyStats.Chars[0].Inventory; // TODO: selected char
             inventoryUI.DrawInventory();
+        }
+        else if (shopActionType == ShopActionType.BuySpells)
+        {
+            videoImage.texture = bgTexture;
+
+            // TODO: don't refresh items each time you enter shop
+            var items = Item.GetBooksToBuyAt(shop.ShopType, shop.GuildLevel);
+
+            drawItems(items);
         }
     }
 
@@ -275,6 +284,7 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
         }
         else if (eventData.button == PointerEventData.InputButton.Right)
         {
+            // TODO: spell info
             itemInfoUI.Show(item);
         }
     }

@@ -27,9 +27,9 @@ namespace Business
             if (totalMerchantBonus == 0)
                 priceText = Localization.Instance.Get("MerchantBuyText1", price);
             else if (price == item.Value)
-                priceText = Localization.Instance.Get("MerchantBuyText3", item.NotIdentifiedName, normalPrice, price);
+                priceText = Localization.Instance.Get("MerchantBuyText3", item.Name, normalPrice, price);
             else
-                priceText = Localization.Instance.Get("MerchantBuyText2", item.NotIdentifiedName, normalPrice, price);
+                priceText = Localization.Instance.Get("MerchantBuyText2", item.Name, normalPrice, price);
             view.ShowItemPrice(priceText);
         }
 

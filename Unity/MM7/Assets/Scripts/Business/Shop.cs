@@ -21,11 +21,20 @@ namespace Business
         DarkMagicGuild,
     }
 
+    public enum GuildLevel
+    {
+        Initiate,
+        Adept,
+        Master,
+        Paramount,
+    }
+
     public enum ShopActionType
     {
         None,
         BuyStandard,
         BuySpecial,
+        BuySpells,
         Sell,
         IdentifyItem,
         RepairItem,
@@ -47,12 +56,19 @@ namespace Business
         public ShopType ShopType { get; set; }
         public int TreasureLevelStandard { get; set; }
         public int TreasureLevelSpecial { get; set; }
+        public GuildLevel GuildLevel { get; set; }
 
         public Shop(ShopType shopType, int treasureLevelStandard, int treasureLevelSpecial)
         {
             ShopType = shopType;
             TreasureLevelStandard = treasureLevelStandard;
             TreasureLevelSpecial = treasureLevelSpecial;
+        }
+
+        public Shop(ShopType shopType, GuildLevel guildLevel)
+        {
+            ShopType = shopType;
+            GuildLevel = guildLevel;
         }
 
         public static List<NpcTopic> GetCommonShopTopics()
@@ -67,6 +83,31 @@ namespace Business
                 new NpcTopic("Learn skills", ShopActionType.LearnSkills),
             };
         }
+
+        public static List<NpcTopic> GetGuildShopTopics()
+        {
+            return new List<NpcTopic>()
+            { 
+                new NpcTopic("You must be a member of this guild to study here", ""), // TODO: guild membership
+                new NpcTopic("Buy spells", ShopActionType.BuySpells),
+                new NpcTopic("Learn skills", ShopActionType.LearnSkills),
+            };
+        }
+
+        public static int GetNumberOfBooksByGuildLevel(GuildLevel guildLevel)
+        {
+            int booksInGuildLevel;
+            if (guildLevel == GuildLevel.Initiate)
+                booksInGuildLevel = 4;
+            else if (guildLevel == GuildLevel.Adept)
+                booksInGuildLevel = 7;
+            else if (guildLevel == GuildLevel.Master)
+                booksInGuildLevel = 10;
+            else
+                booksInGuildLevel = 11;
+            return booksInGuildLevel;
+        }
+
     }
 }
 

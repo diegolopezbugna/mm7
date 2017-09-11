@@ -145,12 +145,8 @@ namespace Business
                         Name = "Sethric the Guildmaster",
                         PictureCode = 703, 
                         Greetings = new List<string>() { "" },
-                        Topics = new List<NpcTopic>()
-                            { 
-                                new NpcTopic("You must be a member of this guild to study here", ""),
-                                new NpcTopic("Buy spells", ""),
-                                new NpcTopic("Learn skills", ""),
-                            }
+                        Shop = new Shop(ShopType.FireGuild, GuildLevel.Initiate),
+                        Topics = Shop.GetGuildShopTopics(),
                     };
                 npcs.Add(npc);
             }
@@ -161,12 +157,8 @@ namespace Business
                         Name = "Jenny the Guildmaster",
                         PictureCode = 164, 
                         Greetings = new List<string>() { "" },
-                        Topics = new List<NpcTopic>()
-                            { 
-                                new NpcTopic("You must be a member of this guild to study here", ""),
-                                new NpcTopic("Buy spells", ""),
-                                new NpcTopic("Learn skills", ""),
-                            }
+                        Shop = new Shop(ShopType.AirGuild, GuildLevel.Initiate),
+                        Topics = Shop.GetGuildShopTopics(),
                     };
                 npcs.Add(npc);
             }
@@ -177,12 +169,8 @@ namespace Business
                         Name = "Fialt the Guildmaster",
                         PictureCode = 722, 
                         Greetings = new List<string>() { "" },
-                        Topics = new List<NpcTopic>()
-                            { 
-                                new NpcTopic("You must be a member of this guild to study here", ""),
-                                new NpcTopic("Buy spells", ""),
-                                new NpcTopic("Learn skills", ""),
-                            }
+                        Shop = new Shop(ShopType.SpiritGuild, GuildLevel.Initiate),
+                        Topics = Shop.GetGuildShopTopics(),
                     };
                 npcs.Add(npc);
             }
@@ -193,12 +181,8 @@ namespace Business
                         Name = "Standish the Guildmaster",
                         PictureCode = 794, 
                         Greetings = new List<string>() { "" },
-                        Topics = new List<NpcTopic>()
-                            { 
-                                new NpcTopic("You must be a member of this guild to study here", ""),
-                                new NpcTopic("Buy spells", ""),
-                                new NpcTopic("Learn skills", ""),
-                            }
+                        Shop = new Shop(ShopType.BodyGuild, GuildLevel.Initiate),
+                        Topics = Shop.GetGuildShopTopics(),
                     };
                 npcs.Add(npc);
             }

@@ -34,6 +34,15 @@ public class ItemInfoUI : MonoBehaviour {
     [SerializeField]
     private Text valueText;
 
+    [SerializeField]
+    private RectTransform spellInfoLeft;
+
+    [SerializeField]
+    private Text spellMagicType;
+
+    [SerializeField]
+    private Text spellPointsCost;
+
     private RectTransform rectTransform;
     //private CanvasGroup canvasGroup;
 
@@ -62,13 +71,41 @@ public class ItemInfoUI : MonoBehaviour {
         //StartCoroutine(canvasGroup.Fade(0f, 1f, 0.2f));
 
         titleText.text = item.Name;
+        typeText.gameObject.SetActive(true);
         typeText.text = string.Format("{0}: {1}", Localization.Instance.Get("type"), item.NotIdentifiedName);
         ShowHideText(modificatorsText, GetModificatorsText(item));
         ShowHideText(specialBonusText, GetSpecialBonusText(item));
         descriptionText.text = item.Description;
+        valueText.gameObject.SetActive(true);
         valueText.text = string.Format("{0}: {1}", Localization.Instance.Get("value"), item.Value);
+        itemImage.gameObject.SetActive(true);
         itemImage.rectTransform.sizeDelta = new Vector2(item.Texture.width, item.Texture.height);
         itemImage.texture = item.Texture;
+        spellInfoLeft.gameObject.SetActive(false);
+
+        RedimensionPanel();
+    }
+
+    public void Show(SpellInfo spellInfo)
+    {
+        gameObject.SetActive(true);
+
+        titleText.text = spellInfo.Name;
+        typeText.gameObject.SetActive(false);
+        modificatorsText.gameObject.SetActive(false);
+        specialBonusText.gameObject.SetActive(false);
+        valueText.gameObject.SetActive(false);
+        itemImage.gameObject.SetActive(false);
+        spellInfoLeft.gameObject.SetActive(true);
+        spellMagicType.text = Localization.Instance.Get(spellInfo.SkillCode.ToString());
+        spellPointsCost.text = Localization.Instance.Get("spcost", spellInfo.SpellPointsCost);
+
+        descriptionText.text = spellInfo.Description +
+            "\n\n" + Localization.Instance.Get("Normal") + ": " + spellInfo.Normal +
+            "\n" + Localization.Instance.Get("Expert") + ": " + spellInfo.Expert +
+            "\n" + Localization.Instance.Get("Master") + ": " + spellInfo.Master +
+            "\n" + Localization.Instance.Get("GrandMaster") + ": " + spellInfo.GrandMaster;
+        
         RedimensionPanel();
     }
 
@@ -114,14 +151,18 @@ public class ItemInfoUI : MonoBehaviour {
 
     private void RedimensionPanel()
     {
-        var pictureHeight = itemImage.texture.height;
         LayoutRebuilder.ForceRebuildLayoutImmediate(descriptionText.rectTransform);
         LayoutRebuilder.ForceRebuildLayoutImmediate(rightInfo);
-        var rightInfoHeight = rightInfo.sizeDelta.y;
-        var maxHeight = Mathf.Max(pictureHeight, rightInfoHeight);
+        var maxHeight = Mathf.Max(itemImage.texture.height, rightInfo.sizeDelta.y);
+
+        var leftWidth = 0f;
+        if (spellInfoLeft != null && spellInfoLeft.gameObject.activeSelf)
+            leftWidth = spellInfoLeft.sizeDelta.x;
+        else
+            leftWidth = itemImage.texture.width;
 
         var newPanelHeight = maxHeight + mainHorizontalLayoutGroup.padding.top + mainHorizontalLayoutGroup.padding.bottom;
-        var newPanelWidth = mainHorizontalLayoutGroup.padding.left + itemImage.texture.width + mainHorizontalLayoutGroup.spacing + rightInfo.sizeDelta.x + mainHorizontalLayoutGroup.padding.right;
+        var newPanelWidth = mainHorizontalLayoutGroup.padding.left + leftWidth + mainHorizontalLayoutGroup.spacing + rightInfo.sizeDelta.x + mainHorizontalLayoutGroup.padding.right;
         rectTransform.sizeDelta = new Vector2(newPanelWidth, newPanelHeight);
     }
 }

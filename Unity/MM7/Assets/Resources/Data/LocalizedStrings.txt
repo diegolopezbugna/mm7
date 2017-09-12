@@ -10,3 +10,4 @@ SkillsFor	Skills for: {0}
 SkillPoints	Skill points
 DontCauseAnyTrouble	Don't cause any trouble
 GoodLuckInTheContest	Good luck in the contest!
+spcost	Spell points cost: {0}

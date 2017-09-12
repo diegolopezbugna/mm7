@@ -181,6 +181,7 @@
      <Compile Include="Assets\Scripts\Business\Shop.cs" />
      <Compile Include="Assets\Scripts\Business\Skill.cs" />
      <Compile Include="Assets\Scripts\Business\SkillStatus.cs" />
+     <Compile Include="Assets\Scripts\Business\SpellInfo.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\BuyItemUseCase.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\CreatePartyUseCase.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\EnemyAttacksUseCase.cs" />
@@ -194,6 +195,7 @@
      <Compile Include="Assets\Scripts\EnemyHealth.cs" />
      <Compile Include="Assets\Scripts\Infrastruture\Localization.cs" />
      <Compile Include="Assets\Scripts\Infrastruture\Parsers\ItemsParser.cs" />
+     <Compile Include="Assets\Scripts\Infrastruture\Parsers\SpellInfosParser.cs" />
      <Compile Include="Assets\Scripts\Infrastruture\Parsers\TxtParser.cs" />
      <Compile Include="Assets\Scripts\Infrastruture\Singleton.cs" />
      <Compile Include="Assets\Scripts\Infrastruture\StreamVideo.cs" />

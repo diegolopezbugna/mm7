@@ -152,6 +152,13 @@ namespace Business
             return Mod2;
         }
 
+        public SpellInfo GetSpellInfoAssociated() {
+            if (Mod1.Length > 0)
+                return SpellInfo.GetByCode(int.Parse(Mod1.Substring(1)));
+            else
+                return null;
+        }
+
 
         public static Item GetByCode(int code) {
             if (allItems == null)

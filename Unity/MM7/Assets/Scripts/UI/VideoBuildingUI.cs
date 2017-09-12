@@ -272,7 +272,13 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
         }
         else if (eventData.button == PointerEventData.InputButton.Right)
         {
-            itemInfoUI.Show(item);
+            if (item.EquipSlot == EquipSlot.Book)
+            {
+                var spellInfo = item.GetSpellInfoAssociated();
+                itemInfoUI.Show(spellInfo);
+            }
+            else
+                itemInfoUI.Show(item);
         }
     }
 
@@ -284,7 +290,6 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
         }
         else if (eventData.button == PointerEventData.InputButton.Right)
         {
-            // TODO: spell info
             itemInfoUI.Show(item);
         }
     }

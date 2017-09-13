@@ -20,6 +20,9 @@ public class SpellBookUI : BaseUI<SpellBookUI> {
         base.Show();
         // TODO: learnt spells!
 
+        foreach (Transform child in spellBookBg.transform)
+            Destroy(child.gameObject);  // TODO: reuse?
+
         var prefix = skillCode.ToString().Replace("Magic", "");
         var kk = string.Format("Spells/{0}/{1}Bg", skillCode, prefix);
         spellBookBg.texture = Resources.Load<Texture>(string.Format("Spells/{0}/{1}Bg", skillCode, prefix));

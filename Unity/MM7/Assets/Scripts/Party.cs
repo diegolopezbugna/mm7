@@ -82,7 +82,8 @@ public class Party : Singleton<Party> {
         }
         else if (Input.GetKeyDown("b"))
         {
-            SpellBookUI.Instance.Show(Game.Instance.PartyStats.Chars[0], SkillCode.AirMagic); // TODO: selected char
+            var skillCodes = new List<SkillCode>() { SkillCode.AirMagic, SkillCode.FireMagic, SkillCode.WaterMagic, SkillCode.EarthMagic, SkillCode.MindMagic, SkillCode.BodyMagic, SkillCode.SpiritMagic, SkillCode.LightMagic, SkillCode.DarkMagic };
+            SpellBookUI.Instance.Show(Game.Instance.PartyStats.Chars[0], skillCodes[UnityEngine.Random.Range(0, skillCodes.Count)]); // TODO: selected char
         }
 	}
 

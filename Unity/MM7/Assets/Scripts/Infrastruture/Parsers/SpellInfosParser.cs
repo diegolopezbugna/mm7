@@ -17,12 +17,15 @@ namespace Business
                 var spellInfo = new SpellInfo();
                 spellInfo.Code = int.Parse(values[0]);
                 spellInfo.SkillCode = values[2].ToEnum<SkillCode>(SkillCode.None);
-                spellInfo.Name = values[3];
-                spellInfo.Description = values[6];
-                spellInfo.Normal = values[7];
-                spellInfo.Expert = values[8];
-                spellInfo.Master = values[9];
-                spellInfo.GrandMaster = values[10];
+                spellInfo.SpellBookPosX = float.Parse(values[3]);
+                spellInfo.SpellBookPosY = float.Parse(values[4]);
+                spellInfo.ResourceIndex = int.Parse(values[5]);
+                spellInfo.Name = values[6];
+                spellInfo.Description = values[7];
+                spellInfo.Normal = values[8];
+                spellInfo.Expert = values[9];
+                spellInfo.Master = values[10];
+                spellInfo.GrandMaster = values[11];
                 return spellInfo;
             }
             catch (Exception ex)

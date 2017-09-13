@@ -1,11 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace Business
 {
     public class SpellInfo
     {
-        private static Dictionary<int, SpellInfo> allSpellInfos;
+        private static Dictionary<int, SpellInfo> _allSpellInfos = null;
+        private static Dictionary<int, SpellInfo> AllSpellInfos {
+            get {
+                if (_allSpellInfos == null)
+                {
+                    _allSpellInfos = new Dictionary<int, SpellInfo>();
+                    lock (_allSpellInfos)
+                    {
+                        var parser = new SpellInfosParser("Data/SPELLS");
+                        foreach (var spell in parser.Entities)
+                            _allSpellInfos.Add(spell.Code, spell);
+                    }
+                }
+                return _allSpellInfos;
+            }
+        }
 
         public int Code { get; set; }
         public SkillCode SkillCode { get; set; }
@@ -17,22 +34,38 @@ namespace Business
         public string GrandMaster { get; set; }
         public int SpellPointsCost { get; set; }
 
+        public float SpellBookPosX { get; set; }
+        public float SpellBookPosY { get; set; }
+        public int ResourceIndex { get; set; }
+
+        private Sprite _textureOn;
+        public Sprite TextureOn {
+            get {
+                if (_textureOn == null)
+                    _textureOn = Resources.Load<Sprite>(string.Format("Spells/{0}/{1}On{2:D2}", SkillCode, SkillCode.ToString().Replace("Magic", ""), ResourceIndex));
+                return _textureOn;
+            }
+        }
+
+        private Sprite _textureOff;
+        public Sprite TextureOff {
+            get {
+                if (_textureOff == null)
+                    _textureOff = Resources.Load<Sprite>(string.Format("Spells/{0}/{1}Off{2:D2}", SkillCode, SkillCode.ToString().Replace("Magic", ""), ResourceIndex));
+                return _textureOff;
+            }
+        }
+
         public SpellInfo()
         {
         }
 
         public static SpellInfo GetByCode(int code) {
-            if (allSpellInfos == null)
-            {
-                allSpellInfos = new Dictionary<int, SpellInfo>();
-                lock (allSpellInfos)
-                {
-                    var parser = new SpellInfosParser("Data/SPELLS");
-                    foreach (var spell in parser.Entities)
-                        allSpellInfos.Add(spell.Code, spell);
-                }
-            }
-            return allSpellInfos[code];
+            return AllSpellInfos[code];
+        }
+
+        public static List<SpellInfo> GetAllBySkill(SkillCode skillCode) {
+            return AllSpellInfos.Values.Where(s => s.SkillCode == skillCode).ToList();
         }
     }
 }

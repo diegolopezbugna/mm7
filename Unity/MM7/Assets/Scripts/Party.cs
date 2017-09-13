@@ -80,6 +80,10 @@ public class Party : Singleton<Party> {
         {
             CharDetailsUI.Instance.ShowSkills();
         }
+        else if (Input.GetKeyDown("b"))
+        {
+            SpellBookUI.Instance.Show(Game.Instance.PartyStats.Chars[0], SkillCode.AirMagic); // TODO: selected char
+        }
 	}
 
     void FixedUpdate() {

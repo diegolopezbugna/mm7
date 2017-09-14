@@ -38,20 +38,20 @@ namespace Business
         public float SpellBookPosY { get; set; }
         public int ResourceIndex { get; set; }
 
-        private Sprite _textureOn;
-        public Sprite TextureOn {
+        private Texture _textureOn;
+        public Texture TextureOn {
             get {
                 if (_textureOn == null)
-                    _textureOn = Resources.Load<Sprite>(string.Format("Spells/{0}/{1}On{2:D2}", SkillCode, SkillCode.ToString().Replace("Magic", ""), ResourceIndex));
+                    _textureOn = Resources.Load<Texture>(string.Format("Spells/{0}/{1}On{2:D2}", SkillCode, SkillCode.ToString().Replace("Magic", ""), ResourceIndex));
                 return _textureOn;
             }
         }
 
-        private Sprite _textureOff;
-        public Sprite TextureOff {
+        private Texture _textureOff;
+        public Texture TextureOff {
             get {
                 if (_textureOff == null)
-                    _textureOff = Resources.Load<Sprite>(string.Format("Spells/{0}/{1}Off{2:D2}", SkillCode, SkillCode.ToString().Replace("Magic", ""), ResourceIndex));
+                    _textureOff = Resources.Load<Texture>(string.Format("Spells/{0}/{1}Off{2:D2}", SkillCode, SkillCode.ToString().Replace("Magic", ""), ResourceIndex));
                 return _textureOff;
             }
         }

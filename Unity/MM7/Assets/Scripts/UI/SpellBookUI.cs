@@ -13,6 +13,9 @@ public class SpellBookUI : BaseUI<SpellBookUI> {
     [SerializeField]
     private RectTransform tabsContainer;
 
+    [SerializeField]
+    private ItemInfoUI spellInfoUI;
+
     private Dictionary<SkillCode, Texture> texturesTabsOff = new Dictionary<SkillCode, Texture>();
     private Dictionary<SkillCode, Texture> texturesTabsOn = new Dictionary<SkillCode, Texture>();
 
@@ -65,27 +68,21 @@ public class SpellBookUI : BaseUI<SpellBookUI> {
     {
         var go = new GameObject(spell.Name);
         go.transform.SetParent(spellBookBg.transform, false);
-        var image = go.AddComponent<Image>();
-        image.sprite = spell.TextureOff;
-        image.SetNativeSize();
-        image.rectTransform.pivot = Vector2.up;
-        image.rectTransform.anchorMin = Vector2.up;
-        image.rectTransform.anchorMax = Vector2.up;
-        image.rectTransform.anchoredPosition = new Vector2(spell.SpellBookPosX, -spell.SpellBookPosY);
-        var button = go.AddComponent<Button>();
-        button.targetGraphic = image;
-        button.transition = Selectable.Transition.SpriteSwap;
-        var spriteState = new SpriteState();
-        spriteState.highlightedSprite = spell.TextureOn;
-        button.spriteState = spriteState;
-        button.onClick.AddListener(() => SpellOnClick(spell));
+        var spellButton = go.AddComponent<SpellButton>();
+        spellButton.SpellInfo = spell;
+        spellButton.OnSpellButtonLeftClick = OnSpellButtonLeftClick;
+        spellButton.OnSpellButtonRightClick = OnSpellButtonRightClick;
     }
 
-    private void SpellOnClick(SpellInfo spell)
+    private void OnSpellButtonLeftClick(SpellInfo spellInfo)
     {
-        Debug.Log("FIRE!");
-        Instantiate(Resources.Load<GameObject>("SpellsFX/FireBolt"), Party.Instance.transform, false);
+        Instantiate(Resources.Load<GameObject>("SpellsFX/FireBolt"), Party.Instance.transform, false); // TODO: move to useCase
         Hide();
+    }
+
+    private void OnSpellButtonRightClick(SpellInfo spellInfo)
+    {
+        spellInfoUI.Show(spellInfo);
     }
 
     private void Clean()

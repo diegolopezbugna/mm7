@@ -266,6 +266,7 @@
      <Compile Include="Assets\Scripts\UI\SkillItem.cs" />
      <Compile Include="Assets\Scripts\UI\SkillsUI.cs" />
      <Compile Include="Assets\Scripts\UI\SpellBookUI.cs" />
+     <Compile Include="Assets\Scripts\UI\SpellButton.cs" />
      <Compile Include="Assets\Scripts\UI\StatsUI.cs" />
      <Compile Include="Assets\Scripts\UI\TopicData.cs" />
      <Compile Include="Assets\Scripts\UI\VideoBuildingUI.cs" />

@@ -89,7 +89,7 @@ public class Party : Singleton<Party> {
 
     void FixedUpdate() {
         bool isUserAttacking = Input.GetKeyDown("q");
-        CalculateTarget(isUserAttacking);
+        CalculateTarget(isUserAttacking); // TODO: move to update
     }
 
     void LateUpdate() {

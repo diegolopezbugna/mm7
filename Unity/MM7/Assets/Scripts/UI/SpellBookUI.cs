@@ -78,6 +78,14 @@ public class SpellBookUI : BaseUI<SpellBookUI> {
         var spriteState = new SpriteState();
         spriteState.highlightedSprite = spell.TextureOn;
         button.spriteState = spriteState;
+        button.onClick.AddListener(() => SpellOnClick(spell));
+    }
+
+    private void SpellOnClick(SpellInfo spell)
+    {
+        Debug.Log("FIRE!");
+        Instantiate(Resources.Load<GameObject>("SpellsFX/FireBolt"), Party.Instance.transform, false);
+        Hide();
     }
 
     private void Clean()

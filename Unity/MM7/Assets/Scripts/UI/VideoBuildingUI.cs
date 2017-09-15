@@ -186,7 +186,7 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
         videoPlayer.Prepare();
 
         //Wait until video is prepared
-        var waitTime = new WaitForSeconds(0.01f);
+        var waitTime = new WaitForSecondsRealtime(0.01f);
         while (!videoPlayer.isPrepared)
             yield return waitTime;
         yield return waitTime;

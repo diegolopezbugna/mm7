@@ -18,6 +18,7 @@ public class SpellBookUI : BaseUI<SpellBookUI> {
 
     private Dictionary<SkillCode, Texture> texturesTabsOff = new Dictionary<SkillCode, Texture>();
     private Dictionary<SkillCode, Texture> texturesTabsOn = new Dictionary<SkillCode, Texture>();
+    private Dictionary<PlayingCharacter, SkillCode> lastPageVisitedBySpeller = new Dictionary<PlayingCharacter, SkillCode>();
 
     public override void Awake()
     {
@@ -42,23 +43,26 @@ public class SpellBookUI : BaseUI<SpellBookUI> {
         texturesTabsOn.Add(SkillCode.DarkMagic, Resources.Load<Texture>("Spells/TAB9B"));
     }
 
-    public override void Start()
-    {
-        base.Start();
-        Show(null, SkillCode.FireMagic);
+    public void Show(PlayingCharacter speller) {
+        if (!lastPageVisitedBySpeller.ContainsKey(speller)) {
+            // TODO: only allowed pages
+            var skillCodes = new List<SkillCode>() { SkillCode.AirMagic, SkillCode.FireMagic, SkillCode.WaterMagic, SkillCode.EarthMagic, SkillCode.MindMagic, SkillCode.BodyMagic, SkillCode.SpiritMagic, SkillCode.LightMagic, SkillCode.DarkMagic };
+            lastPageVisitedBySpeller[speller] = skillCodes[UnityEngine.Random.Range(0, skillCodes.Count)];
+        }
+        Show(speller, lastPageVisitedBySpeller[speller]);
     }
-
+        
     public void Show(PlayingCharacter speller, SkillCode skillCode) {
         base.Show();
-        // TODO: learnt spells!
 
         Clean();
-        DrawTabs(speller, skillCode);
+        DrawTabs(speller, skillCode); // TODO: learnt spells!
+        lastPageVisitedBySpeller[speller] = skillCode;
 
         var prefix = skillCode.ToString().Replace("Magic", "");
         var kk = string.Format("Spells/{0}/{1}Bg", skillCode, prefix);
         spellBookBg.texture = Resources.Load<Texture>(string.Format("Spells/{0}/{1}Bg", skillCode, prefix));
-        var spells = SpellInfo.GetAllBySkill(skillCode);
+        var spells = SpellInfo.GetAllBySkill(skillCode); // TODO: learnt spells!
 
         foreach (var s in spells)
             DrawSpell(s);
@@ -70,14 +74,14 @@ public class SpellBookUI : BaseUI<SpellBookUI> {
         go.transform.SetParent(spellBookBg.transform, false);
         var spellButton = go.AddComponent<SpellButton>();
         spellButton.SpellInfo = spell;
-        spellButton.OnSpellButtonLeftClick = OnSpellButtonLeftClick;
-        spellButton.OnSpellButtonRightClick = OnSpellButtonRightClick;
+        spellButton.OnSpellButtonLeftUp = OnSpellButtonLeftClick;
+        spellButton.OnSpellButtonRightDown = OnSpellButtonRightClick;
     }
 
     private void OnSpellButtonLeftClick(SpellInfo spellInfo)
     {
-        Instantiate(Resources.Load<GameObject>("SpellsFX/FireBolt"), Party.Instance.transform, false); // TODO: move to useCase
         Hide();
+        Party.Instance.SpellBookCastSpell(spellInfo);
     }
 
     private void OnSpellButtonRightClick(SpellInfo spellInfo)

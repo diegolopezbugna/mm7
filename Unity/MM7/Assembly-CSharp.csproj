@@ -228,6 +228,7 @@
      <Compile Include="Assets\Scripts\Business\UseCases\CreatePartyUseCase.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\EnemyAttacksUseCase.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\PartyAttacksUseCase.cs" />
+     <Compile Include="Assets\Scripts\Business\UseCases\PartyCastsSpellUseCase.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\SellItemUseCase.cs" />
      <Compile Include="Assets\Scripts\CharPortrait.cs" />
      <Compile Include="Assets\Scripts\CreateParty\CreateParty.cs" />

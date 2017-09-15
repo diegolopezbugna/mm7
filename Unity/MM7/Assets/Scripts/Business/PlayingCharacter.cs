@@ -166,7 +166,7 @@ namespace Business
 
         public float RecoveryTime {
             get {
-                // TODO: formula! depends on speed? armor?
+                // TODO: formula! depends on speed? armor? spellInfo.recoveryTime
                 return 2f;
             }
         }
@@ -189,9 +189,11 @@ namespace Business
             EquippedItems.UnequipItem(item);
         }
 
-        public int GetTotalMerchantBonus() {
-            // TODO: merchant bonus + NPCs
-            return 0;
+        public int GetTotalSkillBonus(SkillCode skillCode) {
+            if (!Skills.ContainsKey(skillCode))
+                return 0; // TODO: NPCs, items
+
+            return Skills[skillCode].Points; // TODO: Skill level modifiers, NPC bonuses, items
         }
     }
 }

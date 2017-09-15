@@ -20,7 +20,7 @@ namespace Business
 
         public void AskItemPrice(Item item, PlayingCharacter seller, float shopValueMultiplier) {
             var normalPrice = Mathf.CeilToInt(item.Value / (shopValueMultiplier + 2f));
-            int totalMerchantBonus = seller.GetTotalMerchantBonus();
+            int totalMerchantBonus = seller.GetTotalSkillBonus(SkillCode.Merchant);
             var price = GetMerchantPrice(item, totalMerchantBonus, shopValueMultiplier);
 
             var priceText = "";
@@ -34,7 +34,7 @@ namespace Business
         }
 
         public void SellItem(Item item, PlayingCharacter seller, float shopValueMultiplier) {
-            int price = GetMerchantPrice(item, seller.GetTotalMerchantBonus(), shopValueMultiplier);
+            int price = GetMerchantPrice(item, seller.GetTotalSkillBonus(SkillCode.Merchant), shopValueMultiplier);
 
             seller.Inventory.RemoveItem(item);
             Game.Instance.PartyStats.Gold += price;

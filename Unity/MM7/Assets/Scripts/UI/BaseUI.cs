@@ -24,18 +24,18 @@ public class BaseUI<T> : Singleton<T> where T : MonoBehaviour
     }
     
     public virtual void Show() {
-        gameObject.SetActive(true);
-        IsShowing = true;
-        fpc.SetCursorLock(false);
+        Show(false);
     }
 
     public virtual void Show(bool cursorLock) {
         gameObject.SetActive(true);
         IsShowing = true;
         fpc.SetCursorLock(cursorLock);
+        Time.timeScale = 0;
     }
 
     public virtual void Hide() {
+        Time.timeScale = 1;
         fpc.SetCursorLock(true);
         IsShowing = false;
         gameObject.SetActive(false);

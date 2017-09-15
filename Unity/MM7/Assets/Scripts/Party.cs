@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using Business;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class Party : Singleton<Party> {
 
@@ -47,8 +48,10 @@ public class Party : Singleton<Party> {
 
     private bool isEnemyEngagingPartyThisFrame = false;
     private bool isEnemyInHandToHandCombatThisFrame = false;
+    private SpellInfo spellChoosingTarget = null;
 
     private PartyHealth partyHealth;
+    private FirstPersonController fpc;
 
 	// Use this for initialization
 	void Start () {
@@ -64,10 +67,33 @@ public class Party : Singleton<Party> {
             charsPortraits[i].ConditionStatus = CharConditionStatus.Normal;
         }
         partyHealth = this.GetComponent<PartyHealth>();
+        fpc = FindObjectOfType<FirstPersonController>();
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+    {
+        // TODO: refactor main loop
+        
+        if (spellChoosingTarget != null) 
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                var targetPoint = CalculateMouseTarget();
+                var view = transform.GetComponent<PartyAttack>();
+                var partyCastsSpellUseCase = new PartyCastsSpellUseCase(view, Party.Instance.transform);
+                Time.timeScale = 1;
+                partyCastsSpellUseCase.ThrowSpell(Game.Instance.PartyStats.Chars[3], spellChoosingTarget, targetPoint); // TODO: selected char
+                spellChoosingTarget = null;
+                fpc.SetCursorLock(true);
+            }
+            else
+            {
+                CalculateMouseTarget();
+            }
+            return;
+        }
+
         if (Input.GetKeyDown("i"))
         {
             CharDetailsUI.Instance.ShowInventory();
@@ -82,21 +108,20 @@ public class Party : Singleton<Party> {
         }
         else if (Input.GetKeyDown("b"))
         {
-            var skillCodes = new List<SkillCode>() { SkillCode.AirMagic, SkillCode.FireMagic, SkillCode.WaterMagic, SkillCode.EarthMagic, SkillCode.MindMagic, SkillCode.BodyMagic, SkillCode.SpiritMagic, SkillCode.LightMagic, SkillCode.DarkMagic };
-            SpellBookUI.Instance.Show(Game.Instance.PartyStats.Chars[0], skillCodes[UnityEngine.Random.Range(0, skillCodes.Count)]); // TODO: selected char
+            // TODO: check recovery times
+            SpellBookUI.Instance.Show(Game.Instance.PartyStats.Chars[3]); // TODO: selected char
         }
-	}
 
-    void FixedUpdate() {
         bool isUserAttacking = Input.GetKeyDown("q");
-        CalculateTarget(isUserAttacking); // TODO: move to update
-    }
+        CalculateTarget(isUserAttacking);
+	}
 
     void LateUpdate() {
         CheckEnemiesEngagingStatus();
     }
 
     void CalculateTarget(bool includeTargetPoint) {
+        // TODO: refactor main loop
 
         RaycastHit hit;
         var ray = Camera.main.ScreenPointToRay(crosshair.transform.position);
@@ -157,6 +182,46 @@ public class Party : Singleton<Party> {
                 var screenPoint = new Vector3(crosshair.transform.position.x, crosshair.transform.position.y, Camera.main.farClipPlane);
                 CurrentTargetPoint = Camera.main.ScreenToWorldPoint(screenPoint);
             }
+        }
+    }
+
+    public Vector3? CalculateMouseTarget() {
+        RaycastHit hit;
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit, Camera.main.farClipPlane))
+        {
+            UpdateFocussedText(hit);
+            return hit.point;
+        }
+        return null;
+    }
+
+    private void UpdateFocussedText(RaycastHit hit)
+    {
+        if (hit.transform.tag.StartsWith("Enemy"))
+        {
+            focussedText.text = hit.transform.gameObject.tag.TagToDescription() + " - " + hit.distance;
+        }
+        else if (hit.transform.tag.StartsWith("VideoDoor") && hit.distance < 5)
+        {
+            var videoDoor = hit.transform.GetComponent<VideoDoor>();
+            focussedText.text = videoDoor.GetDescription();
+        }
+        else if (hit.transform.tag.StartsWith("Npc") && hit.distance < 2)
+        {
+            var npcTalk = hit.transform.GetComponent<NpcTalk>();
+            if (npcTalk != null)
+                focussedText.text = npcTalk.GetDescription();
+            else
+            {
+                var npcNews = hit.transform.GetComponent<NpcNews>();
+                if (npcNews != null)
+                    focussedText.text = npcNews.GetDescription();
+            }
+        }
+        else
+        {
+            focussedText.text = "";
         }
     }
 
@@ -222,4 +287,22 @@ public class Party : Singleton<Party> {
     public float GetDistanceSqrTo(Transform other) {
         return (transform.position - other.position).sqrMagnitude;
     }
+
+    public void SpellBookCastSpell(SpellInfo spellInfo) 
+    {
+        if (spellInfo.NeedsTarget)
+        {
+            Time.timeScale = 0;
+            fpc.SetCursorLock(false);
+            spellChoosingTarget = spellInfo;
+            // TODO: change cursor?
+        }
+        else
+        {
+            var view = transform.GetComponent<PartyAttack>();
+            var partyCastsSpellUseCase = new PartyCastsSpellUseCase(view, Party.Instance.transform);
+            partyCastsSpellUseCase.CastSpell(Game.Instance.PartyStats.Chars[3], spellChoosingTarget); // TODO: selected char
+        }
+    }
+
 }

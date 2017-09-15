@@ -33,10 +33,14 @@ namespace Business
         public string Master { get; set; }
         public string GrandMaster { get; set; }
         public int SpellPointsCost { get; set; }
+        public Dictionary<SkillLevel, int> RecoveryTimes { get; set; }
+        public int BaseDamage { get; set; }
+        public int SkillPointDamageBonus { get; set; }
 
         public float SpellBookPosX { get; set; }
         public float SpellBookPosY { get; set; }
         public int ResourceIndex { get; set; }
+        public string SpellFxName { get; set; }
 
         private Texture _textureOn;
         public Texture TextureOn {
@@ -58,6 +62,7 @@ namespace Business
 
         public SpellInfo()
         {
+            RecoveryTimes = new Dictionary<SkillLevel, int>();
         }
 
         public static SpellInfo GetByCode(int code) {
@@ -66,6 +71,13 @@ namespace Business
 
         public static List<SpellInfo> GetAllBySkill(SkillCode skillCode) {
             return AllSpellInfos.Values.Where(s => s.SkillCode == skillCode).ToList();
+        }
+
+        public bool NeedsTarget {
+            get {
+                // TODO: each spell
+                return true;
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -49,6 +50,7 @@ public class PartyAttack : MonoBehaviour, PartyAttacksViewInterface {
             {
                 lastCharAttacker = attackingChar;
                 DoAttack(attackingChar, Party.Instance.CurrentTargetPoint, Party.Instance.CurrentTarget);
+                //DoCastPreparedSpell(attackingChar, SpellInfo.GetByCode(2), Party.Instance.CurrentTargetPoint); -> prepared spell
                 lastAttack[attackingChar] = Time.time;
             }
 
@@ -73,9 +75,14 @@ public class PartyAttack : MonoBehaviour, PartyAttacksViewInterface {
         }
     }
 
+//    void DoCastPreparedSpell(int charIndex, SpellInfo spellInfo, Vector3? targetPoint) {
+//        var attackingChar = Game.Instance.PartyStats.Chars[charIndex];
+//        var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, Party.Instance.transform);
+//        partyCastsSpellUseCase.ThrowSpell(attackingChar, spellInfo, targetPoint);
+//    }
+
     public void ThrowArrowToTarget(PlayingCharacter attackingChar, Transform targetTransform,  Vector3 targetPoint, bool didHit, int damage) {
-        int charIndex = Game.Instance.PartyStats.Chars.IndexOf(attackingChar);
-        var origin = transform.TransformPoint((charIndex - 1.5f) / 2f, 0.5f, 0);
+        var origin = GetProjectilOrigin(attackingChar);
         var a = Instantiate(arrow);
 
         var enemyAttackBehaviour = targetTransform.GetComponent<EnemyAttack>();
@@ -100,8 +107,7 @@ public class PartyAttack : MonoBehaviour, PartyAttacksViewInterface {
     }
 
     public void ThrowArrowToNonInteractiveObjects(PlayingCharacter attackingChar, Vector3? targetPoint) {
-        int charIndex = Game.Instance.PartyStats.Chars.IndexOf(attackingChar);
-        var origin = transform.TransformPoint((charIndex - 1.5f) / 2f, 0.5f, 0);
+        var origin = GetProjectilOrigin(attackingChar);
         var a = Instantiate(arrow);
 
         a.transform.position = origin;
@@ -111,6 +117,23 @@ public class PartyAttack : MonoBehaviour, PartyAttacksViewInterface {
             a.transform.rotation = transform.rotation;
 
         a.velocity = a.transform.forward * 40f;
+    }
+
+    // TODO: make ThrowArrow behave like ThrowSpell
+    public void ThrowSpell(PlayingCharacter attackingChar, SpellInfo spell, Vector3? targetPoint, Action<Transform> onCollision) {
+        var origin = GetProjectilOrigin(attackingChar);
+        var spellFxPrefab = Resources.Load<GameObject>("SpellsFX/" + spell.SpellFxName);
+        if (spellFxPrefab == null)
+        {
+            Debug.LogError("SpellFx prefab " + spell.SpellFxName + " not found");
+            return;
+        }
+        var spellFX = Instantiate(spellFxPrefab, origin, transform.rotation);
+
+        spellFX.GetComponentInChildren<RFX4_TransformMotion>().CollisionEnter += (object sender, RFX4_TransformMotion.RFX4_CollisionInfo e) => onCollision(e.Hit.transform);
+
+        if (targetPoint.HasValue)
+            spellFX.transform.LookAt(targetPoint.Value);
     }
 
     public void HandToHandAttack(PlayingCharacter attackingChar, Transform targetTransform, bool didHit, int damage) {
@@ -133,5 +156,12 @@ public class PartyAttack : MonoBehaviour, PartyAttacksViewInterface {
 
     public void AddMessage(string message) {
         MessagesScroller.Instance.AddMessage(message);
+    }
+
+    private Vector3 GetProjectilOrigin(PlayingCharacter attackingChar)
+    {
+        int charIndex = Game.Instance.PartyStats.Chars.IndexOf(attackingChar);
+        return transform.TransformPoint((charIndex - 1.5f) / 2f, 0.5f, 0);
+
     }
 }

@@ -10,7 +10,7 @@ public delegate void SpellButtonDelegate(SpellInfo spellInfo);
 
 namespace Business
 {
-    public class SpellButton : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
+    public class SpellButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
     {
         private RawImage image;
         
@@ -30,8 +30,8 @@ namespace Business
             }
         }
 
-        public SpellButtonDelegate OnSpellButtonLeftClick { get; set; }
-        public SpellButtonDelegate OnSpellButtonRightClick { get; set; }
+        public SpellButtonDelegate OnSpellButtonLeftUp { get; set; }
+        public SpellButtonDelegate OnSpellButtonRightDown { get; set; }
         public SpellButtonDelegate OnSpellButtonPointerEnter { get; set; }
         public SpellButtonDelegate OnSpellButtonPointerExit { get; set; }
 
@@ -41,10 +41,14 @@ namespace Business
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            if (eventData.button == PointerEventData.InputButton.Left && OnSpellButtonLeftClick != null)
-                OnSpellButtonLeftClick(SpellInfo);
-            if (eventData.button == PointerEventData.InputButton.Right && OnSpellButtonRightClick != null)
-                OnSpellButtonRightClick(SpellInfo);
+            if (eventData.button == PointerEventData.InputButton.Right && OnSpellButtonRightDown != null)
+                OnSpellButtonRightDown(SpellInfo);
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            if (eventData.button == PointerEventData.InputButton.Left && OnSpellButtonLeftUp != null)
+                OnSpellButtonLeftUp(SpellInfo);
         }
 
         public void OnPointerEnter(PointerEventData eventData)

@@ -237,6 +237,10 @@
      <Compile Include="Assets\Scripts\CreateParty\CreatePartyCharAttribute.cs" />
      <Compile Include="Assets\Scripts\EnemyAttack.cs" />
      <Compile Include="Assets\Scripts\EnemyHealth.cs" />
+     <Compile Include="Assets\Scripts\FirstPersonController\FirstPersonController.cs" />
+     <Compile Include="Assets\Scripts\FirstPersonController\HeadBob.cs" />
+     <Compile Include="Assets\Scripts\FirstPersonController\MouseLook.cs" />
+     <Compile Include="Assets\Scripts\FirstPersonController\RigidbodyFirstPersonController.cs" />
      <Compile Include="Assets\Scripts\Infrastruture\Localization.cs" />
      <Compile Include="Assets\Scripts\Infrastruture\Parsers\ItemsParser.cs" />
      <Compile Include="Assets\Scripts\Infrastruture\Parsers\SpellInfosParser.cs" />

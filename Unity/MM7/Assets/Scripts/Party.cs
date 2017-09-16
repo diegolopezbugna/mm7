@@ -52,7 +52,6 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface {
 
     private PartyHealth partyHealthBehaviour;
     private PartyAttack partyAttackBehaviour;
-    private FirstPersonController fpc;
 
 	// Use this for initialization
 	void Start () {
@@ -66,7 +65,6 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface {
         }
         partyHealthBehaviour = this.GetComponent<PartyHealth>();
         partyAttackBehaviour = this.GetComponent<PartyAttack>();
-        fpc = FindObjectOfType<FirstPersonController>();
 	}
 	
 	// Update is called once per frame
@@ -85,7 +83,7 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface {
                     Time.timeScale = 1;
                     partyCastsSpellUseCase.ThrowSpell(Game.Instance.PartyStats.Chars[3], spellChoosingTarget, targetPoint); // TODO: selected char
                     spellChoosingTarget = null;
-                    fpc.SetCursorLock(true);
+                    FirstPersonController.Instance.SetCursorLock(true);
                 }
             }
             else
@@ -294,7 +292,7 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface {
         if (spellInfo.NeedsPartyTarget || spellInfo.Needs3dTarget)
         {
             Time.timeScale = 0;
-            fpc.SetCursorLock(false);
+            FirstPersonController.Instance.SetCursorLock(false);
             spellChoosingTarget = spellInfo;
             // TODO: change cursor?
         }
@@ -315,7 +313,7 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface {
             Time.timeScale = 1;
             partyCastsSpellUseCase.CastSpell(Game.Instance.PartyStats.Chars[2], spellChoosingTarget, playingCharClicked); // TODO: selected char
             spellChoosingTarget = null;
-            fpc.SetCursorLock(true);
+            FirstPersonController.Instance.SetCursorLock(true);
         }
     }
 

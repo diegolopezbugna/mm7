@@ -26,6 +26,5 @@ C:\Users\Diego\Documents\MM7\Unity\MM7\Temp\bin\Debug\nunit.framework.xml
 C:\Users\Diego\Documents\MM7\Unity\MM7\Temp\bin\Debug\UnityEngine.Analytics.xml
 C:\Users\Diego\Documents\MM7\Unity\MM7\Temp\bin\Debug\UnityEngine.HoloLens.xml
 C:\Users\Diego\Documents\MM7\Unity\MM7\Temp\bin\Debug\UnityEngine.VR.xml
-C:\Users\Diego\Documents\MM7\Unity\MM7\obj\Debug\Assembly-CSharp-firstpass.csprojResolveAssemblyReference.cache
 C:\Users\Diego\Documents\MM7\Unity\MM7\obj\Debug\Assembly-CSharp-firstpass.dll
 C:\Users\Diego\Documents\MM7\Unity\MM7\obj\Debug\Assembly-CSharp-firstpass.pdb

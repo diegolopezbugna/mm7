@@ -206,9 +206,9 @@ public class CharPortrait : MonoBehaviour {
     private IEnumerator AnimateSpell(Texture texture)
     {
         spellAnimationImage.texture = texture;
-        spellAnimationImage.CrossFadeAlpha(1, 1, true);
-        yield return new WaitForSecondsRealtime(3);
-        spellAnimationImage.CrossFadeAlpha(0, 1, true);
+        spellAnimationImage.CrossFadeAlpha(1, 0.3f, true);
+        yield return new WaitForSecondsRealtime(1);
+        spellAnimationImage.CrossFadeAlpha(0, 0.3f, true);
     }
 
     private IEnumerator AnimateSpell(List<Texture> textures)

@@ -34,7 +34,12 @@ namespace Business
 
         public void CastSpell(PlayingCharacter speller, SpellInfo spellInfo)
         {
-            // TODO: spells with no target
+            // TODO: each spell
+            foreach (var target in Game.Instance.PartyStats.Chars)
+            {
+                View.ShowPortraitSpellAnimation(target, spellInfo);
+                View.UpdatePlayingCharacter(target);
+            }
         }
 
         public void CastSpell(PlayingCharacter speller, SpellInfo spellInfo, PlayingCharacter target)

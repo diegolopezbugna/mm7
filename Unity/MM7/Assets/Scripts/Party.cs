@@ -298,9 +298,8 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface {
         }
         else
         {
-            var view = transform.GetComponent<PartyAttack>();
             var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, transform);
-            partyCastsSpellUseCase.CastSpell(Game.Instance.PartyStats.Chars[3], spellChoosingTarget); // TODO: selected char
+            partyCastsSpellUseCase.CastSpell(Game.Instance.PartyStats.Chars[2], spellInfo); // TODO: selected char
         }
     }
 
@@ -309,7 +308,6 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface {
         if (spellChoosingTarget != null && spellChoosingTarget.NeedsPartyTarget)
         {
             var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, transform);
-
             Time.timeScale = 1;
             partyCastsSpellUseCase.CastSpell(Game.Instance.PartyStats.Chars[2], spellChoosingTarget, playingCharClicked); // TODO: selected char
             spellChoosingTarget = null;

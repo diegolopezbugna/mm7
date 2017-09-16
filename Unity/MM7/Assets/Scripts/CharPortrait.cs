@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using Business;
 
 public enum CharEnemyEngagingStatus {
     None,
@@ -27,6 +29,9 @@ public class CharPortrait : MonoBehaviour {
 
     [SerializeField]
     private RawImage charPortraitImage;
+
+    [SerializeField]
+    private RawImage spellAnimationImage;
 
     [SerializeField]
     private RawImage statusGreenImage;
@@ -68,8 +73,14 @@ public class CharPortrait : MonoBehaviour {
         }
     }
 
+    public PlayingCharacter PlayingCharacter { get; set; }
+
 	// Use this for initialization
 	void Start () {
+        var button = charPortraitImage.gameObject.AddComponent<CharPortraitButton>();
+        button.OnCharPortraitButtonLeftUp = OnCharPortraitLeftClick;
+        if (spellAnimationImage != null)
+            spellAnimationImage.canvasRenderer.SetAlpha(0f);
 	}
 	
 	// Update is called once per frame
@@ -174,8 +185,45 @@ public class CharPortrait : MonoBehaviour {
         statusRedImage.enabled = true;
     }
 
-    public bool IsCharActive() {
+    public bool IsCharActive() 
+    {
         return ConditionStatus != CharConditionStatus.Unconscious && 
             ConditionStatus != CharConditionStatus.Dead;
+    }
+
+    public void ShowSpellAnimation(SpellInfo spell)
+    {
+        if (spell.PortraitAnimationTextures == null || spell.PortraitAnimationTextures.Count == 0)
+            return;
+        
+        spellAnimationImage.canvasRenderer.SetAlpha(0f);
+        if (spell.PortraitAnimationTextures.Count == 1)
+            StartCoroutine(AnimateSpell(spell.PortraitAnimationTextures[0]));
+        else
+            StartCoroutine(AnimateSpell(spell.PortraitAnimationTextures));
+    }
+
+    private IEnumerator AnimateSpell(Texture texture)
+    {
+        spellAnimationImage.texture = texture;
+        spellAnimationImage.CrossFadeAlpha(1, 1, true);
+        yield return new WaitForSecondsRealtime(3);
+        spellAnimationImage.CrossFadeAlpha(0, 1, true);
+    }
+
+    private IEnumerator AnimateSpell(List<Texture> textures)
+    {
+        spellAnimationImage.CrossFadeAlpha(1f, 0.1f, true);
+        for (var i = 0; i < textures.Count; i++)
+        {
+            spellAnimationImage.texture = textures[i];
+            yield return new WaitForSecondsRealtime(0.1f);
+        }
+        spellAnimationImage.CrossFadeAlpha(0f, 0.1f, true);
+    }
+
+    public void OnCharPortraitLeftClick()
+    {
+        Party.Instance.OnPortraitLeftClick(PlayingCharacter);
     }
 }

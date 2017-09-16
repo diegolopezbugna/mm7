@@ -5,6 +5,12 @@ using UnityEngine;
 
 namespace Business
 {
+    public enum SpellCodes 
+    {
+        Fire_FireBolt = 2,
+        Body_Heal = 68,
+    }
+    
     public class SpellInfo
     {
         private static Dictionary<int, SpellInfo> _allSpellInfos = null;
@@ -60,6 +66,39 @@ namespace Business
             }
         }
 
+        private List<Texture> _portraitAnimationTextures;
+        public List<Texture> PortraitAnimationTextures {
+            get {
+                if (_portraitAnimationTextures == null)
+                {
+                    _portraitAnimationTextures = new List<Texture>();
+                    lock (_portraitAnimationTextures)
+                    {
+                        var spellCode = string.Format("{0:D2}", Code);
+                        var t = Resources.Load<Texture>("SpellPortraitSprites/sp" + spellCode + "e");
+                        if (t != null)
+                        {
+                            _portraitAnimationTextures.Add(t);
+                        }
+                        else
+                        {
+                            var i = 1;
+                            while (true)
+                            {
+                                t = Resources.Load<Texture>("SpellPortraitSprites/sp" + spellCode + "e" + i.ToString());
+                                if (t == null)
+                                    break;
+                                _portraitAnimationTextures.Add(t);
+                                i++;
+                            }
+                        }
+                    }
+                }
+                return _portraitAnimationTextures;
+            }
+        }
+
+
         public SpellInfo()
         {
             RecoveryTimes = new Dictionary<SkillLevel, int>();
@@ -73,12 +112,24 @@ namespace Business
             return AllSpellInfos.Values.Where(s => s.SkillCode == skillCode).ToList();
         }
 
-        public bool NeedsTarget {
+        public bool NeedsPartyTarget {
             get {
-                // TODO: each spell
-                return true;
+                // TODO: each spell? loaded from .txt?
+                if (Code == (int)SpellCodes.Body_Heal)
+                    return true;
+                return false;
             }
         }
+
+        public bool Needs3dTarget {
+            get {
+                // TODO: each spell? loaded from .txt?
+                if (Code == (int)SpellCodes.Fire_FireBolt)
+                    return true;
+                return false;
+            }
+        }
+
     }
 }
 

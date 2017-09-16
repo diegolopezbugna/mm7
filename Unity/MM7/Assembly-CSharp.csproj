@@ -218,6 +218,7 @@
      <Compile Include="Assets\Scripts\Business\Presenters\BuySellItemViewInterface.cs" />
      <Compile Include="Assets\Scripts\Business\Presenters\CreatePartyViewInterface.cs" />
      <Compile Include="Assets\Scripts\Business\Presenters\PartyAttacksViewInterface.cs" />
+     <Compile Include="Assets\Scripts\Business\Presenters\PartyCastsSpellViewInterface.cs" />
      <Compile Include="Assets\Scripts\Business\Profession.cs" />
      <Compile Include="Assets\Scripts\Business\Race.cs" />
      <Compile Include="Assets\Scripts\Business\Shop.cs" />
@@ -257,6 +258,7 @@
      <Compile Include="Assets\Scripts\SwitchingPositionsWanderEnemyMove.cs" />
      <Compile Include="Assets\Scripts\UI\BaseUI.cs" />
      <Compile Include="Assets\Scripts\UI\CharDetailsUI.cs" />
+     <Compile Include="Assets\Scripts\UI\CharPortraitButton.cs" />
      <Compile Include="Assets\Scripts\UI\EquippedItemsUI.cs" />
      <Compile Include="Assets\Scripts\UI\InventoryItem.cs" />
      <Compile Include="Assets\Scripts\UI\InventoryUI.cs" />

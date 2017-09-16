@@ -6,7 +6,7 @@ using System.Linq;
 using Business;
 using UnityStandardAssets.Characters.FirstPerson;
 
-public class Party : Singleton<Party> {
+public class Party : Singleton<Party>, PartyCastsSpellViewInterface {
 
     [SerializeField]
     private Text focussedText;
@@ -50,7 +50,8 @@ public class Party : Singleton<Party> {
     private bool isEnemyInHandToHandCombatThisFrame = false;
     private SpellInfo spellChoosingTarget = null;
 
-    private PartyHealth partyHealth;
+    private PartyHealth partyHealthBehaviour;
+    private PartyAttack partyAttackBehaviour;
     private FirstPersonController fpc;
 
 	// Use this for initialization
@@ -59,14 +60,12 @@ public class Party : Singleton<Party> {
         var chars = Game.Instance.PartyStats.Chars;
         for (int i = 0; i < chars.Count; i++)
         {
+            charsPortraits[i].PlayingCharacter = Game.Instance.PartyStats.Chars[i];
             charsPortraits[i].SetPortraitImageCode(chars[i].PortraitCode);
-            charsPortraits[i].SetMaxHitPoints(chars[i].MaxHitPoints);
-            charsPortraits[i].SetHitPoints(chars[i].HitPoints);
-            charsPortraits[i].SetMaxSpellPoints(chars[i].MaxSpellPoints);
-            charsPortraits[i].SetSpellPoints(chars[i].SpellPoints);
-            charsPortraits[i].ConditionStatus = CharConditionStatus.Normal;
+            UpdatePlayingCharacter(chars[i]);
         }
-        partyHealth = this.GetComponent<PartyHealth>();
+        partyHealthBehaviour = this.GetComponent<PartyHealth>();
+        partyAttackBehaviour = this.GetComponent<PartyAttack>();
         fpc = FindObjectOfType<FirstPersonController>();
 	}
 	
@@ -79,13 +78,15 @@ public class Party : Singleton<Party> {
         {
             if (Input.GetMouseButtonDown(0))
             {
-                var targetPoint = CalculateMouseTarget();
-                var view = transform.GetComponent<PartyAttack>();
-                var partyCastsSpellUseCase = new PartyCastsSpellUseCase(view, Party.Instance.transform);
-                Time.timeScale = 1;
-                partyCastsSpellUseCase.ThrowSpell(Game.Instance.PartyStats.Chars[3], spellChoosingTarget, targetPoint); // TODO: selected char
-                spellChoosingTarget = null;
-                fpc.SetCursorLock(true);
+                if (spellChoosingTarget.Needs3dTarget)
+                {
+                    var targetPoint = CalculateMouseTarget();
+                    var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, transform);
+                    Time.timeScale = 1;
+                    partyCastsSpellUseCase.ThrowSpell(Game.Instance.PartyStats.Chars[3], spellChoosingTarget, targetPoint); // TODO: selected char
+                    spellChoosingTarget = null;
+                    fpc.SetCursorLock(true);
+                }
             }
             else
             {
@@ -263,7 +264,7 @@ public class Party : Singleton<Party> {
             var damage = Random.Range(enemy.DamageMin, enemy.DamageMax + 1);  // TODO: review damage formula
             message = string.Format("{0} hits {1} for {2} points", enemy.tag.TagToDescription(), Game.Instance.PartyStats.Chars[charIndex].Name, damage);
             Game.Instance.PartyStats.Chars[charIndex].HitPoints -= damage; // this code smells... this is a UseCase!
-            partyHealth.TakeHit(charIndex);
+            partyHealthBehaviour.TakeHit(charIndex);
             charsPortraits[charIndex].SetHitPoints(Game.Instance.PartyStats.Chars[charIndex].HitPoints);
             charsPortraits[charIndex].ShowHitPortrait();
             if (Game.Instance.PartyStats.Chars[charIndex].HitPoints <= 0)
@@ -290,7 +291,7 @@ public class Party : Singleton<Party> {
 
     public void SpellBookCastSpell(SpellInfo spellInfo) 
     {
-        if (spellInfo.NeedsTarget)
+        if (spellInfo.NeedsPartyTarget || spellInfo.Needs3dTarget)
         {
             Time.timeScale = 0;
             fpc.SetCursorLock(false);
@@ -300,9 +301,47 @@ public class Party : Singleton<Party> {
         else
         {
             var view = transform.GetComponent<PartyAttack>();
-            var partyCastsSpellUseCase = new PartyCastsSpellUseCase(view, Party.Instance.transform);
+            var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, transform);
             partyCastsSpellUseCase.CastSpell(Game.Instance.PartyStats.Chars[3], spellChoosingTarget); // TODO: selected char
         }
     }
 
+    public void OnPortraitLeftClick(PlayingCharacter playingCharClicked)
+    {
+        if (spellChoosingTarget != null && spellChoosingTarget.NeedsPartyTarget)
+        {
+            var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, transform);
+
+            Time.timeScale = 1;
+            partyCastsSpellUseCase.CastSpell(Game.Instance.PartyStats.Chars[2], spellChoosingTarget, playingCharClicked); // TODO: selected char
+            spellChoosingTarget = null;
+            fpc.SetCursorLock(true);
+        }
+    }
+
+    public void AddMessage(string message)
+    {
+        MessagesScroller.Instance.AddMessage(message);
+    }
+
+    public void ThrowSpell(PlayingCharacter attackingChar, SpellInfo spellInfo, Vector3? targetPoint, System.Action<Transform> onCollision)
+    {
+        partyAttackBehaviour.ThrowSpell(attackingChar, spellInfo, targetPoint, onCollision);
+    }
+
+    public void ShowPortraitSpellAnimation(PlayingCharacter target, SpellInfo spellInfo)
+    {
+        var i = Game.Instance.PartyStats.Chars.IndexOf(target);
+        charsPortraits[i].ShowSpellAnimation(spellInfo);
+    }
+
+    public void UpdatePlayingCharacter(PlayingCharacter playingCharacter)
+    {
+        var i = Game.Instance.PartyStats.Chars.IndexOf(playingCharacter);
+        charsPortraits[i].SetMaxHitPoints(playingCharacter.MaxHitPoints);
+        charsPortraits[i].SetHitPoints(playingCharacter.HitPoints);
+        charsPortraits[i].SetMaxSpellPoints(playingCharacter.MaxSpellPoints);
+        charsPortraits[i].SetSpellPoints(playingCharacter.SpellPoints);
+        charsPortraits[i].ConditionStatus = CharConditionStatus.Normal; // TODO: condition status
+    }
 }

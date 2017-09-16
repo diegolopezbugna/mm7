@@ -195,5 +195,13 @@ namespace Business
 
             return Skills[skillCode].Points; // TODO: Skill level modifiers, NPC bonuses, items
         }
+
+        public void Heal(int hitPointsToRecover) {
+            // TODO: conditions preventing heal points recovering
+            if (MaxHitPoints - HitPoints > hitPointsToRecover)
+                HitPoints += hitPointsToRecover;
+            else
+                HitPoints = MaxHitPoints;
+        }
     }
 }

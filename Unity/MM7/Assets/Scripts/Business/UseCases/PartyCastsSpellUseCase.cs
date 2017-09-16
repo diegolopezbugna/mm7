@@ -4,10 +4,10 @@ namespace Business
 {
     public class PartyCastsSpellUseCase
     {
-        private PartyAttacksViewInterface View { get; set; }
+        private PartyCastsSpellViewInterface View { get; set; }
         private Transform PartyTransform { get; set; }
 
-        public PartyCastsSpellUseCase(PartyAttacksViewInterface view, Transform partyTransform)
+        public PartyCastsSpellUseCase(PartyCastsSpellViewInterface view, Transform partyTransform)
         {
             View = view;
             PartyTransform = partyTransform;
@@ -36,6 +36,31 @@ namespace Business
         {
             // TODO: spells with no target
         }
+
+        public void CastSpell(PlayingCharacter speller, SpellInfo spellInfo, PlayingCharacter target)
+        {
+            if (spellInfo.Code == (int)SpellCodes.Body_Heal)
+            {
+                if (!speller.Skills.ContainsKey(SkillCode.BodyMagic))
+                {
+                    SpellFailed(speller, spellInfo);
+                    return;
+                }
+
+                var multiplicator = (int)speller.Skills[SkillCode.BodyMagic].SkillLevel + 2;
+                var hitPointsHealing = 5 + multiplicator * speller.GetTotalSkillBonus(SkillCode.BodyMagic);
+                target.Heal(hitPointsHealing);
+
+                View.ShowPortraitSpellAnimation(target, spellInfo);
+                View.UpdatePlayingCharacter(target);
+            }
+        }
+
+        private void SpellFailed(PlayingCharacter speller, SpellInfo spellInfo)
+        {
+            // TODO: spell failed, show sad portrait
+        }
+
     }
 }
 

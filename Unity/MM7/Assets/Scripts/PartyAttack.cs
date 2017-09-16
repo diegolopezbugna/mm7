@@ -50,7 +50,6 @@ public class PartyAttack : MonoBehaviour, PartyAttacksViewInterface {
             {
                 lastCharAttacker = attackingChar;
                 DoAttack(attackingChar, Party.Instance.CurrentTargetPoint, Party.Instance.CurrentTarget);
-                //DoCastPreparedSpell(attackingChar, SpellInfo.GetByCode(2), Party.Instance.CurrentTargetPoint); -> prepared spell
                 lastAttack[attackingChar] = Time.time;
             }
 
@@ -74,12 +73,6 @@ public class PartyAttack : MonoBehaviour, PartyAttacksViewInterface {
             partyAttacksUseCase.HitNothing(attackingChar);
         }
     }
-
-//    void DoCastPreparedSpell(int charIndex, SpellInfo spellInfo, Vector3? targetPoint) {
-//        var attackingChar = Game.Instance.PartyStats.Chars[charIndex];
-//        var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, Party.Instance.transform);
-//        partyCastsSpellUseCase.ThrowSpell(attackingChar, spellInfo, targetPoint);
-//    }
 
     public void ThrowArrowToTarget(PlayingCharacter attackingChar, Transform targetTransform,  Vector3 targetPoint, bool didHit, int damage) {
         var origin = GetProjectilOrigin(attackingChar);

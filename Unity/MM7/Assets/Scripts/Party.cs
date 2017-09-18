@@ -74,21 +74,16 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface {
         
         if (spellChoosingTarget != null) 
         {
-            if (Input.GetMouseButtonDown(0))
+            var targeRaycastHit = CalculateMouseTarget();
+            if (Input.GetMouseButtonDown(0) && 
+                spellChoosingTarget.Needs3dTarget && 
+                targeRaycastHit != null)
             {
-                if (spellChoosingTarget.Needs3dTarget)
-                {
-                    var targetPoint = CalculateMouseTarget();
-                    var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, transform);
-                    Time.timeScale = 1;
-                    partyCastsSpellUseCase.ThrowSpell(Game.Instance.PartyStats.Chars[3], spellChoosingTarget, targetPoint); // TODO: selected char
-                    spellChoosingTarget = null;
-                    FirstPersonController.Instance.SetCursorLock(true);
-                }
-            }
-            else
-            {
-                CalculateMouseTarget();
+                var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, transform);
+                Time.timeScale = 1;
+                partyCastsSpellUseCase.CastSpell(Game.Instance.PartyStats.Chars[3], spellChoosingTarget, targeRaycastHit.Value.point, targeRaycastHit.Value.transform); // TODO: selected char
+                spellChoosingTarget = null;
+                FirstPersonController.Instance.SetCursorLock(true);
             }
             return;
         }
@@ -184,13 +179,13 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface {
         }
     }
 
-    public Vector3? CalculateMouseTarget() {
+    public RaycastHit? CalculateMouseTarget() {
         RaycastHit hit;
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit, Camera.main.farClipPlane))
         {
             UpdateFocussedText(hit);
-            return hit.point;
+            return hit;
         }
         return null;
     }
@@ -320,9 +315,14 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface {
         MessagesScroller.Instance.AddMessage(message);
     }
 
-    public void ThrowSpell(PlayingCharacter attackingChar, SpellInfo spellInfo, Vector3? targetPoint, System.Action<Transform> onCollision)
+    public void ShowSpellFx(PlayingCharacter attackingChar, SpellInfo spellInfo, Vector3? targetPoint, System.Action<Transform> onCollision)
     {
-        partyAttackBehaviour.ThrowSpell(attackingChar, spellInfo, targetPoint, onCollision);
+        partyAttackBehaviour.ShowSpellFx(attackingChar, spellInfo, targetPoint, onCollision);
+    }
+
+    public void ThrowSpellFx(PlayingCharacter attackingChar, SpellInfo spellInfo, Vector3 targetPoint, System.Action<Transform> onCollision)
+    {
+        partyAttackBehaviour.ThrowSpellFx(attackingChar, spellInfo, targetPoint, onCollision);
     }
 
     public void ShowPortraitSpellAnimation(PlayingCharacter target, SpellInfo spellInfo)

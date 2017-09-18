@@ -8,6 +8,14 @@ namespace Business
     public enum SpellCodes 
     {
         Fire_FireBolt = 2,
+        Fire_Immolation = 8,
+        Fire_Incinerate = 11,
+        Air_LightningBolt = 18,
+        Air_Implosion = 20,
+        Water_PoisonSpray = 24,
+        Water_IceBolt = 26,
+        Water_AcidBurst = 29,
+        Earth_RockBlast = 41,
         Body_Heal = 68,
     }
     
@@ -124,8 +132,23 @@ namespace Business
         public bool Needs3dTarget {
             get {
                 // TODO: each spell? loaded from .txt?
-                if (Code == (int)SpellCodes.Fire_FireBolt)
-                    return true;
+                switch (Code)
+                {
+                    case (int)SpellCodes.Fire_FireBolt:
+                    case (int)SpellCodes.Air_Implosion:
+                        return true;
+                }
+                return false;
+            }
+        }
+
+        public bool HasNoTrail {
+            get {
+                switch (Code)
+                {
+                    case (int)SpellCodes.Air_Implosion:
+                        return true;
+                }
                 return false;
             }
         }

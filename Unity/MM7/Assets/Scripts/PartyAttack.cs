@@ -113,20 +113,40 @@ public class PartyAttack : MonoBehaviour, PartyAttacksViewInterface {
     }
 
     // TODO: make ThrowArrow behave like ThrowSpell
-    public void ThrowSpell(PlayingCharacter attackingChar, SpellInfo spell, Vector3? targetPoint, Action<Transform> onCollision) {
+    public void ShowSpellFx(PlayingCharacter attackingChar, SpellInfo spell, Vector3? targetPoint, Action<Transform> onCollision) {
+        // TODO: onCOllission?? Immolation?
+        if (targetPoint != null)
+            InstantiateSpellFx(spell, targetPoint.Value, transform.rotation);
+        else
+        {
+            InstantiateSpellFx(spell, transform.position + Vector3.down, transform.rotation);
+        }
+    }
+
+    // TODO: make ThrowArrow behave like ThrowSpell
+    public void ThrowSpellFx(PlayingCharacter attackingChar, SpellInfo spell, Vector3 targetPoint, Action<Transform> onCollision) {
         var origin = GetProjectilOrigin(attackingChar);
-        var spellFxPrefab = Resources.Load<GameObject>("SpellsFX/" + spell.SpellFxName);
+        var spellFX = InstantiateSpellFx(spell, origin, transform.rotation);
+
+        if (onCollision != null)
+        {
+            var transformMotion = spellFX.GetComponentInChildren<RFX4_TransformMotion>();
+            if (transformMotion != null)
+                transformMotion.CollisionEnter += (object sender, RFX4_TransformMotion.RFX4_CollisionInfo e) => onCollision(e.Hit.transform);
+        }
+
+        spellFX.transform.LookAt(targetPoint);
+    }
+
+    private GameObject InstantiateSpellFx(SpellInfo spell, Vector3 position, Quaternion rotation) {
+        var spellFxPrefab = Resources.Load<GameObject>("SpellsFX/" + spell.SpellFxName);    // TODO: cache!!!
         if (spellFxPrefab == null)
         {
             Debug.LogError("SpellFx prefab " + spell.SpellFxName + " not found");
-            return;
+            return null;
         }
-        var spellFX = Instantiate(spellFxPrefab, origin, transform.rotation);
-
-        spellFX.GetComponentInChildren<RFX4_TransformMotion>().CollisionEnter += (object sender, RFX4_TransformMotion.RFX4_CollisionInfo e) => onCollision(e.Hit.transform);
-
-        if (targetPoint.HasValue)
-            spellFX.transform.LookAt(targetPoint.Value);
+        var spellFX = Instantiate(spellFxPrefab, position, transform.rotation) as GameObject;
+        return spellFX;
     }
 
     public void HandToHandAttack(PlayingCharacter attackingChar, Transform targetTransform, bool didHit, int damage) {

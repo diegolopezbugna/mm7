@@ -115,11 +115,32 @@ public class PartyAttack : MonoBehaviour, PartyAttacksViewInterface {
     // TODO: make ThrowArrow behave like ThrowSpell
     public void ShowSpellFx(PlayingCharacter attackingChar, SpellInfo spell, Vector3? targetPoint, Action<Transform> onCollision) {
         // TODO: onCOllission?? Immolation?
-        if (targetPoint != null)
-            InstantiateSpellFx(spell, targetPoint.Value, transform.rotation);
+        if (spell.Code == (int)SpellCodes.Air_LightningBolt)
+        {
+            var spellFX = InstantiateSpellFx(spell, GetProjectilOrigin(attackingChar), transform.rotation);
+            spellFX.transform.LookAt(targetPoint.Value);
+        }
         else
         {
-            InstantiateSpellFx(spell, transform.position + Vector3.down, transform.rotation);
+            if (targetPoint != null)
+            {
+                if (spell.Code == (int)SpellCodes.Fire_Incinerate)  // TODO: make it better!!!
+                {
+                    // spell needs to start on floor
+                    RaycastHit hitInfo;
+                    LayerMask floorLayer = 1 << 9;
+                    if (Physics.Raycast(targetPoint.Value, Vector3.down, out hitInfo, 500f, floorLayer))
+                        InstantiateSpellFx(spell, hitInfo.point, transform.rotation);
+                    else
+                        InstantiateSpellFx(spell, targetPoint.Value, transform.rotation);
+                }
+                else
+                {
+                    InstantiateSpellFx(spell, targetPoint.Value, transform.rotation);
+                }
+            }
+            else
+                InstantiateSpellFx(spell, transform.position + Vector3.down, transform.rotation);
         }
     }
 

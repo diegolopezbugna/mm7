@@ -135,6 +135,8 @@ namespace Business
                 switch (Code)
                 {
                     case (int)SpellCodes.Fire_FireBolt:
+                    case (int)SpellCodes.Fire_Incinerate:
+                    case (int)SpellCodes.Air_LightningBolt:
                     case (int)SpellCodes.Air_Implosion:
                         return true;
                 }
@@ -146,6 +148,8 @@ namespace Business
             get {
                 switch (Code)
                 {
+                    case (int)SpellCodes.Fire_Incinerate:
+                    case (int)SpellCodes.Air_LightningBolt:
                     case (int)SpellCodes.Air_Implosion:
                         return true;
                 }

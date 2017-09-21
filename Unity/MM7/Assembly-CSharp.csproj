@@ -244,6 +244,7 @@
      <Compile Include="Assets\Scripts\Business\Attribute.cs" />
      <Compile Include="Assets\Scripts\Business\BonusCost.cs" />
      <Compile Include="Assets\Scripts\Business\Building.cs" />
+     <Compile Include="Assets\Scripts\Business\Enemy.cs" />
      <Compile Include="Assets\Scripts\Business\EquippedItems.cs" />
      <Compile Include="Assets\Scripts\Business\Game.cs" />
      <Compile Include="Assets\Scripts\Business\Gender.cs" />
@@ -255,8 +256,11 @@
      <Compile Include="Assets\Scripts\Business\PlayingCharacter.cs" />
      <Compile Include="Assets\Scripts\Business\Presenters\BuySellItemViewInterface.cs" />
      <Compile Include="Assets\Scripts\Business\Presenters\CreatePartyViewInterface.cs" />
+     <Compile Include="Assets\Scripts\Business\Presenters\EnemyAttacksViewInterface.cs" />
      <Compile Include="Assets\Scripts\Business\Presenters\PartyAttacksViewInterface.cs" />
      <Compile Include="Assets\Scripts\Business\Presenters\PartyCastsSpellViewInterface.cs" />
+     <Compile Include="Assets\Scripts\Business\Presenters\PlayingCharacterViewInterface.cs" />
+     <Compile Include="Assets\Scripts\Business\Presenters\RestUseCaseViewInterface.cs" />
      <Compile Include="Assets\Scripts\Business\Profession.cs" />
      <Compile Include="Assets\Scripts\Business\Race.cs" />
      <Compile Include="Assets\Scripts\Business\Shop.cs" />
@@ -268,8 +272,11 @@
      <Compile Include="Assets\Scripts\Business\UseCases\EnemyAttacksUseCase.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\PartyAttacksUseCase.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\PartyCastsSpellUseCase.cs" />
+     <Compile Include="Assets\Scripts\Business\UseCases\PartyRestsUseCase.cs" />
+     <Compile Include="Assets\Scripts\Business\UseCases\PlayingCharacterHealsUseCase.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\SellItemUseCase.cs" />
      <Compile Include="Assets\Scripts\CharPortrait.cs" />
+     <Compile Include="Assets\Scripts\ConditionStatus.cs" />
      <Compile Include="Assets\Scripts\CreateParty\CreateParty.cs" />
      <Compile Include="Assets\Scripts\CreateParty\CreatePartyChar.cs" />
      <Compile Include="Assets\Scripts\CreateParty\CreatePartyCharAttribute.cs" />
@@ -295,7 +302,7 @@
      <Compile Include="Assets\Scripts\NpcWeapon.cs" />
      <Compile Include="Assets\Scripts\Party.cs" />
      <Compile Include="Assets\Scripts\PartyAttack.cs" />
-     <Compile Include="Assets\Scripts\PartyHealth.cs" />
+     <Compile Include="Assets\Scripts\PartyBlood.cs" />
      <Compile Include="Assets\Scripts\RandomWanderMove.cs" />
      <Compile Include="Assets\Scripts\SwitchingPositionsWanderEnemyMove.cs" />
      <Compile Include="Assets\Scripts\UI\BaseUI.cs" />
@@ -307,6 +314,7 @@
      <Compile Include="Assets\Scripts\UI\ItemInfoUI.cs" />
      <Compile Include="Assets\Scripts\UI\NpcDialog.cs" />
      <Compile Include="Assets\Scripts\UI\ProfessionData.cs" />
+     <Compile Include="Assets\Scripts\UI\RestUI.cs" />
      <Compile Include="Assets\Scripts\UI\SkillData.cs" />
      <Compile Include="Assets\Scripts\UI\SkillItem.cs" />
      <Compile Include="Assets\Scripts\UI\SkillsUI.cs" />

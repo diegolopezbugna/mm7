@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Business;
 
 public class EnemyAttack : MonoBehaviour {
 
@@ -37,6 +38,24 @@ public class EnemyAttack : MonoBehaviour {
     [SerializeField]
     private int armorClass = 0;
     public int ArmorClass { get { return armorClass; } }
+
+    private Enemy enemy;
+    public Enemy Enemy {
+        get {
+            if (enemy == null)
+            {
+                enemy = new Enemy()
+                    { 
+                        Armor = ArmorClass, 
+                        DamageMin = this.DamageMin, 
+                        DamageMax = this.DamageMax,
+                        MonsterLevel = this.MonsterLevel,
+                        Name = this.tag.TagToDescription(),
+                    };
+            }
+            return enemy;
+        }
+    }
 
     private Animator animator;
     private RandomWanderMove wanderMoveBehaviour;
@@ -93,11 +112,14 @@ public class EnemyAttack : MonoBehaviour {
         var charAttacked = GetCharAttacked();
         if (charAttacked >= 0)
         {
-            Party.Instance.EnemyAttacks(this, charAttacked);
+            var enemyAttacksUseCase = new EnemyAttacksUseCase(Party.Instance, Party.Instance);
+            enemyAttacksUseCase.EnemyAttacks(Enemy, Game.Instance.PartyStats.Chars[charAttacked]);
+
             if (isRanged)
             {
                 // TODO: proyectiles?
             }
+
         }
         else
         {

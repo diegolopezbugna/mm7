@@ -12,15 +12,10 @@ public enum CharEnemyEngagingStatus {
     Red
 }
 
-public enum CharConditionStatus {
-    Normal,
-    Unconscious,
-    Dead,
-}
-
 public class CharPortraitImages {
     public Texture Normal;
     public List<Texture> Damage;
+    public Texture Sleeping;
     public Texture Unconscious;
     public Texture Dead;
 }
@@ -50,18 +45,26 @@ public class CharPortrait : MonoBehaviour {
 
     private CharPortraitImages portraitImages;
 
-    private CharConditionStatus _conditionStatus;
-    public CharConditionStatus ConditionStatus
+    private ConditionStatus _conditionStatus;
+    public ConditionStatus ConditionStatus
     {
-        get { return _conditionStatus; }
-        set {
+        get 
+        { 
+            return _conditionStatus; 
+        }
+        set 
+        {
             _conditionStatus = value;
-            if (value == CharConditionStatus.Unconscious)
+            if (value == ConditionStatus.Unconscious)
             {
                 charPortraitImage.texture = portraitImages.Unconscious;
-                SetStatus(CharEnemyEngagingStatus.None);
+                SetStatus(CharEnemyEngagingStatus.None);    // TODO: this should be inside the use case
             }
-            else if (value == CharConditionStatus.Dead)
+            else if (value == ConditionStatus.Sleeping)
+            {
+                charPortraitImage.texture = portraitImages.Sleeping;
+            }
+            else if (value == ConditionStatus.Dead)
             {
                 charPortraitImage.texture = portraitImages.Dead;
                 SetStatus(CharEnemyEngagingStatus.None);
@@ -94,6 +97,7 @@ public class CharPortrait : MonoBehaviour {
                 GetPortraitImagePath(portraitCode, "37"),
                 GetPortraitImagePath(portraitCode, "38"),
                 GetPortraitImagePath(portraitCode, "39")},
+            GetPortraitImagePath(portraitCode, "04"),
             GetPortraitImagePath(portraitCode, "11"),
             "Portraits/PCover03a");
     }
@@ -102,15 +106,16 @@ public class CharPortrait : MonoBehaviour {
         return string.Format("Portraits/PC{0}{1}", portraitCode, portraitSubcode);
     }
 
-    public void SetPortraitImages(string normal, string[] damage, string unconscious, string dead)
+    public void SetPortraitImages(string normal, string[] damage, string sleeping, string unconscious, string dead)
     {
         portraitImages = new CharPortraitImages();
-        portraitImages.Normal = Resources.Load(normal) as Texture;
+        portraitImages.Normal = Resources.Load<Texture>(normal);
         portraitImages.Damage = new List<Texture>(damage.Length - 1);
         foreach (var d in damage)
-            portraitImages.Damage.Add(Resources.Load(d) as Texture);
-        portraitImages.Unconscious = Resources.Load(unconscious) as Texture;
-        portraitImages.Dead = Resources.Load(dead) as Texture;
+            portraitImages.Damage.Add(Resources.Load<Texture>(d));
+        portraitImages.Sleeping = Resources.Load<Texture>(sleeping);
+        portraitImages.Unconscious = Resources.Load<Texture>(unconscious);
+        portraitImages.Dead = Resources.Load<Texture>(dead);
     }
 
     public void SetMaxHitPoints(float maxHitPoints)
@@ -187,8 +192,8 @@ public class CharPortrait : MonoBehaviour {
 
     public bool IsCharActive() 
     {
-        return ConditionStatus != CharConditionStatus.Unconscious && 
-            ConditionStatus != CharConditionStatus.Dead;
+        return ConditionStatus != ConditionStatus.Unconscious && 
+            ConditionStatus != ConditionStatus.Dead;
     }
 
     public void ShowSpellAnimation(SpellInfo spell)

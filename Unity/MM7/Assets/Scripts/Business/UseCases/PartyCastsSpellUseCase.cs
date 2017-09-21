@@ -5,12 +5,14 @@ namespace Business
 {
     public class PartyCastsSpellUseCase
     {
-        private PartyCastsSpellViewInterface View { get; set; }
-        private Transform PartyTransform { get; set; }
+        private PartyCastsSpellViewInterface View;
+        private PlayingCharacterViewInterface PlayingCharacterView;
+        private Transform PartyTransform;
 
-        public PartyCastsSpellUseCase(PartyCastsSpellViewInterface view, Transform partyTransform)
+        public PartyCastsSpellUseCase(PartyCastsSpellViewInterface view, PlayingCharacterViewInterface playingCharacterView, Transform partyTransform)
         {
             View = view;
+            PlayingCharacterView = playingCharacterView;
             PartyTransform = partyTransform;
         }
 
@@ -26,7 +28,7 @@ namespace Business
                 foreach (var target in Game.Instance.PartyStats.Chars)
                 {
                     View.ShowPortraitSpellAnimation(target, spellInfo);
-                    View.UpdatePlayingCharacter(target);
+                    PlayingCharacterView.UpdatePlayingCharacter(target);
                 }
             }
         }
@@ -43,10 +45,10 @@ namespace Business
 
                 var multiplicator = (int)speller.Skills[SkillCode.BodyMagic].SkillLevel + 2;
                 var hitPointsHealing = 5 + multiplicator * speller.GetTotalSkillBonus(SkillCode.BodyMagic);
-                target.Heal(hitPointsHealing);
-
                 View.ShowPortraitSpellAnimation(target, spellInfo);
-                View.UpdatePlayingCharacter(target);
+
+                var playingCharacterHealsUseCase = new PlayingCharacterHealsUseCase(PlayingCharacterView);
+                playingCharacterHealsUseCase.Heal(target, hitPointsHealing);
             }
         }
 

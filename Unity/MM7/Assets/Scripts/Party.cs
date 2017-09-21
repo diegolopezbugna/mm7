@@ -6,7 +6,7 @@ using System.Linq;
 using Business;
 using UnityStandardAssets.Characters.FirstPerson;
 
-public class Party : Singleton<Party>, PartyCastsSpellViewInterface {
+public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttacksViewInterface, PlayingCharacterViewInterface {
 
     [SerializeField]
     private Text focussedText;
@@ -50,7 +50,7 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface {
     private bool isEnemyInHandToHandCombatThisFrame = false;
     private SpellInfo spellChoosingTarget = null;
 
-    private PartyHealth partyHealthBehaviour;
+    private PartyBlood partyBloodBehaviour;
     private PartyAttack partyAttackBehaviour;
 
 	// Use this for initialization
@@ -63,7 +63,7 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface {
             charsPortraits[i].SetPortraitImageCode(chars[i].PortraitCode);
             UpdatePlayingCharacter(chars[i]);
         }
-        partyHealthBehaviour = this.GetComponent<PartyHealth>();
+        partyBloodBehaviour = this.GetComponent<PartyBlood>();
         partyAttackBehaviour = this.GetComponent<PartyAttack>();
 	}
 	
@@ -79,7 +79,7 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface {
                 spellChoosingTarget.Needs3dTarget && 
                 targeRaycastHit != null)
             {
-                var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, transform);
+                var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, this, transform);
                 Time.timeScale = 1;
                 partyCastsSpellUseCase.CastSpell(Game.Instance.PartyStats.Chars[3], spellChoosingTarget, targeRaycastHit.Value.point, targeRaycastHit.Value.transform); // TODO: selected char
                 spellChoosingTarget = null;
@@ -92,13 +92,9 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface {
         {
             CharDetailsUI.Instance.ShowInventory();
         }
-        else if (Input.GetKeyDown("s"))
+        else if (Input.GetKeyDown("r"))
         {
-            CharDetailsUI.Instance.ShowStats();
-        }
-        else if (Input.GetKeyDown("k"))
-        {
-            CharDetailsUI.Instance.ShowSkills();
+            RestUI.Instance.Show();
         }
         else if (Input.GetKeyDown("b"))
         {
@@ -246,34 +242,6 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface {
         isEnemyEngagingPartyThisFrame = false;
     }
 
-    public void EnemyAttacks(EnemyAttack enemy, int charIndex) {
-        // TODO: move all this logic to business.EnemyAttacksUseCase!!!
-        var ac = Game.Instance.PartyStats.Chars[charIndex].ArmorClass;
-        var chanceToHit = (5f + enemy.MonsterLevel * 2f) / (10f + enemy.MonsterLevel * 2f + ac);
-
-        var message = "";
-        if (Random.Range(0f, 1f) > chanceToHit)
-        {
-            var damage = Random.Range(enemy.DamageMin, enemy.DamageMax + 1);  // TODO: review damage formula
-            message = string.Format("{0} hits {1} for {2} points", enemy.tag.TagToDescription(), Game.Instance.PartyStats.Chars[charIndex].Name, damage);
-            Game.Instance.PartyStats.Chars[charIndex].HitPoints -= damage; // this code smells... this is a UseCase!
-            partyHealthBehaviour.TakeHit(charIndex);
-            charsPortraits[charIndex].SetHitPoints(Game.Instance.PartyStats.Chars[charIndex].HitPoints);
-            charsPortraits[charIndex].ShowHitPortrait();
-            if (Game.Instance.PartyStats.Chars[charIndex].HitPoints <= 0)
-            {
-                charsPortraits[charIndex].ConditionStatus = CharConditionStatus.Unconscious;
-                message += " who gets unconscious";
-            }
-            // TODO: dead
-        }
-        else
-        {
-            message = string.Format("{0} misses {1}", enemy.tag.TagToDescription(), Game.Instance.PartyStats.Chars[charIndex].Name);
-        }
-        MessagesScroller.Instance.AddMessage(message);
-    }
-
     public bool IsCharActive(int charIndex) {
         return charsPortraits[charIndex].IsCharActive();
     }
@@ -293,7 +261,7 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface {
         }
         else
         {
-            var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, transform);
+            var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, this, transform);
             partyCastsSpellUseCase.CastSpell(Game.Instance.PartyStats.Chars[2], spellInfo); // TODO: selected char
         }
     }
@@ -302,7 +270,7 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface {
     {
         if (spellChoosingTarget != null && spellChoosingTarget.NeedsPartyTarget)
         {
-            var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, transform);
+            var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, this, transform);
             Time.timeScale = 1;
             partyCastsSpellUseCase.CastSpell(Game.Instance.PartyStats.Chars[2], spellChoosingTarget, playingCharClicked); // TODO: selected char
             spellChoosingTarget = null;
@@ -338,6 +306,12 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface {
         charsPortraits[i].SetHitPoints(playingCharacter.HitPoints);
         charsPortraits[i].SetMaxSpellPoints(playingCharacter.MaxSpellPoints);
         charsPortraits[i].SetSpellPoints(playingCharacter.SpellPoints);
-        charsPortraits[i].ConditionStatus = CharConditionStatus.Normal; // TODO: condition status
+        charsPortraits[i].ConditionStatus = playingCharacter.ConditionStatus;
+    }
+
+    public void TakeHit(PlayingCharacter target)
+    {
+        partyBloodBehaviour.TakeHit();
+        charsPortraits[Game.Instance.PartyStats.Chars.IndexOf(target)].ShowHitPortrait();
     }
 }

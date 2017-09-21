@@ -171,6 +171,8 @@ namespace Business
             }
         }
 
+        public ConditionStatus ConditionStatus { get; set; }
+
         public void EquipItem(Item item) {
             Item itemToBeLost = null;
             EquippedItems.TryEquipItem(item, out itemToBeLost);
@@ -194,14 +196,6 @@ namespace Business
                 return 0; // TODO: NPCs, items
 
             return Skills[skillCode].Points; // TODO: Skill level modifiers, NPC bonuses, items
-        }
-
-        public void Heal(int hitPointsToRecover) {
-            // TODO: conditions preventing heal points recovering
-            if (MaxHitPoints - HitPoints > hitPointsToRecover)
-                HitPoints += hitPointsToRecover;
-            else
-                HitPoints = MaxHitPoints;
         }
     }
 }

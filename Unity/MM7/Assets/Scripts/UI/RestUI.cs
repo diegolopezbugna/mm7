@@ -30,7 +30,7 @@ public class RestUI : BaseUI<RestUI>, RestUseCaseViewInterface {
     private Texture[] _hourglassTextures;
     private Texture[] HourglassTextures {
         get {
-            if (_hourglassTextures == null)
+            if (_hourglassTextures == null || _hourglassTextures.Length == 0)
                 _hourglassTextures = Resources.LoadAll<Texture>("RestHourGlass");
             return _hourglassTextures;
         }

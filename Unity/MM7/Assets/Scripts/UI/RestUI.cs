@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Business;
 
-public class RestUI : BaseUI<RestUI>, RestUseCaseViewInterface {
+public class RestUI : BaseUI<RestUI>, PartyRestsViewInterface {
 
     [SerializeField]
     private Text timeValue;
@@ -36,9 +36,9 @@ public class RestUI : BaseUI<RestUI>, RestUseCaseViewInterface {
         }
     }
 
-    public override void Start()
+    public override void Awake()
     {
-        base.Start();
+        base.Awake();
         _defaultEnviroDayLengthInMinutes = EnviroSky.instance.GameTime.DayLengthInMinutes;
         _defaultEnviroNightLengthInMinutes = EnviroSky.instance.GameTime.NightLengthInMinutes;
     }
@@ -105,7 +105,7 @@ public class RestUI : BaseUI<RestUI>, RestUseCaseViewInterface {
     public void OnRestHealClick()
     {
         var restUseCase = new PartyRestsUseCase(this, Party.Instance);
-        restUseCase.RestAndHeal();
+        restUseCase.RestAndHeal(false);
     }
 
     public void OnWaitUntilDawnClick()

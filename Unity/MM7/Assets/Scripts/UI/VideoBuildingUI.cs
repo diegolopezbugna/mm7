@@ -134,7 +134,20 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
 
         if (npcTopic.ShopActionType != ShopActionType.None && npc.Shop != null)
         {
-            if (npc.Shop.ShopType == ShopType.WeaponSmith)
+            if (npc.Shop.ShopType == ShopType.Inn)
+            {
+                if (npcTopic.ShopActionType == ShopActionType.RentRoom)
+                {
+                    var rentRoomUseCase = new RentRoomUseCase(this, RestUI.Instance, Party.Instance);
+                    rentRoomUseCase.RentRoom(6, Game.Instance.PartyStats.Chars[0]); // TODO: selected char & shop multiplier
+                }
+                else if (npcTopic.ShopActionType == ShopActionType.BuyFood)
+                {
+                    var rentRoomUseCase = new RentRoomUseCase(this, RestUI.Instance, Party.Instance);
+                    rentRoomUseCase.BuyFood(6, Game.Instance.PartyStats.Chars[0]); // TODO: selected char & shop multiplier
+                }
+            }
+            else if (npc.Shop.ShopType == ShopType.WeaponSmith)
                 ShowShop(npcTopic.ShopActionType, npc.Shop, textureWeaponShop, (List<Item> items) => {
                     for (int i = 0; i < items.Count; i++)
                         DrawItem(items[i], new Vector2(0, 0.5f), new Vector2(30f + i * ((textureWeaponShop.width - 30f) / (items.Count)), 0f));
@@ -315,7 +328,7 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
         dialogText.text = priceText;
     }
 
-    public void RefreshGold()
+    public void RefreshGoldAndFood()
     {
         // TODO: refresh gold
     }

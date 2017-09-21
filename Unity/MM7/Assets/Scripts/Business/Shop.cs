@@ -6,6 +6,7 @@ namespace Business
     public enum ShopType
     {
         None,
+        Inn,
         Armory,
         WeaponSmith,
         MagicShop,
@@ -32,6 +33,8 @@ namespace Business
     public enum ShopActionType
     {
         None,
+        RentRoom,
+        BuyFood,
         BuyStandard,
         BuySpecial,
         BuySpells,
@@ -58,6 +61,11 @@ namespace Business
         public int TreasureLevelSpecial { get; set; }
         public GuildLevel GuildLevel { get; set; }
 
+        public Shop(ShopType shopType)
+        {
+            ShopType = shopType;
+        }
+
         public Shop(ShopType shopType, int treasureLevelStandard, int treasureLevelSpecial)
         {
             ShopType = shopType;
@@ -69,6 +77,17 @@ namespace Business
         {
             ShopType = shopType;
             GuildLevel = guildLevel;
+        }
+
+        public static List<NpcTopic> GetInnShopTopics(int shopMultiplier)
+        {
+            return new List<NpcTopic>()
+            { 
+                
+                new NpcTopic(string.Format("Rent room for {0} gold", shopMultiplier / 2), ShopActionType.RentRoom),  // TODO: depends on selected char merchant skill!!!
+                new NpcTopic(string.Format("Fill packs to {0} days for {1} gold", shopMultiplier, shopMultiplier / 3), ShopActionType.BuyFood),  // TODO: depends on selected char merchant skill!!!
+                new NpcTopic("Learn skills", ShopActionType.LearnSkills),
+            };
         }
 
         public static List<NpcTopic> GetCommonShopTopics()

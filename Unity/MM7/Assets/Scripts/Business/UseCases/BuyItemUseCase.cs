@@ -49,7 +49,7 @@ namespace Business
             }
 
             Game.Instance.PartyStats.Gold -= price;
-            view.RefreshGold();
+            view.RefreshGoldAndFood();
             view.NotifySuccessfulOperation(item, buyer);
         }
 

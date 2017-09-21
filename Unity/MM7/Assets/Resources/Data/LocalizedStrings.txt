@@ -5,7 +5,7 @@ MerchantBuyText1	Hmph. Looks like junk to me. <yawn> I suppose I could give you 
 MerchantBuyText2	Usually I try to buy something like this {0} for {1} gold.  I'll give you {2} for it.
 MerchantBuyText3	Normally, I do my best to buy a {0} for {1} gold. But I can see you know it's worth {2}. Agreed?
 ImSorryButYouDontHaveEnoughMoney	I'm sorry, {0}, but you don't have enough money.
-YourPacksAreFull	You packs are full.
+YourPacksAreFull	Your packs are full.
 SkillsFor	Skills for: {0}
 SkillPoints	Skill points
 DontCauseAnyTrouble	Don't cause any trouble

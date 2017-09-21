@@ -129,12 +129,8 @@ namespace Business
                         Name = "Aaron the Innkeep",
                         PictureCode = 706, 
                         Greetings = new List<string>() { "" },
-                        Topics = new List<NpcTopic>()
-                            { 
-                                new NpcTopic("Rent room for 3 gold", ""),
-                                new NpcTopic("Fill packs to 6 days for 2 gold", ""),
-                                new NpcTopic("Learn skills", ""),
-                            }
+                        Shop = new Shop(ShopType.Inn),
+                        Topics = Shop.GetInnShopTopics(6),
                     };
                 npcs.Add(npc);
             }

@@ -2,9 +2,10 @@
 
 namespace Business
 {
-    public interface RestUseCaseViewInterface
+    public interface PartyRestsViewInterface
     {
         void WaitTime(float timeInHours, Action onFinished);
+        void Show();
         void Hide();
     }
 }

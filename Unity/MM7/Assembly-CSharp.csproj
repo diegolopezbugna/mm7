@@ -274,6 +274,7 @@
      <Compile Include="Assets\Scripts\Business\UseCases\PartyCastsSpellUseCase.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\PartyRestsUseCase.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\PlayingCharacterHealsUseCase.cs" />
+     <Compile Include="Assets\Scripts\Business\UseCases\RentRoomUseCase.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\SellItemUseCase.cs" />
      <Compile Include="Assets\Scripts\CharPortrait.cs" />
      <Compile Include="Assets\Scripts\ConditionStatus.cs" />

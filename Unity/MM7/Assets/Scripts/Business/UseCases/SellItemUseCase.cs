@@ -38,7 +38,7 @@ namespace Business
 
             seller.Inventory.RemoveItem(item);
             Game.Instance.PartyStats.Gold += price;
-            view.RefreshGold();
+            view.RefreshGoldAndFood();
             view.NotifySuccessfulOperation(item, seller);
         }
 

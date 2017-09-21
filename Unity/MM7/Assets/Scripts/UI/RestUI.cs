@@ -19,8 +19,22 @@ public class RestUI : BaseUI<RestUI>, RestUseCaseViewInterface {
     [SerializeField]
     private Text yearValue;
 
+    [SerializeField]
+    private RawImage hourglassImage;
+
     private float _defaultEnviroDayLengthInMinutes = 30f;
     private float _defaultEnviroNightLengthInMinutes = 30f;
+
+    private int _defaultHourglassSprite = 4;
+    private int _currentHourglassSprite;
+    private Texture[] _hourglassTextures;
+    private Texture[] HourglassTextures {
+        get {
+            if (_hourglassTextures == null)
+                _hourglassTextures = Resources.LoadAll<Texture>("RestHourGlass");
+            return _hourglassTextures;
+        }
+    }
 
     public override void Start()
     {
@@ -33,6 +47,8 @@ public class RestUI : BaseUI<RestUI>, RestUseCaseViewInterface {
     {
         base.Show(cursorLock);
         Time.timeScale = 1;
+        _currentHourglassSprite = _defaultHourglassSprite;
+        hourglassImage.texture = HourglassTextures[_currentHourglassSprite];
     }
 
     public override void Update()
@@ -51,16 +67,30 @@ public class RestUI : BaseUI<RestUI>, RestUseCaseViewInterface {
         EnviroSky.instance.GameTime.NightLengthInMinutes = 0.1f;
 
         while (EnviroSky.instance.internalHour > enviroHour)
+        {
+            NextHourGlass();
             yield return null;
+        }
         
         while (EnviroSky.instance.internalHour < enviroHour)
+        {
+            NextHourGlass();
             yield return null;
+        }
         
         EnviroSky.instance.GameTime.DayLengthInMinutes = _defaultEnviroDayLengthInMinutes;
         EnviroSky.instance.GameTime.NightLengthInMinutes = _defaultEnviroDayLengthInMinutes;
 
         if (onFinished != null)
             onFinished();
+    }
+
+    private void NextHourGlass()
+    {
+        _currentHourglassSprite++;
+        if (_currentHourglassSprite >= _hourglassTextures.Length)
+            _currentHourglassSprite = 0;
+        hourglassImage.texture = HourglassTextures[_currentHourglassSprite];
     }
 
     private void Wait(float enviroTimeToWait, Action onFinished) 
@@ -80,7 +110,7 @@ public class RestUI : BaseUI<RestUI>, RestUseCaseViewInterface {
 
     public void OnWaitUntilDawnClick()
     {
-        StartCoroutine(WaitUntil(8f, null));  // TODO: different sunrises depending on season and location
+        StartCoroutine(WaitUntil(8f, () => Hide()));  // TODO: different sunrises depending on season and location
     }
 
     public void OnWait1HourClick()

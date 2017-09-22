@@ -19,6 +19,7 @@ public class NpcDialog : BaseUI<NpcDialog> {
 
     public void Show(Npc npc) {
         base.Show();
+        Time.timeScale = 1;
         npcText.text = npc.NextGreeting();
         ShowTopics(npc);
         RepositionNpcText();
@@ -26,6 +27,7 @@ public class NpcDialog : BaseUI<NpcDialog> {
 
     public void ShowNews(string news) {
         base.Show(true);
+        Time.timeScale = 1;
         npcText.text = news;
         topicsContainer.SetActive(false);
         RepositionNpcText();

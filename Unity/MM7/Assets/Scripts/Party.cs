@@ -122,7 +122,17 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
                 Debug.DrawRay(ray.origin, ray.direction, Color.blue, 2, true);
                 //Debug.Log("HIT: " + hit.transform.gameObject.tag);
 
-                focussedText.text = hit.transform.gameObject.tag.TagToDescription() + " - " + hit.distance;
+                focussedText.text = hit.transform.gameObject.tag.TagToDescription() + string.Format(" - {0:F1}", hit.distance);
+
+                if (Input.GetMouseButton(1))
+                {
+                    var enemyAttack = hit.transform.GetComponent<EnemyAttack>();
+                    var enemyHealth = hit.transform.GetComponent<EnemyHealth>();
+                    if (enemyAttack != null && enemyHealth != null)
+                    {
+                        IdentifyMonsterUI.Instance.Show(enemyAttack.Enemy, enemyHealth);
+                    }
+                }
             }
             else if (hit.transform.tag.StartsWith("VideoDoor") && hit.distance < 5)
             {

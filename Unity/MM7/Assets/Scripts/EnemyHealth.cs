@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour {
 
     [SerializeField]
-    private int hitPoints;
+    public int hitPoints;
 
     [SerializeField]
     private int experience;
@@ -21,12 +21,15 @@ public class EnemyHealth : MonoBehaviour {
     private EnemyAttack enemyAttackBehaviour;
     private RandomWanderMove enemyRandomWanderMoveBehaviour;
 
+    public int MaxHitPoints { get; private set; }  // TODO: move to Business.Enemy?
+
 	// Use this for initialization
 	void Start () {
         animator = GetComponent<Animator>();
         blood = GetComponentInChildren<ParticleSystem>();
         enemyAttackBehaviour = GetComponent<EnemyAttack>();
         enemyRandomWanderMoveBehaviour = GetComponent<RandomWanderMove>();
+        MaxHitPoints = hitPoints;
 	}
 	
 	// Update is called once per frame

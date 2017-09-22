@@ -98,12 +98,8 @@ namespace Business
                         Name = "Lauren the Healer",
                         PictureCode = 731, 
                         Greetings = new List<string>() { "" },
-                        Topics = new List<NpcTopic>()
-                            { 
-                                new NpcTopic("Heal 10 gold", ""),
-                                new NpcTopic("Donate", ""),
-                                new NpcTopic("Learn skills", ""),
-                            }
+                        Shop = new Shop(ShopType.Healer, 10),
+                        Topics = Shop.GetHealerShopTopics(10),
                     };
                 npcs.Add(npc);
             }
@@ -129,7 +125,7 @@ namespace Business
                         Name = "Aaron the Innkeep",
                         PictureCode = 706, 
                         Greetings = new List<string>() { "" },
-                        Shop = new Shop(ShopType.Inn),
+                        Shop = new Shop(ShopType.Inn, 6),
                         Topics = Shop.GetInnShopTopics(6),
                     };
                 npcs.Add(npc);

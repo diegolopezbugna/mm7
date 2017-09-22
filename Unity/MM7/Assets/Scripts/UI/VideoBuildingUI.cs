@@ -139,12 +139,28 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
                 if (npcTopic.ShopActionType == ShopActionType.RentRoom)
                 {
                     var rentRoomUseCase = new RentRoomUseCase(this, RestUI.Instance, Party.Instance);
-                    rentRoomUseCase.RentRoom(6, Game.Instance.PartyStats.Chars[0]); // TODO: selected char & shop multiplier
+                    rentRoomUseCase.RentRoom(npc.Shop.ShopMultiplier, Game.Instance.PartyStats.Chars[0]); // TODO: selected char
                 }
                 else if (npcTopic.ShopActionType == ShopActionType.BuyFood)
                 {
                     var rentRoomUseCase = new RentRoomUseCase(this, RestUI.Instance, Party.Instance);
-                    rentRoomUseCase.BuyFood(6, Game.Instance.PartyStats.Chars[0]); // TODO: selected char & shop multiplier
+                    rentRoomUseCase.BuyFood(npc.Shop.ShopMultiplier, Game.Instance.PartyStats.Chars[0]); // TODO: selected char
+                }
+            }
+            else if (npc.Shop.ShopType == ShopType.Healer)
+            {
+                if (npcTopic.ShopActionType == ShopActionType.Heal)
+                {
+                    var playingCharacterHealsUseCase = new PlayingCharacterHealsUseCase(Party.Instance, this);
+                    playingCharacterHealsUseCase.HealAtHealer(npc.Shop.ShopMultiplier, Game.Instance.PartyStats.Chars[0]); // TODO: selected char
+                }
+                if (npcTopic.ShopActionType == ShopActionType.Donate)
+                {
+                    // TODO: move to use case, do something
+                    Game.Instance.PartyStats.Gold -= npc.Shop.ShopMultiplier;
+                    if (Game.Instance.PartyStats.Gold < 0)
+                        Game.Instance.PartyStats.Gold = 0;
+                    RefreshGoldAndFood();
                 }
             }
             else if (npc.Shop.ShopType == ShopType.WeaponSmith)
@@ -317,9 +333,8 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
     }
 
     #region BuySellItemViewInterface implementation
-    public void ShowError(PlayingCharacter buyer, string errorText)
+    public void ShowError(string errorText)
     {
-        // TODO: portrait sad face
         dialogText.text = errorText;
     }
 

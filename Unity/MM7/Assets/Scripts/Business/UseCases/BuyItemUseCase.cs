@@ -38,13 +38,13 @@ namespace Business
 
             if (Game.Instance.PartyStats.Gold < price)
             {
-                view.ShowError(buyer, Localization.Instance.Get("ImSorryButYouDontHaveEnoughMoney", buyer.Name));
+                view.ShowError(Localization.Instance.Get("ImSorryButYouDontHaveEnoughMoney", buyer.Name));
                 return;
             }
 
             if (!buyer.Inventory.TryInsertItem(item))
             {
-                view.ShowError(buyer, Localization.Instance.Get("YourPacksAreFull"));
+                view.ShowError(Localization.Instance.Get("YourPacksAreFull"));
                 return;
             }
 

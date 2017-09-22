@@ -30,7 +30,7 @@ namespace Business
             }
             else
             {
-                View.ShowError(buyer, Localization.Instance.Get("ImSorryButYouDontHaveEnoughMoney", buyer.Name));
+                View.ShowError(Localization.Instance.Get("ImSorryButYouDontHaveEnoughMoney", buyer.Name));
             }
         }
 
@@ -48,12 +48,12 @@ namespace Business
                 }
                 else
                 {
-                    View.ShowError(buyer, Localization.Instance.Get("YourPacksAreFull"));
+                    View.ShowError(Localization.Instance.Get("YourPacksAreFull"));
                 }
             }
             else
             {
-                View.ShowError(buyer, Localization.Instance.Get("ImSorryButYouDontHaveEnoughMoney", buyer.Name));
+                View.ShowError(Localization.Instance.Get("ImSorryButYouDontHaveEnoughMoney", buyer.Name));
             }
         }
     }

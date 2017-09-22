@@ -46,12 +46,18 @@ namespace Business
             }
         }
 
-        public void HealAtHealer(int shopMultiplier, PlayingCharacter playingCharacter)
+        public int GetHealingAtHealerCost(int shopMultiplier, PlayingCharacter playingCharacter)
         {
             var cost = shopMultiplier;
             if (playingCharacter.ConditionStatus == ConditionStatus.Dead)
                 cost = 20 * shopMultiplier; // TODO: update formula (time multiplier?)
             // TODO: more conditions
+            return cost;
+        }
+
+        public void HealAtHealer(int shopMultiplier, PlayingCharacter playingCharacter)
+        {
+            var cost = GetHealingAtHealerCost(shopMultiplier, playingCharacter);
 
             if (Game.Instance.PartyStats.Gold >= cost)
             {

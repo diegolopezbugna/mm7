@@ -32,6 +32,19 @@ namespace Business
             Title = title;
             ShopActionType = shopActionType;
         }
+
+        public string GetTitleFor(Shop shop, PlayingCharacter playingCharacter)
+        {
+            // TODO: merchant skill of playingCharacter
+            if (shop.ShopType == ShopType.Healer && ShopActionType == ShopActionType.Heal)
+            {
+                var playingCharacterHealsUseCase = new PlayingCharacterHealsUseCase(null);
+                var cost = playingCharacterHealsUseCase.GetHealingAtHealerCost(shop.ShopMultiplier, playingCharacter);
+                return string.Format(Title, cost);
+            }
+
+            return Title;
+        }
     }
 }
 

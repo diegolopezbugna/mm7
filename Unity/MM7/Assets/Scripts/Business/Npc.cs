@@ -99,7 +99,7 @@ namespace Business
                         PictureCode = 731, 
                         Greetings = new List<string>() { "" },
                         Shop = new Shop(ShopType.Healer, 10),
-                        Topics = Shop.GetHealerShopTopics(10),
+                        Topics = Shop.GetHealerShopTopics(),
                     };
                 npcs.Add(npc);
             }

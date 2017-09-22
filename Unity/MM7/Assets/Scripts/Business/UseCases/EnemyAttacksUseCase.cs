@@ -30,6 +30,7 @@ namespace Business
                 if (targetCharacter.HitPoints <= -targetCharacter.Endurance) // TODO: PRESERVATION SPELL, endurance bonuses from items
                 {
                     targetCharacter.ConditionStatus = ConditionStatus.Dead;
+                    targetCharacter.SpellPoints = 0;
                     MessagesScroller.Instance.AddMessage(string.Format("{0} dies.", targetCharacter.Name));
                 }
                 else if (targetCharacter.HitPoints <= 0)

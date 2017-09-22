@@ -94,11 +94,11 @@ namespace Business
             };
         }
 
-        public static List<NpcTopic> GetHealerShopTopics(int shopMultiplier)
+        public static List<NpcTopic> GetHealerShopTopics()
         {
             return new List<NpcTopic>()
             { 
-                new NpcTopic(string.Format("Heal {0} gold", shopMultiplier), ShopActionType.Heal),  // TODO: depends on selected char merchant skill!!!
+                new NpcTopic("Heal {0} gold", ShopActionType.Heal),
                 new NpcTopic("Donate", ShopActionType.Donate),
                 new NpcTopic("Learn skills", ShopActionType.LearnSkills),
             };

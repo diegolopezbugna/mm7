@@ -117,7 +117,7 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
             if (i > 0)
                 topicText = Instantiate(topicText, topicText.transform.parent);
 
-            topicText.text = npc.Topics[i].Title;
+            topicText.text = npc.Topics[i].GetTitleFor(npc.Shop, Game.Instance.PartyStats.Chars[3]); // TODO: selected char
             topicText.GetComponent<TopicData>().Npc = npc;
             topicText.GetComponent<TopicData>().NpcTopic = npc.Topics[i];
         }
@@ -152,7 +152,7 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
                 if (npcTopic.ShopActionType == ShopActionType.Heal)
                 {
                     var playingCharacterHealsUseCase = new PlayingCharacterHealsUseCase(Party.Instance, this);
-                    playingCharacterHealsUseCase.HealAtHealer(npc.Shop.ShopMultiplier, Game.Instance.PartyStats.Chars[0]); // TODO: selected char
+                    playingCharacterHealsUseCase.HealAtHealer(npc.Shop.ShopMultiplier, Game.Instance.PartyStats.Chars[3]); // TODO: selected char
                 }
                 if (npcTopic.ShopActionType == ShopActionType.Donate)
                 {

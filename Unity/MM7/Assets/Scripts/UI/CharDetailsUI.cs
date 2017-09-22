@@ -24,6 +24,12 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
     [SerializeField]
     private ItemInfoUI itemInfoUI;
 
+    [SerializeField]
+    private Text foodValue;
+
+    [SerializeField]
+    private Text goldValue;
+
     private RectTransform rectTransform;
     private Canvas canvas;
 
@@ -46,6 +52,7 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
             inventories[i].OnInventoryItemPointerDown = OnInventoryItemPointerDown;
             inventories[i].OnInventorySlotPointerDown = OnInventorySlotPointerDown;
         }
+        RefreshGoldAndFood();
     }
 
     public override void Update()
@@ -54,6 +61,12 @@ public class CharDetailsUI : BaseUI<CharDetailsUI> {
 
         if (DraggingItem != null && DraggingItemGameObject != null)
             PositionDraggingItem();
+    }
+
+    public void RefreshGoldAndFood()
+    {
+        foodValue.text = Game.Instance.PartyStats.Food.ToString();
+        goldValue.text = Game.Instance.PartyStats.Gold.ToString();
     }
 
     private void BeginDrag(Item item) {

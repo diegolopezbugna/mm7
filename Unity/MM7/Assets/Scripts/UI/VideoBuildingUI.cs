@@ -330,7 +330,7 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
 
     public void RefreshGoldAndFood()
     {
-        // TODO: refresh gold
+        CharDetailsUI.Instance.RefreshGoldAndFood();
     }
 
     public void NotifySuccessfulOperation(Item item, PlayingCharacter buyerSeller)

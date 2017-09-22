@@ -324,4 +324,9 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
         partyBloodBehaviour.TakeHit();
         charsPortraits[Game.Instance.PartyStats.Chars.IndexOf(target)].ShowHitPortrait();
     }
+
+    public void ShowGameOver()
+    {
+        GameOverUI.Instance.Show();
+    }
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Linq;
 
 namespace Business
 {
@@ -38,6 +39,10 @@ namespace Business
                 }
 
                 PlayingCharacterView.UpdatePlayingCharacter(targetCharacter);
+
+                if (Game.Instance.PartyStats.Chars.All(c => c.HitPoints <= 0)) {
+                    PlayingCharacterView.ShowGameOver();
+                }
             }
             else
             {

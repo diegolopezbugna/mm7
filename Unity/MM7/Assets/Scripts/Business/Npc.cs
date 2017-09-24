@@ -50,7 +50,7 @@ namespace Business
                         Name = "Tor the Blacksmith",
                         PictureCode = 705, 
                         Greetings = new List<string>() { "" },
-                        Shop = new Shop(ShopType.WeaponSmith, 1, 2),
+                        Shop = new Shop(ShopType.WeaponSmith, 1.5f, 1, 2),
                         Topics = Shop.GetCommonShopTopics(),
                     };
                 npcs.Add(npc);
@@ -62,7 +62,7 @@ namespace Business
                         Name = "Erik the Armorsmith",
                         PictureCode = 704, 
                         Greetings = new List<string>() { "" },
-                        Shop = new Shop(ShopType.Armory, 1, 2),
+                        Shop = new Shop(ShopType.Armory, 1.5f, 1, 2),
                         Topics = Shop.GetCommonShopTopics(),
                     };
                 npcs.Add(npc);
@@ -74,7 +74,7 @@ namespace Business
                         Name = "Thurston the Magician",
                         PictureCode = 712, 
                         Greetings = new List<string>() { "" },
-                        Shop = new Shop(ShopType.MagicShop, 1, 2),
+                        Shop = new Shop(ShopType.MagicShop, 1.5f, 1, 2),
                         Topics = Shop.GetCommonShopTopics(),
                     };
                 npcs.Add(npc);
@@ -86,7 +86,7 @@ namespace Business
                         Name = "Kethry the Alchemist",
                         PictureCode = 702, 
                         Greetings = new List<string>() { "" },
-                        Shop = new Shop(ShopType.Alchemist, 1, 2),
+                        Shop = new Shop(ShopType.Alchemist, 2f, 1, 2),
                         Topics = Shop.GetCommonShopTopics(),
                     };
                 npcs.Add(npc);

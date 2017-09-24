@@ -43,6 +43,9 @@ public class CharPortrait : MonoBehaviour {
     [SerializeField]
     private Slider spellPointsSlider;
 
+    [SerializeField]
+    private RawImage selectedImage;
+
     private CharPortraitImages portraitImages;
 
     private ConditionStatus _conditionStatus;
@@ -74,6 +77,12 @@ public class CharPortrait : MonoBehaviour {
                 charPortraitImage.texture = portraitImages.Normal;
             }
         }
+    }
+
+    public bool IsSelected 
+    {
+        get { return selectedImage.IsActive(); }
+        set { selectedImage.gameObject.SetActive(value); }
     }
 
     public PlayingCharacter PlayingCharacter { get; set; }
@@ -138,7 +147,7 @@ public class CharPortrait : MonoBehaviour {
 
     public void SetStatus(CharEnemyEngagingStatus status)
     {
-        if (!IsCharActive() && status != CharEnemyEngagingStatus.None)
+        if (!PlayingCharacter.IsActive && status != CharEnemyEngagingStatus.None)
             return;
 
         if (status == CharEnemyEngagingStatus.Green)
@@ -188,12 +197,6 @@ public class CharPortrait : MonoBehaviour {
         statusGreenImage.enabled = false;
         statusYellowImage.enabled = false;
         statusRedImage.enabled = true;
-    }
-
-    public bool IsCharActive() 
-    {
-        return ConditionStatus != ConditionStatus.Unconscious && 
-            ConditionStatus != ConditionStatus.Dead;
     }
 
     public void ShowSpellAnimation(SpellInfo spell)

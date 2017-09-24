@@ -35,6 +35,9 @@ namespace Business
 
         public string GetTitleFor(Shop shop, PlayingCharacter playingCharacter)
         {
+            if (shop == null)
+                return Title;
+            
             // TODO: merchant skill of playingCharacter
             if (shop.ShopType == ShopType.Healer && ShopActionType == ShopActionType.Heal)
             {

@@ -19,46 +19,29 @@ public class PartyAttack : MonoBehaviour, PartyAttacksViewInterface {
     private int lastCharAttacker = -1;
     private List<Animator> weaponAnimators = new List<Animator>();
 
-	// Use this for initialization
-	void Start () {
-        lastAttack = new float[4];
-
+	void Start () 
+    {
         foreach (var wc in weaponContainers)
         {
             weaponAnimators.Add(wc.GetComponentInChildren<Animator>());
         }
     }
 	
-	// Update is called once per frame
-	void Update () {
+	void Update () 
+    {
         if (Input.GetKeyDown("q"))
         {
-            // TODO: select player
-            var attackingChar = -1;
-            var newCharAttacker = lastCharAttacker + 1;
-            for (int i = newCharAttacker; i < newCharAttacker + CHARS; i++)
+            var attackingPlayer = Party.Instance.GetPlayingCharacterSelected();
+            if (attackingPlayer != null)
             {
-                var j = i % 4;
-                if (Time.time - lastAttack[j] > Game.Instance.PartyStats.Chars[j].RecoveryTime && 
-                    Party.Instance.IsCharActive(j))
-                {
-                    attackingChar = j;
-                    break;
-                }
+                DoAttack(attackingPlayer, Party.Instance.CurrentTargetPoint, Party.Instance.CurrentTarget);
             }
-            if (attackingChar >= 0)
-            {
-                lastCharAttacker = attackingChar;
-                DoAttack(attackingChar, Party.Instance.CurrentTargetPoint, Party.Instance.CurrentTarget);
-                lastAttack[attackingChar] = Time.time;
-            }
-
         }
 	}
 
-    void DoAttack(int charIndex, Vector3? targetPoint, Transform targetTransform) {
-        var attackingChar = Game.Instance.PartyStats.Chars[charIndex];
-        var partyAttacksUseCase = new PartyAttacksUseCase(this, targetPoint, targetTransform, Party.Instance.transform);
+    void DoAttack(PlayingCharacter attackingChar, Vector3? targetPoint, Transform targetTransform) 
+    {
+        var partyAttacksUseCase = new PartyAttacksUseCase(this, Party.Instance, targetPoint, targetTransform, Party.Instance.transform);
 
         if (targetTransform != null && targetTransform.tag.StartsWith("Enemy"))
         {

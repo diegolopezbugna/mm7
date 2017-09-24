@@ -9,20 +9,23 @@ namespace Business
         private const float longRangeSqrDistance = 40 * 40; // TODO: check distances
 
         private PartyAttacksViewInterface View { get; set; }
+        private PlayingCharacterViewInterface PlayingCharacterView { get; set; }
         private Vector3? TargetPoint { get; set; }
         private Transform TargetTransform { get; set; }
         private Transform PartyTransform { get; set; }
 
-        public PartyAttacksUseCase(PartyAttacksViewInterface view, Vector3? targetPoint, Transform targetTransform, Transform partyTransform)
+        public PartyAttacksUseCase(PartyAttacksViewInterface view, PlayingCharacterViewInterface playingCharacterView, Vector3? targetPoint, Transform targetTransform, Transform partyTransform)
         {
             View = view;
+            PlayingCharacterView = playingCharacterView;
             TargetPoint = targetPoint;
             TargetTransform = targetTransform;
             PartyTransform = partyTransform;
         }
 
         // TODO: instead of monsterArmorClass have a monster instance?
-        public void TryHit(PlayingCharacter attackingChar, float monsterArmorClass) {
+        public void TryHit(PlayingCharacter attackingChar, float monsterArmorClass) 
+        {
             var distanceToTargetSqr = (TargetTransform.position - PartyTransform.position).sqrMagnitude;
             bool handToHand = distanceToTargetSqr < handToHandRangeSqrDistance;
             var attackBonus = handToHand ? attackingChar.AttackBonus : attackingChar.RangedAttackBonus;
@@ -30,6 +33,8 @@ namespace Business
             var toHitDefenseNumber = (monsterArmorClass + 15f) * GetAttackDistanceMultiplier(distanceToTargetSqr); 
             bool didHit = Random.Range(1f, toHitAttackNumber) > Random.Range(1f, toHitDefenseNumber);
             var damage = 0;
+
+            SetRecoveryTime(attackingChar, handToHand);
 
             if (handToHand)
             {
@@ -57,26 +62,39 @@ namespace Business
                 View.AddMessage(string.Format("{0} misses {1}", attackingChar.Name, TargetTransform.tag.TagToDescription()));
         }
 
-        public void HitNothing(PlayingCharacter attackingChar) {
+        public void HitNothing(PlayingCharacter attackingChar) 
+        {
+            bool handToHand = false;
             if (TargetPoint.HasValue)
             {
                 var distanceToTargetSqr = (TargetPoint.Value - PartyTransform.position).sqrMagnitude;
                 if (distanceToTargetSqr < handToHandRangeSqrDistance)
-                    View.HandToHandAttack(attackingChar, null, false, 0);
-                else
-                    View.ThrowArrowToNonInteractiveObjects(attackingChar, TargetPoint);
+                    handToHand = true;
             }
+
+            SetRecoveryTime(attackingChar, handToHand);
+
+            if (handToHand)
+                View.HandToHandAttack(attackingChar, null, false, 0);
             else
                 View.ThrowArrowToNonInteractiveObjects(attackingChar, TargetPoint);
         }
 
-        private float GetAttackDistanceMultiplier(float distanceToTargetSqr) {
+        private float GetAttackDistanceMultiplier(float distanceToTargetSqr) 
+        {
             if (distanceToTargetSqr > longRangeSqrDistance)
                 return 2f;
             else if (distanceToTargetSqr > mediumRangeSqrDistance)
                 return 1.5f;
             else
                 return 1f;
+        }
+
+        private void SetRecoveryTime(PlayingCharacter attackingChar, bool handToHand)
+        {
+            attackingChar.LastAttackTimeFrom = Time.time;
+            attackingChar.LastAttackTimeTo = attackingChar.LastAttackTimeFrom + (handToHand ? attackingChar.RecoveryTime : attackingChar.RangedRecoveryTime);
+            PlayingCharacterView.SelectNextPlayingCharacter();
         }
 
     }

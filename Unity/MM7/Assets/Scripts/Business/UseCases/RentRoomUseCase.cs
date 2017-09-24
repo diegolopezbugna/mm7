@@ -1,5 +1,6 @@
 ﻿using System;
 using Infrastructure;
+using UnityEngine;
 
 namespace Business
 {
@@ -16,12 +17,12 @@ namespace Business
             PlayingCharacterView = playingCharacterView;
         }
 
-        public void RentRoom(int shopMultiplier, PlayingCharacter buyer)
+        public void RentRoom(float shopMultiplier, PlayingCharacter buyer)
         {
-            var rentCost = shopMultiplier / 2; // TODO: reduced price by merchant bonus
+            var rentCost = Mathf.CeilToInt(shopMultiplier / 2); // TODO: reduced price by merchant bonus
             if (Game.Instance.PartyStats.Gold >= rentCost)
             {
-                Game.Instance.PartyStats.Gold -= shopMultiplier / 2;
+                Game.Instance.PartyStats.Gold -= rentCost;
                 View.RefreshGoldAndFood();
                 View.Hide();
                 PartyRestsView.Show();
@@ -34,12 +35,12 @@ namespace Business
             }
         }
 
-        public void BuyFood(int shopMultiplier, PlayingCharacter buyer)
+        public void BuyFood(float shopMultiplier, PlayingCharacter buyer)
         {
-            var foodCost = shopMultiplier / 3; // TODO: reduced price by merchant bonus
+            var foodCost = Mathf.CeilToInt(shopMultiplier / 3); // TODO: reduced price by merchant bonus
             if (Game.Instance.PartyStats.Gold >= foodCost)
             {
-                var foodToBuy = shopMultiplier;
+                var foodToBuy = Mathf.CeilToInt(shopMultiplier);
                 if (Game.Instance.PartyStats.Food < foodToBuy)
                 {
                     Game.Instance.PartyStats.Food += foodToBuy;

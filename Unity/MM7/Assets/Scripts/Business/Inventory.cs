@@ -142,7 +142,7 @@ namespace Business
             return BagItems.GetUpperBound(1) + 1;
         }
 
-        public int GetSlotsNeeded(float slotSize, float itemSize)
+        public static int GetSlotsNeeded(float slotSize, float itemSize)
         {
             var fraction = itemSize / slotSize;
             var slotsRequired = Mathf.FloorToInt(fraction);

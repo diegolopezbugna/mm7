@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Business;
 using Infrastructure;
+using System.Linq;
 
 public class SpellBookUI : BaseUI<SpellBookUI> {
 
@@ -45,9 +46,11 @@ public class SpellBookUI : BaseUI<SpellBookUI> {
 
     public void Show(PlayingCharacter speller) {
         if (!lastPageVisitedBySpeller.ContainsKey(speller)) {
-            // TODO: only allowed pages
-            var skillCodes = new List<SkillCode>() { SkillCode.AirMagic, SkillCode.FireMagic, SkillCode.WaterMagic, SkillCode.EarthMagic, SkillCode.MindMagic, SkillCode.BodyMagic, SkillCode.SpiritMagic, SkillCode.LightMagic, SkillCode.DarkMagic };
-            lastPageVisitedBySpeller[speller] = skillCodes[UnityEngine.Random.Range(0, skillCodes.Count)];
+            var learntMagicSkills = speller.Skills.Keys.Where(s => s.ToString().Contains("Magic")).ToList();
+            if (learntMagicSkills.Count > 0)
+                lastPageVisitedBySpeller[speller] = learntMagicSkills[UnityEngine.Random.Range(0, learntMagicSkills.Count)];
+            else
+                return;
         }
         Show(speller, lastPageVisitedBySpeller[speller]);
     }
@@ -99,16 +102,9 @@ public class SpellBookUI : BaseUI<SpellBookUI> {
 
     private void DrawTabs(PlayingCharacter speller, SkillCode selectedTab)
     {
-        // TODO: learnt skills!
-        DrawTab(speller, SkillCode.FireMagic, selectedTab == SkillCode.FireMagic);
-        DrawTab(speller, SkillCode.AirMagic, selectedTab == SkillCode.AirMagic);
-        DrawTab(speller, SkillCode.WaterMagic, selectedTab == SkillCode.WaterMagic);
-        DrawTab(speller, SkillCode.EarthMagic, selectedTab == SkillCode.EarthMagic);
-        DrawTab(speller, SkillCode.SpiritMagic, selectedTab == SkillCode.SpiritMagic);
-        DrawTab(speller, SkillCode.MindMagic, selectedTab == SkillCode.MindMagic);
-        DrawTab(speller, SkillCode.BodyMagic, selectedTab == SkillCode.BodyMagic);
-        DrawTab(speller, SkillCode.LightMagic, selectedTab == SkillCode.LightMagic);
-        DrawTab(speller, SkillCode.DarkMagic, selectedTab == SkillCode.DarkMagic);
+        var learntMagicSkills = speller.Skills.Keys.Where(s => s.ToString().Contains("Magic")).ToList();
+        foreach (var skillCode in learntMagicSkills)
+            DrawTab(speller, skillCode, selectedTab == skillCode);
     }
 
     private void DrawTab(PlayingCharacter speller, SkillCode skillCode, bool isSelected)

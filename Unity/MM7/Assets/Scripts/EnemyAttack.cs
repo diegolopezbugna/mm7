@@ -130,7 +130,7 @@ public class EnemyAttack : MonoBehaviour {
     private int GetCharAttacked() {
         var charAttacked = Random.Range(0, 4);
         int i = 0;
-        while (!Party.Instance.IsCharActive(charAttacked))
+        while (!Game.Instance.PartyStats.Chars[charAttacked].IsActive)
         {
             if (i == 20)
                 return -1;

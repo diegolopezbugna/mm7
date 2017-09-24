@@ -63,7 +63,7 @@ namespace Business
         public int TreasureLevelStandard { get; set; }
         public int TreasureLevelSpecial { get; set; }
         public GuildLevel GuildLevel { get; set; }
-        public int ShopMultiplier { get; set; }
+        public float ShopMultiplier { get; set; }
 
         public Shop(ShopType shopType, int shopMultiplier)
         {
@@ -71,9 +71,10 @@ namespace Business
             ShopMultiplier = shopMultiplier;
         }
 
-        public Shop(ShopType shopType, int treasureLevelStandard, int treasureLevelSpecial)
+        public Shop(ShopType shopType, float shopMultiplier, int treasureLevelStandard, int treasureLevelSpecial)
         {
             ShopType = shopType;
+            ShopMultiplier = shopMultiplier;
             TreasureLevelStandard = treasureLevelStandard;
             TreasureLevelSpecial = treasureLevelSpecial;
         }

@@ -49,6 +49,18 @@ namespace Business
         public Inventory Inventory { get; set; }
         public EquippedItems EquippedItems { get; set; }
 
+        public float LastAttackTimeFrom { get; set; }
+        public float LastAttackTimeTo { get; set; }
+
+        public bool IsActive
+        {
+            get
+            {
+                return ConditionStatus != ConditionStatus.Unconscious && 
+                    ConditionStatus != ConditionStatus.Dead;
+            }
+        }
+
         public PlayingCharacter(string name, Race race, Gender gender, string portraitCode, SkillCode[] startingSkills) {
             Name = name;
             Race = race;
@@ -166,7 +178,14 @@ namespace Business
 
         public float RecoveryTime {
             get {
-                // TODO: formula! depends on speed? armor? spellInfo.recoveryTime
+                // TODO: formula! depends on speed? armor?
+                return 2f;
+            }
+        }
+
+        public float RangedRecoveryTime {
+            get {
+                // TODO: formula! depends on speed? armor?
                 return 2f;
             }
         }

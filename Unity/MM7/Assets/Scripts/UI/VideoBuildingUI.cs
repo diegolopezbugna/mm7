@@ -53,8 +53,8 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
     [SerializeField]
     private GameObject inventoryPrefab;
 
-    //public Building Building { get; set; }
-    //public List<Npc> Npcs { get; set; }
+    public Building Building { get; set; }
+    public List<Npc> Npcs { get; set; }
 
     private Dictionary<string, int> CurrentGreeting = new Dictionary<string, int>();
     private VideoPlayer videoPlayer;
@@ -77,8 +77,8 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
 	}
 
     public void Show(Building building, List<Npc> npcs) {
-//        Building = building;
-//        Npcs = npcs;
+        Building = building;
+        Npcs = npcs;
         base.Show();
         StartCoroutine(PlayVideo("Assets/Resources/Videos/" + building.VideoFilename + ".mp4"));
         buildingNameText.text = building.Name;
@@ -117,7 +117,7 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
             if (i > 0)
                 topicText = Instantiate(topicText, topicText.transform.parent);
 
-            topicText.text = npc.Topics[i].GetTitleFor(npc.Shop, Game.Instance.PartyStats.Chars[3]); // TODO: selected char
+            topicText.text = npc.Topics[i].GetTitleFor(npc.Shop, Party.Instance.GetPlayingCharacterSelectedOrDefault());
             topicText.GetComponent<TopicData>().Npc = npc;
             topicText.GetComponent<TopicData>().NpcTopic = npc.Topics[i];
         }
@@ -139,12 +139,12 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
                 if (npcTopic.ShopActionType == ShopActionType.RentRoom)
                 {
                     var rentRoomUseCase = new RentRoomUseCase(this, RestUI.Instance, Party.Instance);
-                    rentRoomUseCase.RentRoom(npc.Shop.ShopMultiplier, Game.Instance.PartyStats.Chars[0]); // TODO: selected char
+                    rentRoomUseCase.RentRoom(npc.Shop.ShopMultiplier, Party.Instance.GetPlayingCharacterSelectedOrDefault());
                 }
                 else if (npcTopic.ShopActionType == ShopActionType.BuyFood)
                 {
                     var rentRoomUseCase = new RentRoomUseCase(this, RestUI.Instance, Party.Instance);
-                    rentRoomUseCase.BuyFood(npc.Shop.ShopMultiplier, Game.Instance.PartyStats.Chars[0]); // TODO: selected char
+                    rentRoomUseCase.BuyFood(npc.Shop.ShopMultiplier, Party.Instance.GetPlayingCharacterSelectedOrDefault());
                 }
             }
             else if (npc.Shop.ShopType == ShopType.Healer)
@@ -152,12 +152,12 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
                 if (npcTopic.ShopActionType == ShopActionType.Heal)
                 {
                     var playingCharacterHealsUseCase = new PlayingCharacterHealsUseCase(Party.Instance, this);
-                    playingCharacterHealsUseCase.HealAtHealer(npc.Shop.ShopMultiplier, Game.Instance.PartyStats.Chars[3]); // TODO: selected char
+                    playingCharacterHealsUseCase.HealAtHealer(npc.Shop.ShopMultiplier, Party.Instance.GetPlayingCharacterSelectedOrDefault());
                 }
                 if (npcTopic.ShopActionType == ShopActionType.Donate)
                 {
                     // TODO: move to use case, do something
-                    Game.Instance.PartyStats.Gold -= npc.Shop.ShopMultiplier;
+                    Game.Instance.PartyStats.Gold -= Mathf.CeilToInt(npc.Shop.ShopMultiplier);
                     if (Game.Instance.PartyStats.Gold < 0)
                         Game.Instance.PartyStats.Gold = 0;
                     RefreshGoldAndFood();
@@ -253,7 +253,7 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
             inventoryUI.OnInventoryItemPointerDown = OnSellingItemFromInventoryPointerDown;
             inventoryUI.OnInventoryItemPointerEnter = OnSellingItemFromInventoryPointerEnter;
             inventoryUI.OnInventoryItemPointerExit = OnSellingItemFromInventoryPointerExit;
-            inventoryUI.Inventory = Game.Instance.PartyStats.Chars[0].Inventory; // TODO: selected char
+            inventoryUI.Inventory = Party.Instance.GetPlayingCharacterSelectedOrDefault().Inventory;
             inventoryUI.DrawInventory();
         }
         else if (shopActionType == ShopActionType.BuySpells)
@@ -286,7 +286,7 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
 
     private void ShowItemPrice(Item item, PointerEventData eventData) {
         var buyItemUseCase = new BuyItemUseCase(this);
-        buyItemUseCase.AskItemPrice(item, Game.Instance.PartyStats.Chars[0], 1.5f); // TODO: buying char, value multiplier
+        buyItemUseCase.AskItemPrice(item, Party.Instance.GetPlayingCharacterSelectedOrDefault(), GetSellerNpc().Shop.ShopMultiplier);
     }
 
     private void HideItemPrice(Item item, PointerEventData eventData) {
@@ -297,7 +297,7 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             var buyItemUseCase = new BuyItemUseCase(this);
-            buyItemUseCase.BuyItem(item, Game.Instance.PartyStats.Chars[0], 1.5f); // TODO: buying char, value multiplier
+            buyItemUseCase.BuyItem(item, Party.Instance.GetPlayingCharacterSelectedOrDefault(), GetSellerNpc().Shop.ShopMultiplier);
         }
         else if (eventData.button == PointerEventData.InputButton.Right)
         {
@@ -315,7 +315,7 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             var sellItemUseCase = new SellItemUseCase(this);
-            sellItemUseCase.SellItem(item, Game.Instance.PartyStats.Chars[0], 1.5f); // TODO: selling char, value multiplier
+            sellItemUseCase.SellItem(item, Party.Instance.GetPlayingCharacterSelectedOrDefault(), GetSellerNpc().Shop.ShopMultiplier);
         }
         else if (eventData.button == PointerEventData.InputButton.Right)
         {
@@ -325,11 +325,23 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
 
     private void OnSellingItemFromInventoryPointerEnter(Inventory inventory, Item item, PointerEventData eventData) {
         var sellItemUseCase = new SellItemUseCase(this);
-        sellItemUseCase.AskItemPrice(item, Game.Instance.PartyStats.Chars[0], 1.5f); // TODO: selling char, value multiplier
+        sellItemUseCase.AskItemPrice(item, Party.Instance.GetPlayingCharacterSelectedOrDefault(), GetSellerNpc().Shop.ShopMultiplier);
     }
 
     private void OnSellingItemFromInventoryPointerExit(Inventory inventory, Item item, PointerEventData eventData) {
         dialogText.text = "";
+    }
+
+    private Npc GetSellerNpc() {
+        foreach (var npc in Npcs)
+            if (npc.Shop != null)
+                return npc;
+        return null;
+    }
+
+    public void OnPlayingCharacterChanged() {
+        var seller = GetSellerNpc();
+        ShowTopics(seller != null ? seller : Npcs[0]);
     }
 
     #region BuySellItemViewInterface implementation

@@ -72,7 +72,7 @@ public class InventoryUI : MonoBehaviour, IPointerDownHandler {
 
     public static float GetOffsetForCenterItemInSlot(float slotSize, float itemSize)
     {
-        var slotsNeeded = Game.Instance.PartyStats.Chars[0].Inventory.GetSlotsNeeded(slotSize, itemSize);
+        var slotsNeeded = Inventory.GetSlotsNeeded(slotSize, itemSize);
         var extraSpace = slotsNeeded * slotSize - itemSize;
         return extraSpace / 2;
     }

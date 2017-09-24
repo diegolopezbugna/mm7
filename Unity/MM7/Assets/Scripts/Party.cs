@@ -20,6 +20,55 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
     [SerializeField]
     private CharPortrait[] charsPortraits;
 
+    private int _charPortraitSelected = -1;
+    public int CharPortraitSelected
+    { 
+        get { return _charPortraitSelected; }
+        set
+        {
+            _charPortraitSelected = value;
+            for (int i = 0; i < charsPortraits.Length; i++)
+                charsPortraits[i].IsSelected = false;
+            if (value >= 0)
+                charsPortraits[value].IsSelected = true;
+        }
+    }
+
+    public PlayingCharacter GetPlayingCharacterSelected()
+    {
+        var i = CharPortraitSelected;
+        if (i < 0)
+            return null;
+        else
+            return charsPortraits[i].PlayingCharacter;
+    }
+
+    public PlayingCharacter GetPlayingCharacterSelectedOrDefault()
+    {
+        var selected = GetPlayingCharacterSelected();
+        if (selected == null)
+            selected = charsPortraits[0].PlayingCharacter;   // TODO: who will be next available?
+        return selected;
+    }
+        
+    public void SetPlayingCharacterSelected(PlayingCharacter playingCharacter)
+    {
+        if (playingCharacter == null)
+        {
+            CharPortraitSelected = -1;
+            return;
+        }
+
+        for (int i = 0; i < charsPortraits.Length; i++)
+        {
+            if (charsPortraits[i].PlayingCharacter == playingCharacter)
+            {
+                CharPortraitSelected = i;
+                break;
+            }
+        }
+    }
+
     private Transform currentTarget;
     public Transform CurrentTarget
     {
@@ -71,21 +120,57 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
 	void Update () 
     {
         // TODO: refactor main loop
-        
+
+        if (CharPortraitSelected < 0)
+        {
+            SelectNextPlayingCharacter();
+        }
+
         if (spellChoosingTarget != null) 
         {
-            var targeRaycastHit = CalculateMouseTarget();
+            if (spellChoosingTarget.NeedsPartyTarget)
+            {
+                for (int i = 0; i < charsPortraits.Length; i++)
+                {
+                    if (Input.GetKeyDown((i + 1).ToString()))
+                    {
+                        OnPortraitLeftClick(Game.Instance.PartyStats.Chars[i]);
+                        return;
+                    }
+                }
+            }
+
+            var targetRaycastHit = CalculateMouseTarget();
             if (Input.GetMouseButtonDown(0) && 
                 spellChoosingTarget.Needs3dTarget && 
-                targeRaycastHit != null)
+                targetRaycastHit != null)
             {
                 var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, this, transform);
                 Time.timeScale = 1;
-                partyCastsSpellUseCase.CastSpell(Game.Instance.PartyStats.Chars[3], spellChoosingTarget, targeRaycastHit.Value.point, targeRaycastHit.Value.transform); // TODO: selected char
+                partyCastsSpellUseCase.CastSpell(GetPlayingCharacterSelected(), spellChoosingTarget, targetRaycastHit.Value.point, targetRaycastHit.Value.transform);
                 spellChoosingTarget = null;
                 FirstPersonController.Instance.SetCursorLock(true);
             }
             return;
+        }
+
+        for (int i = 0; i < charsPortraits.Length; i++)
+        {
+            if (Input.GetKeyDown((i + 1).ToString()))
+            {
+                if (VideoBuildingUI.Instance.IsShowing)
+                {
+                    CharPortraitSelected = i;
+                    VideoBuildingUI.Instance.OnPlayingCharacterChanged();
+                }
+                else
+                {
+                    if (charsPortraits[i].PlayingCharacter.IsActive &&
+                        charsPortraits[i].PlayingCharacter.LastAttackTimeTo < Time.time)
+                        CharPortraitSelected = i;
+                }
+                break;
+            }
         }
 
         if (Input.GetKeyDown("i"))
@@ -99,7 +184,9 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
         else if (Input.GetKeyDown("b"))
         {
             // TODO: check recovery times
-            SpellBookUI.Instance.Show(Game.Instance.PartyStats.Chars[3]); // TODO: selected char
+            var playingCharacterSelected = GetPlayingCharacterSelected();
+            if (playingCharacterSelected != null)
+                SpellBookUI.Instance.Show(playingCharacterSelected);
         }
 
         bool isUserAttacking = Input.GetKeyDown("q");
@@ -252,15 +339,11 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
         isEnemyEngagingPartyThisFrame = false;
     }
 
-    public bool IsCharActive(int charIndex) {
-        return charsPortraits[charIndex].IsCharActive();
-    }
-
     public float GetDistanceSqrTo(Transform other) {
         return (transform.position - other.position).sqrMagnitude;
     }
 
-    public void SpellBookCastSpell(SpellInfo spellInfo) 
+    public void SpellBookCastSpell(SpellInfo spellInfo)
     {
         if (spellInfo.NeedsPartyTarget || spellInfo.Needs3dTarget)
         {
@@ -272,7 +355,7 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
         else
         {
             var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, this, transform);
-            partyCastsSpellUseCase.CastSpell(Game.Instance.PartyStats.Chars[2], spellInfo); // TODO: selected char
+            partyCastsSpellUseCase.CastSpell(GetPlayingCharacterSelected(), spellInfo);
         }
     }
 
@@ -282,7 +365,7 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
         {
             var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, this, transform);
             Time.timeScale = 1;
-            partyCastsSpellUseCase.CastSpell(Game.Instance.PartyStats.Chars[2], spellChoosingTarget, playingCharClicked); // TODO: selected char
+            partyCastsSpellUseCase.CastSpell(GetPlayingCharacterSelected(), spellChoosingTarget, playingCharClicked);
             spellChoosingTarget = null;
             FirstPersonController.Instance.SetCursorLock(true);
         }
@@ -317,6 +400,8 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
         charsPortraits[i].SetMaxSpellPoints(playingCharacter.MaxSpellPoints);
         charsPortraits[i].SetSpellPoints(playingCharacter.SpellPoints);
         charsPortraits[i].ConditionStatus = playingCharacter.ConditionStatus;
+        if (!playingCharacter.IsActive && GetPlayingCharacterSelected() == playingCharacter)
+            SelectNextPlayingCharacter();
     }
 
     public void TakeHit(PlayingCharacter target)
@@ -329,4 +414,27 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
     {
         GameOverUI.Instance.Show();
     }
+
+    public void SelectNextPlayingCharacter() 
+    {
+        var current = CharPortraitSelected;
+        var i = current;
+
+        for (int pass = 0; pass < charsPortraits.Length; pass++)
+        {
+            i++;
+            if (i >= charsPortraits.Length)
+                i -= charsPortraits.Length;
+
+            if (charsPortraits[i].PlayingCharacter.IsActive && 
+                charsPortraits[i].PlayingCharacter.LastAttackTimeTo < Time.time)
+            {
+                CharPortraitSelected = i;
+                return;
+            }
+        }
+
+        CharPortraitSelected = -1;
+    }
+
 }

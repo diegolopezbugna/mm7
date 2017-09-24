@@ -1,5 +1,6 @@
 ﻿using System;
 using Infrastructure;
+using UnityEngine;
 
 namespace Business
 {
@@ -46,22 +47,22 @@ namespace Business
             }
         }
 
-        public int GetHealingAtHealerCost(int shopMultiplier, PlayingCharacter playingCharacter)
+        public int GetHealingAtHealerCost(float shopMultiplier, PlayingCharacter playingCharacter)
         {
             var cost = shopMultiplier;
             if (playingCharacter.ConditionStatus == ConditionStatus.Dead)
                 cost = 20 * shopMultiplier; // TODO: update formula (time multiplier?)
             // TODO: more conditions
-            return cost;
+            return Mathf.CeilToInt(cost);
         }
 
-        public void HealAtHealer(int shopMultiplier, PlayingCharacter playingCharacter)
+        public void HealAtHealer(float shopMultiplier, PlayingCharacter playingCharacter)
         {
             var cost = GetHealingAtHealerCost(shopMultiplier, playingCharacter);
 
             if (Game.Instance.PartyStats.Gold >= cost)
             {
-                Game.Instance.PartyStats.Gold -= cost;
+                Game.Instance.PartyStats.Gold -= Mathf.CeilToInt(cost);
                 BuySellItemView.RefreshGoldAndFood();
                 playingCharacter.ConditionStatus = ConditionStatus.Normal;
                 playingCharacter.HitPoints = playingCharacter.MaxHitPoints;

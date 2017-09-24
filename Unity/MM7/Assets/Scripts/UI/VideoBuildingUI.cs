@@ -66,6 +66,18 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
         videoPlayer = gameObject.AddComponent<VideoPlayer>();
         audioSource = gameObject.AddComponent<AudioSource>();
         canvas = GetComponent<Canvas>();
+        Party.Instance.PlayingCharacterSelectedChanged += Party_Instance_PlayingCharacterSelectedChanged;
+    }
+
+    void Party_Instance_PlayingCharacterSelectedChanged (object sender, EventArgs e)
+    {
+        if (IsShowing)
+        {
+            var seller = GetSellerNpc();
+            ShowTopics(seller != null ? seller : Npcs[0]);
+            if (GetComponentInChildren<InventoryUI>() != null)
+                ShowShop(ShopActionType.Sell, seller.Shop, null, null);
+        }
     }
 
 	public override void Update () {
@@ -337,11 +349,6 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
             if (npc.Shop != null)
                 return npc;
         return null;
-    }
-
-    public void OnPlayingCharacterChanged() {
-        var seller = GetSellerNpc();
-        ShowTopics(seller != null ? seller : Npcs[0]);
     }
 
     #region BuySellItemViewInterface implementation

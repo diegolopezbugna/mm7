@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -42,6 +43,17 @@ public class SpellBookUI : BaseUI<SpellBookUI> {
         texturesTabsOn.Add(SkillCode.LightMagic, Resources.Load<Texture>("Spells/TAB8B"));
         texturesTabsOff.Add(SkillCode.DarkMagic, Resources.Load<Texture>("Spells/TAB9A"));
         texturesTabsOn.Add(SkillCode.DarkMagic, Resources.Load<Texture>("Spells/TAB9B"));
+
+        Party.Instance.PlayingCharacterSelectedChanged += Party_Instance_PlayingCharacterSelectedChanged;
+    }
+
+    void Party_Instance_PlayingCharacterSelectedChanged (object sender, EventArgs e)
+    {
+        if (IsShowing)
+        {
+            Hide();
+            Show(Party.Instance.GetPlayingCharacterSelected());
+        }
     }
 
     public void Show(PlayingCharacter speller) {

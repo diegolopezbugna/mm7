@@ -159,15 +159,23 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
         }
         else if (Input.GetKeyDown("r"))
         {
-            RestUI.Instance.Show();
+            OnRestIconClicked();
         }
         else if (Input.GetKeyDown("b"))
         {
-            // TODO: check recovery times
-            var playingCharacterSelected = GetPlayingCharacterSelected();
-            if (playingCharacterSelected != null)
-                SpellBookUI.Instance.Show(playingCharacterSelected);
+            OnSpellBookIconClicked();
         }
+        else if (Input.GetKeyUp(KeyCode.Escape) && 
+            !VideoBuildingUI.Instance.IsShowing && 
+            !RestUI.Instance.IsShowing && 
+            !CharDetailsUI.Instance.IsShowing && 
+            !SpellBookUI.Instance.IsShowing &&
+            !NpcDialog.Instance.IsShowing && !GameOverUI.Instance.IsShowing)
+        {
+            // TODO: better way
+            FirstPersonController.Instance.SetCursorLock(false);
+        }
+            
 
         bool isUserAttacking = Input.GetKeyDown("q");
         CalculateTarget(isUserAttacking);
@@ -422,6 +430,18 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
         }
 
         CharPortraitSelected = -1;
+    }
+
+    public void OnRestIconClicked() 
+    {
+        RestUI.Instance.Show();
+    }
+
+    public void OnSpellBookIconClicked()
+    {
+        var playingCharacterSelected = GetPlayingCharacterSelected();
+        if (playingCharacterSelected != null)
+            SpellBookUI.Instance.Show(playingCharacterSelected);
     }
 
 }

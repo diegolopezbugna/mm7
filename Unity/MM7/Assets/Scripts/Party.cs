@@ -13,6 +13,9 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
     private Text focussedText;
 
     [SerializeField]
+    private Text messagesText;
+
+    [SerializeField]
     private GameObject crosshair;
 
     [SerializeField]
@@ -215,7 +218,7 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
                 focussedText.text = videoDoor.GetDescription();
                 if (Input.GetMouseButton(0) && !VideoBuildingUI.Instance.IsShowing && !CharDetailsUI.Instance.IsShowing) // TODO: better way
                 {
-                    focussedText.text = videoDoor.TryOpen(); // TODO: show result for X seconds
+                    ShowMessage(videoDoor.TryOpen());
                 }
             }
             else if (hit.transform.tag.StartsWith("Npc") && hit.distance < 2)
@@ -442,6 +445,19 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
         var playingCharacterSelected = GetPlayingCharacterSelected();
         if (playingCharacterSelected != null)
             SpellBookUI.Instance.Show(playingCharacterSelected);
+    }
+
+    public void ShowMessage(string message)
+    {
+        StartCoroutine(ShowMessageFor(message, 3f));
+    }
+
+    IEnumerator ShowMessageFor(string message, float seconds)
+    {
+        messagesText.text = message;
+        yield return new WaitForSecondsRealtime(seconds);
+        if (messagesText.text == message)
+            messagesText.text = "";
     }
 
 }

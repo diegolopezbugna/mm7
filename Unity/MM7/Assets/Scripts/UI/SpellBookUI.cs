@@ -62,7 +62,11 @@ public class SpellBookUI : BaseUI<SpellBookUI> {
             if (learntMagicSkills.Count > 0)
                 lastPageVisitedBySpeller[speller] = learntMagicSkills[UnityEngine.Random.Range(0, learntMagicSkills.Count)];
             else
+            {
+                Party.Instance.ShowMessage(Localization.Instance.Get("NoMagicSkills", speller.Name));
+                // TODO: sad face
                 return;
+            }
         }
         Show(speller, lastPageVisitedBySpeller[speller]);
     }
@@ -75,7 +79,6 @@ public class SpellBookUI : BaseUI<SpellBookUI> {
         lastPageVisitedBySpeller[speller] = skillCode;
 
         var prefix = skillCode.ToString().Replace("Magic", "");
-        var kk = string.Format("Spells/{0}/{1}Bg", skillCode, prefix);
         spellBookBg.texture = Resources.Load<Texture>(string.Format("Spells/{0}/{1}Bg", skillCode, prefix));
         var spells = SpellInfo.GetAllBySkill(skillCode); // TODO: learnt spells!
 

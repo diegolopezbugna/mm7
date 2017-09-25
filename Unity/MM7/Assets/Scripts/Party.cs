@@ -10,6 +10,12 @@ using System;
 public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttacksViewInterface, PlayingCharacterViewInterface {
 
     [SerializeField]
+    private Text foodValue;
+
+    [SerializeField]
+    private Text goldValue;
+
+    [SerializeField]
     private Text focussedText;
 
     [SerializeField]
@@ -123,6 +129,8 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
         }
         partyBloodBehaviour = this.GetComponent<PartyBlood>();
         partyAttackBehaviour = this.GetComponent<PartyAttack>();
+
+        RefreshGoldAndFood();
 	}
 	
 	// Update is called once per frame
@@ -208,7 +216,7 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
                     var enemyHealth = hit.transform.GetComponent<EnemyHealth>();
                     if (enemyAttack != null && enemyHealth != null)
                     {
-                        IdentifyMonsterUI.Instance.Show(enemyAttack.Enemy, enemyHealth);
+                        IdentifyMonsterUI.Instance.Show(enemyAttack.EnemyInfo, enemyHealth);
                     }
                 }
             }
@@ -458,6 +466,17 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
         yield return new WaitForSecondsRealtime(seconds);
         if (messagesText.text == message)
             messagesText.text = "";
+    }
+
+    public void RefreshGoldAndFood()
+    {
+        foodValue.text = Game.Instance.PartyStats.Food.ToString();
+        goldValue.text = Game.Instance.PartyStats.Gold.ToString();
+    }
+
+    public void PlayGoldSound()
+    {
+        // TODO: gold sound
     }
 
 }

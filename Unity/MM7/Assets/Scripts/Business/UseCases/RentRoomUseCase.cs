@@ -23,7 +23,7 @@ namespace Business
             if (Game.Instance.PartyStats.Gold >= rentCost)
             {
                 Game.Instance.PartyStats.Gold -= rentCost;
-                View.RefreshGoldAndFood();
+                PlayingCharacterView.RefreshGoldAndFood();
                 View.Hide();
                 PartyRestsView.Show();
                 var partyRestsUseCase = new PartyRestsUseCase(PartyRestsView, PlayingCharacterView);
@@ -45,7 +45,7 @@ namespace Business
                 {
                     Game.Instance.PartyStats.Food += foodToBuy;
                     Game.Instance.PartyStats.Gold -= foodCost; // TODO: reduced price by merchant bonus
-                    View.RefreshGoldAndFood();
+                    PlayingCharacterView.RefreshGoldAndFood();
                 }
                 else
                 {

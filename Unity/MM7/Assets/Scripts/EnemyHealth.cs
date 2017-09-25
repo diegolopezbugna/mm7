@@ -20,6 +20,7 @@ public class EnemyHealth : MonoBehaviour {
     private ParticleSystem blood;
     private EnemyAttack enemyAttackBehaviour;
     private RandomWanderMove enemyRandomWanderMoveBehaviour;
+    private EnemyLoot enemyLootBehaviour;
 
     public int MaxHitPoints { get; private set; }  // TODO: move to Business.Enemy?
 
@@ -29,6 +30,9 @@ public class EnemyHealth : MonoBehaviour {
         blood = GetComponentInChildren<ParticleSystem>();
         enemyAttackBehaviour = GetComponent<EnemyAttack>();
         enemyRandomWanderMoveBehaviour = GetComponent<RandomWanderMove>();
+        enemyLootBehaviour = GetComponent<EnemyLoot>();
+        if (enemyLootBehaviour != null)
+            enemyLootBehaviour.enabled = false;
         MaxHitPoints = hitPoints;
 	}
 	
@@ -61,6 +65,8 @@ public class EnemyHealth : MonoBehaviour {
             }
             Destroy(enemyAttackBehaviour);
             Destroy(enemyRandomWanderMoveBehaviour);
+            if (enemyLootBehaviour != null)
+                enemyLootBehaviour.enabled = true;
             MoveToFloor();
         }
     }

@@ -63,7 +63,7 @@ namespace Business
             if (Game.Instance.PartyStats.Gold >= cost)
             {
                 Game.Instance.PartyStats.Gold -= Mathf.CeilToInt(cost);
-                BuySellItemView.RefreshGoldAndFood();
+                View.RefreshGoldAndFood();
                 playingCharacter.ConditionStatus = ConditionStatus.Normal;
                 playingCharacter.HitPoints = playingCharacter.MaxHitPoints;
                 playingCharacter.SpellPoints = playingCharacter.MaxSpellPoints;

@@ -6,11 +6,13 @@ namespace Business
 {
     public class SellItemUseCase
     {
-        private BuySellItemViewInterface view;
-        
-        public SellItemUseCase(BuySellItemViewInterface view)
+        private BuySellItemViewInterface View;
+        private PlayingCharacterViewInterface PlayingCharacterView;
+
+        public SellItemUseCase(BuySellItemViewInterface view, PlayingCharacterViewInterface playingCharacterView)
         {
-            this.view = view;
+            View = view;
+            PlayingCharacterView = playingCharacterView;
         }
 
         private int GetMerchantPrice(Item item, int totalMerchantBonus, float shopValueMultiplier) {
@@ -30,7 +32,7 @@ namespace Business
                 priceText = Localization.Instance.Get("MerchantBuyText3", item.Name, normalPrice, price);
             else
                 priceText = Localization.Instance.Get("MerchantBuyText2", item.Name, normalPrice, price);
-            view.ShowItemPrice(priceText);
+            View.ShowItemPrice(priceText);
         }
 
         public void SellItem(Item item, PlayingCharacter seller, float shopValueMultiplier) {
@@ -38,8 +40,8 @@ namespace Business
 
             seller.Inventory.RemoveItem(item);
             Game.Instance.PartyStats.Gold += price;
-            view.RefreshGoldAndFood();
-            view.NotifySuccessfulOperation(item, seller);
+            PlayingCharacterView.RefreshGoldAndFood();
+            View.NotifySuccessfulOperation(item, seller);
         }
 
     }

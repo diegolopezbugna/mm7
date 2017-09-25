@@ -14,7 +14,7 @@ namespace Business
             PlayingCharacterView = playingCharacterView;
         }
 
-        public void EnemyAttacks(Enemy enemy, PlayingCharacter targetCharacter) 
+        public void EnemyAttacks(EnemyInfo enemy, PlayingCharacter targetCharacter) 
         {
             var ac = targetCharacter.ArmorClass;
             var chanceToHit = (5f + enemy.MonsterLevel * 2f) / (10f + enemy.MonsterLevel * 2f + ac);

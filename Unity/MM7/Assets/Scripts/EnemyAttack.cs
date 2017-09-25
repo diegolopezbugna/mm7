@@ -39,21 +39,24 @@ public class EnemyAttack : MonoBehaviour {
     private int armorClass = 0;
     public int ArmorClass { get { return armorClass; } }
 
-    private Enemy enemy;
-    public Enemy Enemy {
+    private EnemyInfo enemyInfo;
+    public EnemyInfo EnemyInfo {
         get {
-            if (enemy == null)
+            if (enemyInfo == null)
             {
-                enemy = new Enemy()
+                // TODO: read this from monsters.txt
+                enemyInfo = new EnemyInfo()
                     { 
                         Armor = ArmorClass, 
                         DamageMin = this.DamageMin, 
                         DamageMax = this.DamageMax,
                         MonsterLevel = this.MonsterLevel,
                         Name = this.tag.TagToDescription(),
+                        LootGoldMin = 3,
+                        LootGoldMax = 18,
                     };
             }
-            return enemy;
+            return enemyInfo;
         }
     }
 
@@ -113,7 +116,7 @@ public class EnemyAttack : MonoBehaviour {
         if (charAttacked >= 0)
         {
             var enemyAttacksUseCase = new EnemyAttacksUseCase(Party.Instance, Party.Instance);
-            enemyAttacksUseCase.EnemyAttacks(Enemy, Game.Instance.PartyStats.Chars[charAttacked]);
+            enemyAttacksUseCase.EnemyAttacks(EnemyInfo, Game.Instance.PartyStats.Chars[charAttacked]);
 
             if (isRanged)
             {

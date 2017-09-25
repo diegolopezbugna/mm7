@@ -6,11 +6,13 @@ namespace Business
 {
     public class BuyItemUseCase
     {
-        private BuySellItemViewInterface view;
-        
-        public BuyItemUseCase(BuySellItemViewInterface view)
+        private BuySellItemViewInterface View;
+        private PlayingCharacterViewInterface PlayingCharacterView;
+
+        public BuyItemUseCase(BuySellItemViewInterface view, PlayingCharacterViewInterface playingCharacterView)
         {
-            this.view = view;
+            View = view;
+            PlayingCharacterView = playingCharacterView;
         }
 
         private int GetMerchantPrice(Item item, int totalMerchantBonus, float shopValueMultiplier) {
@@ -30,7 +32,7 @@ namespace Business
                 priceText = Localization.Instance.Get("MerchantSellText3", item.Name, normalPrice, price);
             else
                 priceText = Localization.Instance.Get("MerchantSellText2", item.Name, normalPrice, price);
-            view.ShowItemPrice(priceText);
+            View.ShowItemPrice(priceText);
         }
 
         public void BuyItem(Item item, PlayingCharacter buyer, float shopValueMultiplier) {
@@ -38,19 +40,19 @@ namespace Business
 
             if (Game.Instance.PartyStats.Gold < price)
             {
-                view.ShowError(Localization.Instance.Get("ImSorryButYouDontHaveEnoughMoney", buyer.Name));
+                View.ShowError(Localization.Instance.Get("ImSorryButYouDontHaveEnoughMoney", buyer.Name));
                 return;
             }
 
             if (!buyer.Inventory.TryInsertItem(item))
             {
-                view.ShowError(Localization.Instance.Get("YourPacksAreFull"));
+                View.ShowError(Localization.Instance.Get("YourPacksAreFull"));
                 return;
             }
 
             Game.Instance.PartyStats.Gold -= price;
-            view.RefreshGoldAndFood();
-            view.NotifySuccessfulOperation(item, buyer);
+            PlayingCharacterView.RefreshGoldAndFood();
+            View.NotifySuccessfulOperation(item, buyer);
         }
 
     }

@@ -36,7 +36,7 @@ public class IdentifyMonsterUI : BaseUI<IdentifyMonsterUI> {
         }
     }
 
-    public void Show(Enemy enemy, EnemyHealth enemyHealth)
+    public void Show(EnemyInfo enemy, EnemyHealth enemyHealth)
     {
         base.Show(true);
         nameValue.text = enemy.Name;

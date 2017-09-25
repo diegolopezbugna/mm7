@@ -244,7 +244,7 @@
      <Compile Include="Assets\Scripts\Business\Attribute.cs" />
      <Compile Include="Assets\Scripts\Business\BonusCost.cs" />
      <Compile Include="Assets\Scripts\Business\Building.cs" />
-     <Compile Include="Assets\Scripts\Business\Enemy.cs" />
+     <Compile Include="Assets\Scripts\Business\EnemyInfo.cs" />
      <Compile Include="Assets\Scripts\Business\EquippedItems.cs" />
      <Compile Include="Assets\Scripts\Business\Game.cs" />
      <Compile Include="Assets\Scripts\Business\Gender.cs" />
@@ -270,6 +270,7 @@
      <Compile Include="Assets\Scripts\Business\UseCases\BuyItemUseCase.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\CreatePartyUseCase.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\EnemyAttacksUseCase.cs" />
+     <Compile Include="Assets\Scripts\Business\UseCases\EnemyLootUseCase.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\PartyAttacksUseCase.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\PartyCastsSpellUseCase.cs" />
      <Compile Include="Assets\Scripts\Business\UseCases\PartyRestsUseCase.cs" />
@@ -283,6 +284,7 @@
      <Compile Include="Assets\Scripts\CreateParty\CreatePartyCharAttribute.cs" />
      <Compile Include="Assets\Scripts\EnemyAttack.cs" />
      <Compile Include="Assets\Scripts\EnemyHealth.cs" />
+     <Compile Include="Assets\Scripts\EnemyLoot.cs" />
      <Compile Include="Assets\Scripts\FirstPersonController\FirstPersonController.cs" />
      <Compile Include="Assets\Scripts\FirstPersonController\HeadBob.cs" />
      <Compile Include="Assets\Scripts\FirstPersonController\MouseLook.cs" />

@@ -172,7 +172,7 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
                     Game.Instance.PartyStats.Gold -= Mathf.CeilToInt(npc.Shop.ShopMultiplier);
                     if (Game.Instance.PartyStats.Gold < 0)
                         Game.Instance.PartyStats.Gold = 0;
-                    RefreshGoldAndFood();
+                    Party.Instance.RefreshGoldAndFood();
                 }
             }
             else if (npc.Shop.ShopType == ShopType.WeaponSmith)
@@ -297,7 +297,7 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
     }
 
     private void ShowItemPrice(Item item, PointerEventData eventData) {
-        var buyItemUseCase = new BuyItemUseCase(this);
+        var buyItemUseCase = new BuyItemUseCase(this, Party.Instance);
         buyItemUseCase.AskItemPrice(item, Party.Instance.GetPlayingCharacterSelectedOrDefault(), GetSellerNpc().Shop.ShopMultiplier);
     }
 
@@ -308,7 +308,7 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
     private void OnBuyingItemPointerDown(Item item, PointerEventData eventData) {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            var buyItemUseCase = new BuyItemUseCase(this);
+            var buyItemUseCase = new BuyItemUseCase(this, Party.Instance);
             buyItemUseCase.BuyItem(item, Party.Instance.GetPlayingCharacterSelectedOrDefault(), GetSellerNpc().Shop.ShopMultiplier);
         }
         else if (eventData.button == PointerEventData.InputButton.Right)
@@ -326,7 +326,7 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
     private void OnSellingItemFromInventoryPointerDown(Inventory inventory, Item item, PointerEventData eventData) {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            var sellItemUseCase = new SellItemUseCase(this);
+            var sellItemUseCase = new SellItemUseCase(this, Party.Instance);
             sellItemUseCase.SellItem(item, Party.Instance.GetPlayingCharacterSelectedOrDefault(), GetSellerNpc().Shop.ShopMultiplier);
         }
         else if (eventData.button == PointerEventData.InputButton.Right)
@@ -336,7 +336,7 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
     }
 
     private void OnSellingItemFromInventoryPointerEnter(Inventory inventory, Item item, PointerEventData eventData) {
-        var sellItemUseCase = new SellItemUseCase(this);
+        var sellItemUseCase = new SellItemUseCase(this, Party.Instance);
         sellItemUseCase.AskItemPrice(item, Party.Instance.GetPlayingCharacterSelectedOrDefault(), GetSellerNpc().Shop.ShopMultiplier);
     }
 
@@ -360,11 +360,6 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI>, BuySellItemViewInterface
     public void ShowItemPrice(string priceText)
     {
         dialogText.text = priceText;
-    }
-
-    public void RefreshGoldAndFood()
-    {
-        CharDetailsUI.Instance.RefreshGoldAndFood();
     }
 
     public void NotifySuccessfulOperation(Item item, PlayingCharacter buyerSeller)

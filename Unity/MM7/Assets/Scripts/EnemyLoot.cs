@@ -13,7 +13,8 @@ public class EnemyLoot : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+    {
         if (Input.GetMouseButtonDown(0) && Party.Instance.CurrentTarget == this.transform)
         {
             float distanceToParty = Party.Instance.GetDistanceSqrTo(transform);

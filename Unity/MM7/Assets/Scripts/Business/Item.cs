@@ -27,10 +27,15 @@ namespace Business
         Sscroll,
         Mscroll,
         Book,
+        gold,
     }
     
     public class Item
     {
+        private const int ITEM_GOLD_SMALL = 197;
+        private const int ITEM_GOLD_MEDIUM = 198;
+        private const int ITEM_GOLD_LARGE = 199;
+
         private static Dictionary<int, Item> allItems;
 
         public int Code { get; set; }
@@ -257,6 +262,44 @@ namespace Business
             }
 
             return itemsToChooseFrom.FirstOrDefault();
+        }
+
+        public static Item GenerateGold(int treasureLevel)
+        {
+            int goldAmount = 0;
+            int itemCode = 0;
+
+            switch (treasureLevel)
+            {
+                case 1:
+                    goldAmount = UnityEngine.Random.Range(50, 100);
+                    itemCode = ITEM_GOLD_SMALL;
+                    break;
+                case 2:
+                    goldAmount = UnityEngine.Random.Range(100, 200);
+                    itemCode = ITEM_GOLD_SMALL;
+                    break;
+                case 3:
+                    goldAmount = UnityEngine.Random.Range(200, 500);
+                    itemCode = ITEM_GOLD_MEDIUM;
+                    break;
+                case 4:
+                    goldAmount = UnityEngine.Random.Range(500, 1000);
+                    itemCode = ITEM_GOLD_MEDIUM;
+                    break;
+                case 5:
+                    goldAmount = UnityEngine.Random.Range(1000, 2000);
+                    itemCode = ITEM_GOLD_LARGE;
+                    break;
+                case 6:
+                    goldAmount = UnityEngine.Random.Range(2000, 5000);
+                    itemCode = ITEM_GOLD_LARGE;
+                    break;
+            }
+
+            var item = Item.GetByCode(itemCode);
+            item.Value = goldAmount;
+            return item;
         }
     }
 

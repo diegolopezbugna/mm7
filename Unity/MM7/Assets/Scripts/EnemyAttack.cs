@@ -95,7 +95,7 @@ public class EnemyAttack : MonoBehaviour {
 
             if (distanceToParty > maxAttackDistanceSqr)
             {
-                transform.localPosition = Vector3.MoveTowards(transform.position, Party.Instance.transform.position, engagingSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, Party.Instance.transform.position, engagingSpeed * Time.deltaTime);
             }
             else
             {

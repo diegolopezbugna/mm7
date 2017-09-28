@@ -7,7 +7,6 @@ namespace Business
         public string Name { get; set; }
         public string Description { get; set; }
         public string VideoFilename { get; set; }
-        public string Picture { get; set; }
         public string EnterText { get; set; }
 
         public DungeonEntranceInfo()
@@ -23,16 +22,14 @@ namespace Business
                     return new DungeonEntranceInfo() { 
                         Name = "The Temple of the Moon", 
                         VideoFilename = "Out01 Temple of the Moon",
-                        Description = "",
-                        Picture = "",
-                        EnterText = "Enter the sewer",
+                        Description = "The dripping of water and a strange, unidentifiable squeaking are the only noises that seem to come from the entrance to this cave.",
+                        EnterText = "Enter the cave",
                     };
                 case "192":
                     return new DungeonEntranceInfo() { 
                         Name = "The Dragon's Lair", 
                         VideoFilename = "Out01 Dragon Cave", 
                         Description = "A large dragon obviously makes his residence in these caves. Perhaps this is where those missing adventurers are...",
-                        Picture = "Ticon04",
                         EnterText = "Enter the cave",
                     };
             }

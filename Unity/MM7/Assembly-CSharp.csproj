@@ -244,6 +244,7 @@
      <Compile Include="Assets\Scripts\Business\Attribute.cs" />
      <Compile Include="Assets\Scripts\Business\BonusCost.cs" />
      <Compile Include="Assets\Scripts\Business\Building.cs" />
+     <Compile Include="Assets\Scripts\Business\DungeonEntranceInfo.cs" />
      <Compile Include="Assets\Scripts\Business\EnemyInfo.cs" />
      <Compile Include="Assets\Scripts\Business\EquippedItems.cs" />
      <Compile Include="Assets\Scripts\Business\Game.cs" />
@@ -284,6 +285,7 @@
      <Compile Include="Assets\Scripts\CreateParty\CreateParty.cs" />
      <Compile Include="Assets\Scripts\CreateParty\CreatePartyChar.cs" />
      <Compile Include="Assets\Scripts\CreateParty\CreatePartyCharAttribute.cs" />
+     <Compile Include="Assets\Scripts\DungeonEntrance.cs" />
      <Compile Include="Assets\Scripts\EnemyAttack.cs" />
      <Compile Include="Assets\Scripts\EnemyHealth.cs" />
      <Compile Include="Assets\Scripts\EnemyLoot.cs" />
@@ -323,13 +325,13 @@
      <Compile Include="Assets\Scripts\UI\OpenChestUI.cs" />
      <Compile Include="Assets\Scripts\UI\ProfessionData.cs" />
      <Compile Include="Assets\Scripts\UI\RestUI.cs" />
+     <Compile Include="Assets\Scripts\UI\ShopUI.cs" />
      <Compile Include="Assets\Scripts\UI\SkillData.cs" />
      <Compile Include="Assets\Scripts\UI\SkillItem.cs" />
      <Compile Include="Assets\Scripts\UI\SkillsUI.cs" />
      <Compile Include="Assets\Scripts\UI\SpellBookUI.cs" />
      <Compile Include="Assets\Scripts\UI\SpellButton.cs" />
      <Compile Include="Assets\Scripts\UI\StatsUI.cs" />
-     <Compile Include="Assets\Scripts\UI\TopicData.cs" />
      <Compile Include="Assets\Scripts\UI\VideoBuildingUI.cs" />
      <Compile Include="Assets\Scripts\VideoDoor.cs" />
      <Compile Include="Assets\UMA\Content\UMA_Core\HumanFemale\DNA\HumanFemaleDNAConverterBehaviour.cs" />

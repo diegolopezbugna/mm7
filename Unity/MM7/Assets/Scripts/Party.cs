@@ -229,6 +229,15 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
                     ShowMessage(videoDoor.TryOpen());
                 }
             }
+            else if (hit.transform.tag.StartsWith("DungeonEntrance") && hit.distance < 5)
+            {
+                var dungeonEntrance = hit.transform.GetComponent<DungeonEntrance>();
+                focussedText.text = dungeonEntrance.GetDescription();
+                if (Input.GetMouseButton(0) && !VideoBuildingUI.Instance.IsShowing && !CharDetailsUI.Instance.IsShowing) // TODO: better way
+                {
+                    dungeonEntrance.Show();
+                }
+            }
             else if (hit.transform.tag.StartsWith("Npc") && hit.distance < 2)
             {
                 var npcTalk = hit.transform.GetComponent<NpcTalk>();

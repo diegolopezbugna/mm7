@@ -42,6 +42,8 @@ namespace Business
                     return new Building() { Name = "Initiate Guild of Body", VideoFilename = "Body Guild" };
                 case "186":
                     return new Building() { Name = "Markham's Headquarters", VideoFilename = "Lord and Judge Out01" };
+                case "224":
+                    return new Building() { Name = "Donna Wyrith's Residence", VideoFilename = "Human Poor House 1" };
                 case "225":
                     return new Building() { Name = "Mia Lucille' Home", VideoFilename = "Human Poor House 2" };
                 case "238":

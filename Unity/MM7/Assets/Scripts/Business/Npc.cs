@@ -206,6 +206,21 @@ namespace Business
                     };
                 npcs.Add(npc);
             }
+            else if (locationCode == "224")
+            {
+                var npc = new Npc()
+                    { 
+                        Name = "Donna Wyrith",
+                        PictureCode = 219, 
+                        Greetings = new List<string>() { "Hello, my name is Donna, I live here with my daughter Sally.", "Hello again, what can I do for you?" },
+                        Topics = new List<NpcTopic>()
+                            { 
+                                new NpcTopic("Missing People", "Hmm… I recall a few strangers poking around the entrance to the Dragon's Cave recently. I didn't notice if they went inside, but I haven't seen them around since. They must have realized how dangerous that place is and headed back to town."),
+                                new NpcTopic("Abandoned Temple", "The cave right behind my house is not the Abandoned Temple. It belongs to Morcarack the Pitiless, the Dragon of Emerald Island. He doesn't appreciate visitors, so I wouldn't advise going there. The Abandoned Temple is buried in the hill south of my house. You can get to it by entering the caves at the top of the hill.")
+                            }
+                    };
+                npcs.Add(npc);
+            }
             else if (locationCode == "225")
             {
                 var npc = new Npc()

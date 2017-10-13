@@ -91,16 +91,19 @@ public class EnemyAttack : MonoBehaviour {
         {
             Party.Instance.SetEnemyEngagingParty(this.gameObject, distanceToParty);
             wanderMoveBehaviour.StopMoving();
-            transform.LookAt(Party.Instance.transform); // TODO: smooth
+
+            var partyPostitionToLookAt = new Vector3(Party.Instance.transform.position.x, transform.position.y, Party.Instance.transform.position.z);
+            transform.LookAt(partyPostitionToLookAt); // TODO: smooth
 
             if (distanceToParty > maxAttackDistanceSqr)
             {
                 transform.position = Vector3.MoveTowards(transform.position, Party.Instance.transform.position, engagingSpeed * Time.deltaTime);
+                animator.SetBool("IsRunning", true);
             }
             else
             {
                 var currentTime = Time.time;
-                if (currentTime - lastAttack > 2f)
+                if (currentTime - lastAttack > 2f)  // TODO: enemy recovery time
                 {
                     lastAttack = currentTime;
                     StartCoroutine(AttackParty());
@@ -110,6 +113,8 @@ public class EnemyAttack : MonoBehaviour {
 	}
 
     IEnumerator AttackParty() {
+        animator.SetBool("IsRunning", false);
+        animator.SetBool("IsWalking", false);
         animator.SetTrigger("Attack");
         yield return new WaitForSeconds(attackAnimationPartyHitDuration);
         var charAttacked = GetCharAttacked();

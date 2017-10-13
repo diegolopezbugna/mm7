@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 using UnityStandardAssets.Characters.FirstPerson;
 using Business;
 using Infrastructure;
+using UnityEngine.SceneManagement;
 
 public class VideoBuildingUI : BaseUI<VideoBuildingUI> {
 
@@ -81,8 +82,8 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI> {
         portraitTopicsPortraitImage.texture = picture;
         portraitTopicsPortraitText.text = "";
         ShowTopic(dungeonEntrance.EnterText, () => {
-            // TODO: load dragon cave scene!
-            Debug.Log("load dragon cave scene");
+            Debug.LogFormat("Loading scene {0} ...", dungeonEntrance.SceneName);
+            SceneManager.LoadScene(dungeonEntrance.SceneName);
         });
     }
 

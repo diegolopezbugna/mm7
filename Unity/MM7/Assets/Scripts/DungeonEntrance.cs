@@ -8,8 +8,16 @@ public class DungeonEntrance : MonoBehaviour {
     [SerializeField]
     private string locationCode;
 
+    public string LocationCode { get { return locationCode; } }
+
     [SerializeField]
     private Texture picture;
+
+    [SerializeField]
+    private bool isExit = false;
+
+    [SerializeField]
+    private Transform exitPoint;
 
     private DungeonEntranceInfo _dungeonEntranceInfo;
     public DungeonEntranceInfo DungeonInstanceInfo
@@ -17,7 +25,7 @@ public class DungeonEntrance : MonoBehaviour {
         get
         {
             if (_dungeonEntranceInfo == null)
-                _dungeonEntranceInfo = DungeonEntranceInfo.GetByLocationCode(locationCode);
+                _dungeonEntranceInfo = DungeonEntranceInfo.GetByLocationCode(LocationCode);
             return _dungeonEntranceInfo;
         }
     }
@@ -28,7 +36,12 @@ public class DungeonEntrance : MonoBehaviour {
 
     public void Show()
     {
-        VideoBuildingUI.Instance.Show(DungeonInstanceInfo, picture);
+        VideoBuildingUI.Instance.Show(DungeonInstanceInfo, picture, isExit);
     }
 
+    public void SetPartyLocation()
+    {
+        if (exitPoint != null)
+            Party.Instance.transform.SetPositionAndRotation(exitPoint.position, exitPoint.rotation);
+    }
 }

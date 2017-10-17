@@ -74,16 +74,29 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI> {
         ShowTopics(npc);
     }
 
-    public void Show(DungeonEntranceInfo dungeonEntrance, Texture picture) {
+    public void Show(DungeonEntranceInfo dungeonEntranceInfo, Texture picture, bool isExit) {
         base.Show();
-        StartCoroutine(PlayVideo("Assets/Resources/Videos/" + dungeonEntrance.VideoFilename + ".mp4"));
-        buildingNameText.text = dungeonEntrance.Name;
-        dialogText.text = dungeonEntrance.Description;
+        StartCoroutine(PlayVideo("Assets/Resources/Videos/" + dungeonEntranceInfo.VideoFilename + ".mp4"));
+        buildingNameText.text = dungeonEntranceInfo.Name;
+        dialogText.text = dungeonEntranceInfo.Description;
         portraitTopicsPortraitImage.texture = picture;
         portraitTopicsPortraitText.text = "";
-        ShowTopic(dungeonEntrance.EnterText, () => {
-            Debug.LogFormat("Loading scene {0} ...", dungeonEntrance.SceneName);
-            SceneManager.LoadScene(dungeonEntrance.SceneName);
+        ShowTopic(isExit ? dungeonEntranceInfo.LeaveText : dungeonEntranceInfo.EnterText, () => {
+            Debug.LogFormat("Loading scene {0} ...", dungeonEntranceInfo.EnterSceneName);
+            SceneManager.LoadScene(isExit ? dungeonEntranceInfo.LeaveSceneName : dungeonEntranceInfo.EnterSceneName);   // TODO: async, show loading
+            if (isExit)
+            {
+                foreach (var go in GameObject.FindGameObjectsWithTag("DungeonEntrance"))
+                {
+                    var dungeonEntrance = go.GetComponent<DungeonEntrance>();
+                    if (dungeonEntrance.LocationCode == dungeonEntranceInfo.LocationCode)
+                    {
+                        dungeonEntrance.SetPartyLocation();
+                        break;
+                    }
+                }
+            }
+            Hide();
         });
     }
 

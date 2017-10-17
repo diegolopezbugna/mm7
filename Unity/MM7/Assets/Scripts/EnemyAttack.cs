@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Business;
+using UnityEngine.AI;
 
 public class EnemyAttack : MonoBehaviour {
 
@@ -62,6 +63,7 @@ public class EnemyAttack : MonoBehaviour {
 
     private Animator animator;
     private RandomWanderMove wanderMoveBehaviour;
+    private NavMeshAgent agent;
     private float lastAttack = 0;
     private bool isEngagingParty = false;
 
@@ -76,6 +78,7 @@ public class EnemyAttack : MonoBehaviour {
 	void Start () {
         animator = GetComponent<Animator>();
         wanderMoveBehaviour = GetComponent<RandomWanderMove>();
+        agent = GetComponent<NavMeshAgent>();
 	}
 	
 	// Update is called once per frame
@@ -92,16 +95,35 @@ public class EnemyAttack : MonoBehaviour {
             Party.Instance.SetEnemyEngagingParty(this.gameObject, distanceToParty);
             wanderMoveBehaviour.StopMoving();
 
-            var partyPostitionToLookAt = new Vector3(Party.Instance.transform.position.x, transform.position.y, Party.Instance.transform.position.z);
-            transform.LookAt(partyPostitionToLookAt); // TODO: smooth
+            if (agent == null)
+            {
+                var partyPostitionToLookAt = new Vector3(Party.Instance.transform.position.x, transform.position.y, Party.Instance.transform.position.z);
+                transform.LookAt(partyPostitionToLookAt); // TODO: smooth
+            }
 
             if (distanceToParty > maxAttackDistanceSqr)
             {
-                transform.position = Vector3.MoveTowards(transform.position, Party.Instance.transform.position, engagingSpeed * Time.deltaTime);
                 animator.SetBool("IsRunning", true);
+                if (agent != null)
+                {
+                    agent.speed = engagingSpeed;
+                    agent.SetDestination(Party.Instance.transform.position);
+                    agent.isStopped = false;
+                }
+                else
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, Party.Instance.transform.position, engagingSpeed * Time.deltaTime);
+                }
             }
             else
             {
+                if (agent != null)
+                {
+                    agent.isStopped = true;
+                    var partyPostitionToLookAt = new Vector3(Party.Instance.transform.position.x, transform.position.y, Party.Instance.transform.position.z);
+                    transform.LookAt(partyPostitionToLookAt); // TODO: smooth
+                }
+
                 var currentTime = Time.time;
                 if (currentTime - lastAttack > 2f)  // TODO: enemy recovery time
                 {

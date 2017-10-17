@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Business
 {
@@ -25,8 +26,6 @@ namespace Business
                 return instance;
             }
         }
-
-
 
         public Game()
         {

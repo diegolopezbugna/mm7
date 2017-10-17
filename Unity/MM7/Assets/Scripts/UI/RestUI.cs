@@ -39,6 +39,7 @@ public class RestUI : BaseUI<RestUI>, PartyRestsViewInterface {
     public override void Awake()
     {
         base.Awake();
+        // TODO: inside a cave???
         _defaultEnviroDayLengthInMinutes = EnviroSky.instance.GameTime.DayLengthInMinutes;
         _defaultEnviroNightLengthInMinutes = EnviroSky.instance.GameTime.NightLengthInMinutes;
     }

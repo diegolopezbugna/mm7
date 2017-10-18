@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class NpcMove : MonoBehaviour {
 
@@ -27,9 +28,9 @@ public class NpcMove : MonoBehaviour {
             randomWanderMove.StopMoving();
             isLookingAtPlayer = true;
 
-            //transform.LookAt(Party.Instance.transform);
+            //transform.LookAt(FirstPersonController.Instance.transform);
             anim.SetBool("IsIdleLooking", true);
-            LookAt(Party.Instance.transform);
+            LookAt(FirstPersonController.Instance.transform);
         }
         else
         {

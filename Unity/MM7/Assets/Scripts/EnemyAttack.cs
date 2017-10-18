@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Business;
 using UnityEngine.AI;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class EnemyAttack : MonoBehaviour {
 
@@ -97,7 +98,7 @@ public class EnemyAttack : MonoBehaviour {
 
             if (agent == null)
             {
-                var partyPostitionToLookAt = new Vector3(Party.Instance.transform.position.x, transform.position.y, Party.Instance.transform.position.z);
+                var partyPostitionToLookAt = new Vector3(FirstPersonController.Instance.transform.position.x, transform.position.y, FirstPersonController.Instance.transform.position.z);
                 transform.LookAt(partyPostitionToLookAt); // TODO: smooth
             }
 
@@ -107,12 +108,12 @@ public class EnemyAttack : MonoBehaviour {
                 if (agent != null)
                 {
                     agent.speed = engagingSpeed;
-                    agent.SetDestination(Party.Instance.transform.position);
+                    agent.SetDestination(FirstPersonController.Instance.transform.position);
                     agent.isStopped = false;
                 }
                 else
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, Party.Instance.transform.position, engagingSpeed * Time.deltaTime);
+                    transform.position = Vector3.MoveTowards(transform.position, FirstPersonController.Instance.transform.position, engagingSpeed * Time.deltaTime);
                 }
             }
             else
@@ -120,7 +121,7 @@ public class EnemyAttack : MonoBehaviour {
                 if (agent != null)
                 {
                     agent.isStopped = true;
-                    var partyPostitionToLookAt = new Vector3(Party.Instance.transform.position.x, transform.position.y, Party.Instance.transform.position.z);
+                    var partyPostitionToLookAt = new Vector3(FirstPersonController.Instance.transform.position.x, transform.position.y, FirstPersonController.Instance.transform.position.z);
                     transform.LookAt(partyPostitionToLookAt); // TODO: smooth
                 }
 

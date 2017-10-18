@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Business;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class DungeonEntrance : MonoBehaviour {
 
@@ -42,6 +43,6 @@ public class DungeonEntrance : MonoBehaviour {
     public void SetPartyLocation()
     {
         if (exitPoint != null)
-            Party.Instance.transform.SetPositionAndRotation(exitPoint.position, exitPoint.rotation);
+            FirstPersonController.Instance.transform.SetPositionAndRotation(exitPoint.position, exitPoint.rotation);
     }
 }

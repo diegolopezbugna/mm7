@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Business;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class PartyAttack : MonoBehaviour, PartyAttacksViewInterface {
 
@@ -41,7 +42,7 @@ public class PartyAttack : MonoBehaviour, PartyAttacksViewInterface {
 
     void DoAttack(PlayingCharacter attackingChar, Vector3? targetPoint, Transform targetTransform) 
     {
-        var partyAttacksUseCase = new PartyAttacksUseCase(this, Party.Instance, targetPoint, targetTransform, Party.Instance.transform);
+        var partyAttacksUseCase = new PartyAttacksUseCase(this, Party.Instance, targetPoint, targetTransform, FirstPersonController.Instance.transform);
 
         if (targetTransform != null && targetTransform.tag.StartsWith("Enemy"))
         {

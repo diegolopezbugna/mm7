@@ -128,7 +128,7 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
             UpdatePlayingCharacter(chars[i]);
         }
         partyBloodBehaviour = this.GetComponent<PartyBlood>();
-        partyAttackBehaviour = this.GetComponent<PartyAttack>();
+        partyAttackBehaviour = FirstPersonController.Instance.GetComponent<PartyAttack>();
 
         RefreshGoldAndFood();
 	}
@@ -155,7 +155,7 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
             if (Input.GetMouseButtonDown(0) && 
                 targetRaycastHit != null)
             {
-                var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, this, transform);
+                var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, this, FirstPersonController.Instance.transform);
                 Time.timeScale = 1;
                 partyCastsSpellUseCase.CastSpell(GetPlayingCharacterSelected(), spellChoosingTarget, targetRaycastHit.Value.point, targetRaycastHit.Value.transform);
                 spellChoosingTarget = null;
@@ -348,7 +348,7 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
     }
 
     public float GetDistanceSqrTo(Transform other) {
-        return (transform.position - other.position).sqrMagnitude;
+        return (FirstPersonController.Instance.transform.position - other.position).sqrMagnitude;
     }
 
     public void SpellBookCastSpell(SpellInfo spellInfo)
@@ -361,7 +361,7 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
         }
         else
         {
-            var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, this, transform);
+            var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, this, FirstPersonController.Instance.transform);
             partyCastsSpellUseCase.CastSpell(GetPlayingCharacterSelected(), spellInfo);
         }
     }
@@ -370,7 +370,7 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
     {
         if (spellChoosingTarget != null && spellChoosingTarget.NeedsPartyTarget)
         {
-            var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, this, transform);
+            var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, this, FirstPersonController.Instance.transform);
             Time.timeScale = 1;
             partyCastsSpellUseCase.CastSpell(GetPlayingCharacterSelected(), spellChoosingTarget, playingCharClicked);
             spellChoosingTarget = null;

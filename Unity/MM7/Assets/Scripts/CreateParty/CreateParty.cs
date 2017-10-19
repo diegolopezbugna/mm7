@@ -82,7 +82,11 @@ public class CreateParty : Singleton<CreateParty>, CreatePartyViewInterface
         var partyStats = new PartyStats();
         partyStats.Chars = new List<PlayingCharacter>();
         foreach (var cpc in createPartyChars)
-            partyStats.Chars.Add(cpc.GetPlayingCaracter());
+        {
+            var pc = cpc.GetPlayingCaracter();
+            CreatePartyUseCase.AddStartingInventoryItems(pc);
+            partyStats.Chars.Add(pc);
+        }
         Game.Instance.PartyStats = partyStats;
 
         SceneManager.LoadScene("EmeraldIsland");

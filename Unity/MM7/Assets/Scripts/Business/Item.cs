@@ -36,8 +36,6 @@ namespace Business
         private const int ITEM_GOLD_MEDIUM = 198;
         private const int ITEM_GOLD_LARGE = 199;
 
-        private static Dictionary<int, Item> allItems;
-
         public int Code { get; set; }
         public string PictureFilename { get; set; }
         public string Name { get; set; }
@@ -52,6 +50,23 @@ namespace Business
         public float EquipX { get; set; }
         public float EquipY { get; set; }
         public int[] RandomItemGenerationChanceByTreasureLevel { get; set; }
+
+        private static Dictionary<int, Item> _allItems;
+        private static Dictionary<int, Item> AllItems {
+            get {
+                if (_allItems == null)
+                {
+                    _allItems = new Dictionary<int, Item>();
+                    lock (_allItems)
+                    {
+                        var itemsParser = new ItemsParser("Data/ITEMS");
+                        foreach (var item in itemsParser.Entities)
+                            _allItems.Add(item.Code, item);
+                    }
+                }
+                return _allItems;
+            }
+        }
 
         private Texture texture;
         public Texture Texture {
@@ -166,17 +181,7 @@ namespace Business
 
 
         public static Item GetByCode(int code) {
-            if (allItems == null)
-            {
-                allItems = new Dictionary<int, Item>();
-                lock (allItems)
-                {
-                    var itemsParser = new ItemsParser("Data/ITEMS");
-                    foreach (var item in itemsParser.Entities)
-                        allItems.Add(item.Code, item);
-                }
-            }
-            return allItems[code].MemberwiseClone() as Item;
+            return AllItems[code].MemberwiseClone() as Item;
         }
 
         public static List<Item> GetItemsToBuyAt(ShopType shopType, int treasureLevel) 
@@ -214,7 +219,7 @@ namespace Business
         public static List<Item> GetBooksToBuyAt(ShopType shopType, GuildLevel guildLevel) 
         {
             var numberOfBooksByGuildLevel = Shop.GetNumberOfBooksByGuildLevel(guildLevel);
-            var booksFromThisGuild = allItems.Values.Where(i => i.SkillGroup == (SkillCode)(Enum.Parse(typeof(SkillCode), shopType.ToString().Replace("Guild", "Magic"))));
+            var booksFromThisGuild = AllItems.Values.Where(i => i.SkillGroup == (SkillCode)(Enum.Parse(typeof(SkillCode), shopType.ToString().Replace("Guild", "Magic"))));
             var booksFromThisGuildLevel = booksFromThisGuild.Take(numberOfBooksByGuildLevel).ToList();
 
             var books = new List<Item>();
@@ -225,18 +230,18 @@ namespace Business
             
         public static Item GenerateItem(int treasureLevel) 
         {
-            return GenerateItem(allItems.Values, treasureLevel);
+            return GenerateItem(AllItems.Values, treasureLevel);
         }
 
         public static Item GenerateItem(List<EquipSlot> equipSlots, int treasureLevel) 
         {
-            var thisTypeItems = allItems.Values.Where(i => equipSlots.Contains(i.EquipSlot));
+            var thisTypeItems = AllItems.Values.Where(i => equipSlots.Contains(i.EquipSlot));
             return GenerateItem(thisTypeItems, treasureLevel);
         }
 
         public static Item GenerateItem(SkillCode skillCode, int treasureLevel) 
         {
-            var thisSkillItems = allItems.Values.Where(i => i.SkillGroup == skillCode);
+            var thisSkillItems = AllItems.Values.Where(i => i.SkillGroup == skillCode);
             return GenerateItem(thisSkillItems, treasureLevel);
         }
 

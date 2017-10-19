@@ -8,6 +8,7 @@ public class BaseUI<T> : Singleton<T> where T : MonoBehaviour
 
     // Use this for initialization
     public virtual void Awake() {
+        DontDestroyOnLoad(this.gameObject);
     }
 
     public virtual void Start() {

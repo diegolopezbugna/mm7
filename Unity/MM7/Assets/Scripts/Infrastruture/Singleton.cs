@@ -14,6 +14,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour {
 //            } else if (instance != FindObjectOfType<T>()){
 //                //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
 //                Destroy(FindObjectOfType<T>());
+                DontDestroyOnLoad(instance.gameObject);
             }
             //Sets this to not be destroyed when reloading scene
             // DontDestroyOnLoad(FindObjectOfType<T>());

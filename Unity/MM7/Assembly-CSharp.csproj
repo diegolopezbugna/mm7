@@ -302,6 +302,7 @@
      <Compile Include="Assets\Scripts\Infrastruture\StringExtensions.cs" />
      <Compile Include="Assets\Scripts\Infrastruture\TagToDescription.cs" />
      <Compile Include="Assets\Scripts\Infrastruture\UnityExtensions.cs" />
+     <Compile Include="Assets\Scripts\Loader.cs" />
      <Compile Include="Assets\Scripts\MessagesScroller.cs" />
      <Compile Include="Assets\Scripts\NpcMove.cs" />
      <Compile Include="Assets\Scripts\NpcNews.cs" />

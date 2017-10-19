@@ -117,23 +117,9 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
     private PartyBlood partyBloodBehaviour;
     private PartyAttack partyAttackBehaviour;
 
-    [SerializeField]
-    private GameObject[] uiPrefabs;
-
     void Awake()
     {
-        foreach (var go in uiPrefabs)
-            Instantiate(go);
-
-        // TODO: find a way to remove direct references to these uiPrefabs
-        VideoBuildingUI.Instance.gameObject.SetActive(false);
-        NpcDialog.Instance.gameObject.SetActive(false);
-        CharDetailsUI.Instance.gameObject.SetActive(false);
-        SpellBookUI.Instance.gameObject.SetActive(false);
-        RestUI.Instance.gameObject.SetActive(false);
-        IdentifyMonsterUI.Instance.gameObject.SetActive(false);
-        GameOverUI.Instance.gameObject.SetActive(false);
-        OpenChestUI.Instance.gameObject.SetActive(false);
+        DontDestroyOnLoad(this.gameObject);
     }
 
 	// Use this for initialization

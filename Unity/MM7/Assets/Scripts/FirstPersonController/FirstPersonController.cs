@@ -42,6 +42,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool m_Jumping;
         private AudioSource m_AudioSource;
 
+        void Awake()
+        {
+            DontDestroyOnLoad(this.gameObject);
+        }
+
         // Use this for initialization
         private void Start()
         {
@@ -258,6 +263,14 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 return;
             }
             body.AddForceAtPosition(m_CharacterController.velocity*0.1f, hit.point, ForceMode.Impulse);
+        }
+
+        public void SetPositionAndRotation(Vector3 position, Quaternion rotation)
+        {
+            transform.position = position;
+            transform.rotation = rotation;
+            if (m_MouseLook != null && m_Camera != null)
+                m_MouseLook.Init(transform , m_Camera.transform);
         }
     }
 }

@@ -83,21 +83,37 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI> {
         portraitTopicsPortraitText.text = "";
         ShowTopic(isExit ? dungeonEntranceInfo.LeaveText : dungeonEntranceInfo.EnterText, () => {
             Debug.LogFormat("Loading scene {0} ...", dungeonEntranceInfo.EnterSceneName);
-            SceneManager.LoadScene(isExit ? dungeonEntranceInfo.LeaveSceneName : dungeonEntranceInfo.EnterSceneName);   // TODO: async, show loading
-            if (isExit)
-            {
-                foreach (var go in GameObject.FindGameObjectsWithTag("DungeonEntrance"))
+            StartCoroutine(LoadScene(isExit ? dungeonEntranceInfo.LeaveSceneName : dungeonEntranceInfo.EnterSceneName, () => 
                 {
-                    var dungeonEntrance = go.GetComponent<DungeonEntrance>();
-                    if (dungeonEntrance.LocationCode == dungeonEntranceInfo.LocationCode)
+                    foreach (var go in GameObject.FindGameObjectsWithTag("DungeonEntrance"))
                     {
-                        dungeonEntrance.SetPartyLocation();
-                        break;
+                        var dungeonEntrance = go.GetComponent<DungeonEntrance>();
+                        if (dungeonEntrance.LocationCode == dungeonEntranceInfo.LocationCode)
+                        {
+                            dungeonEntrance.SetPartyLocation();
+                            break;
+                        }
                     }
-                }
-            }
-            Hide();
+                    // TODO: hide loading
+                    Hide();
+                }));
+            // TODO: show loading
         });
+    }
+
+    IEnumerator LoadScene(string sceneName, Action onLoaded)
+    {
+        // envirofog, envirolightshafts, enviroskyrendering
+        Destroy(FirstPersonController.Instance.GetComponentInChildren<EnviroFog>());
+        Destroy(FirstPersonController.Instance.GetComponentInChildren<EnviroLightShafts>());
+        Destroy(FirstPersonController.Instance.GetComponentInChildren<EnviroSkyRendering>());
+
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+        while (!asyncLoad.isDone)
+            yield return null;
+
+        if (onLoaded != null)
+            onLoaded();
     }
 
     public override void Hide()

@@ -187,8 +187,9 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI> {
         audioSource.playOnAwake = false;
         audioSource.Pause();
 
-        videoPlayer.isLooping = false;
         videoPlayer.clip = Resources.Load<VideoClip>("Videos/" + videoName);
+//        videoPlayer.isLooping = true; // TODO: FIX! short videos freeze app!!! add keyframes to videos?
+        videoPlayer.isLooping = false;
 
         //Set Audio Output to AudioSource
         videoPlayer.audioOutputMode = VideoAudioOutputMode.AudioSource;

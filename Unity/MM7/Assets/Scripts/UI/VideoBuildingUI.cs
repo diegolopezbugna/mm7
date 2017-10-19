@@ -65,7 +65,7 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI> {
         Building = building;
         Npcs = npcs;
         base.Show();
-        StartCoroutine(PlayVideo("Assets/Resources/Videos/" + building.VideoFilename + ".mp4"));
+        StartCoroutine(PlayVideo(building.VideoFilename));
         buildingNameText.text = building.Name;
         var npc = npcs[0]; // TODO: more than 1
         dialogText.text = npc.NextGreeting().Text;
@@ -76,7 +76,7 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI> {
 
     public void Show(DungeonEntranceInfo dungeonEntranceInfo, Texture picture, bool isExit) {
         base.Show();
-        StartCoroutine(PlayVideo("Assets/Resources/Videos/" + dungeonEntranceInfo.VideoFilename + ".mp4"));
+        StartCoroutine(PlayVideo(dungeonEntranceInfo.VideoFilename));
         buildingNameText.text = dungeonEntranceInfo.Name;
         dialogText.text = dungeonEntranceInfo.Description;
         portraitTopicsPortraitImage.texture = picture;
@@ -180,15 +180,15 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI> {
         LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)topicsContainer.transform);
     }
 
-    IEnumerator PlayVideo(string url)
+    IEnumerator PlayVideo(string videoName)
     {
         //Disable Play on Awake for both Video and Audio
         videoPlayer.playOnAwake = false;
         audioSource.playOnAwake = false;
         audioSource.Pause();
 
-        videoPlayer.url = url;
         videoPlayer.isLooping = false;
+        videoPlayer.clip = Resources.Load<VideoClip>("Videos/" + videoName);
 
         //Set Audio Output to AudioSource
         videoPlayer.audioOutputMode = VideoAudioOutputMode.AudioSource;

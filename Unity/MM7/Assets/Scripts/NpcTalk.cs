@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Business;
+using CrazyMinnow.SALSA;
 
 public class NpcTalk : MonoBehaviour {
 
@@ -25,7 +26,16 @@ public class NpcTalk : MonoBehaviour {
     }
 
     public void Talk() {
-        NpcDialog.Instance.Show(npc);
+        NpcDialog.Instance.Show(npc, this);
     }
 
+    public void Say(string audioName)
+    {
+        if (!string.IsNullOrEmpty(audioName))
+        {
+            var salsa = GetComponent<Salsa3D>();
+            salsa.LoadAudioClip("Audio/" + audioName);
+            salsa.Play();
+        }
+    }
 }

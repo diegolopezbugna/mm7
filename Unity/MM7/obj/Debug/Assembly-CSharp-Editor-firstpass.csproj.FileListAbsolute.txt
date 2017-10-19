@@ -53,3 +53,5 @@ C:\Users\Diego\Documents\MM7\Unity\MM7\Temp\bin\Debug\UnityEditor.iOS.Extensions
 C:\Users\Diego\Documents\MM7\Unity\MM7\obj\Debug\Assembly-CSharp-Editor-firstpass.csprojResolveAssemblyReference.cache
 C:\Users\Diego\Documents\MM7\Unity\MM7\obj\Debug\Assembly-CSharp-Editor-firstpass.dll
 C:\Users\Diego\Documents\MM7\Unity\MM7\obj\Debug\Assembly-CSharp-Editor-firstpass.pdb
+C:\Users\Diego\Documents\MM7\Unity\MM7\Temp\bin\Debug\SALSA.dll
+C:\Users\Diego\Documents\MM7\Unity\MM7\Temp\bin\Debug\SALSAEditor.dll

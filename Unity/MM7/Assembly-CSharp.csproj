@@ -46,6 +46,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Crazy Minnow Studio\SALSA with RandomEyes\Third Party Support\UMA 2\CM_UmaBasic.cs" />
+     <Compile Include="Assets\Crazy Minnow Studio\SALSA with RandomEyes\Third Party Support\UMA 2\CM_UmaExpressions.cs" />
+     <Compile Include="Assets\Crazy Minnow Studio\SALSA with RandomEyes\Third Party Support\UMA 2\CM_UmaSync.cs" />
+     <Compile Include="Assets\Crazy Minnow Studio\SALSA with RandomEyes\Third Party Support\UMA 2\Examples\Scripts\CM_UmaExpressionsTester.cs" />
      <Compile Include="Assets\Enviro - Dynamic Enviroment\Samples\Scripts\DemoUI.cs" />
      <Compile Include="Assets\Enviro - Dynamic Enviroment\Samples\Scripts\EnviroDayNightSwitch.cs" />
      <Compile Include="Assets\Enviro - Dynamic Enviroment\Samples\Scripts\EventTest.cs" />
@@ -538,6 +542,7 @@
      <None Include="Assets\UMA\Examples\Main Examples\Assets\Shaders\HairFadeCutout.shader" />
      <None Include="Assets\Gaia\3rd Party Samplers\3DForge\Documents\Village Exteriors Kit v1.2.1 - user guide.txt" />
      <None Include="Assets\UMA\Examples\Main Examples\Assets\Shaders\Debug_Normals.shader" />
+     <None Include="Assets\Crazy Minnow Studio\SALSA with RandomEyes\Third Party Support\UMA 2\ReadMe.txt" />
      <None Include="Assets\KriptoFX\Realistic Effects Pack v4\Shaders\RFX4_Tornado.shader" />
      <None Include="Assets\UMA\Examples\Extensions Examples\DynamicCharacterSystem\Assets\Resources\CharacterRecipes\HumanFemalePixi.txt" />
      <None Include="Assets\Enviro - Dynamic Enviroment\Shaders\SurfaceShaders\Metallic\EnviroSurface_Metallic_Emission.shader" />
@@ -591,6 +596,7 @@
      <None Include="Assets\UMA\Core\StandardAssets\UMA\Atlas\AtlasShader.shader" />
      <None Include="Assets\Gaia\3rd Party Samplers\README.txt" />
      <None Include="Assets\KriptoFX\Realistic Effects Pack v4\Shaders\Decal\RFX4_DecalDistortMaskMul.shader" />
+     <None Include="Assets\Crazy Minnow Studio\SALSA with RandomEyes\ReadMe.txt" />
      <None Include="Assets\UMA\InternalDataStore\InEditor\UMAEncryptionSettings-DoNotDelete.txt" />
      <None Include="Assets\KriptoFX\Realistic Effects Pack v4\Shaders\RFX4_IceMobile.shader" />
      <None Include="Assets\Standard Assets\Environment\Water (Basic)\Shaders\FXWaterBasic.shader" />
@@ -694,6 +700,9 @@
  </Reference>
  <Reference Include="UnityEngine.VR">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>
+ </Reference>
+ <Reference Include="SALSA">
+ <HintPath>C:/Users/Diego/Documents/MM7/Unity/MM7/Assets/Crazy Minnow Studio/SALSA with RandomEyes/Plugins/SALSA.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>

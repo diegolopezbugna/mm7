@@ -6,6 +6,9 @@ using UnityStandardAssets.Characters.FirstPerson;
 using Business;
 
 // TODO: code repeated on this class and VideoBuilding!!! Make it BaseUI
+using CrazyMinnow.SALSA;
+
+
 public class NpcDialog : BaseUI<NpcDialog> {
 
     [SerializeField]
@@ -17,11 +20,13 @@ public class NpcDialog : BaseUI<NpcDialog> {
     [SerializeField]
     private GameObject topicsContainer;
 
-    public void Show(Npc npc) {
+    public void Show(Npc npc, NpcTalk npcTalk) {
         base.Show();
         Time.timeScale = 1;
-        npcText.text = npc.NextGreeting();
-        ShowTopics(npc);
+        var greeting = npc.NextGreeting();
+        npcText.text = greeting.Text;
+        npcTalk.Say(greeting.AudioName);
+        ShowTopics(npc, npcTalk);
         RepositionNpcText();
     }
 
@@ -39,7 +44,7 @@ public class NpcDialog : BaseUI<NpcDialog> {
         Hide();
     }
 
-    private void ShowTopics(Npc npc)
+    private void ShowTopics(Npc npc, NpcTalk npcTalk)
     {
         topicsContainer.SetActive(true);
 
@@ -62,14 +67,15 @@ public class NpcDialog : BaseUI<NpcDialog> {
             topicText.onClick.RemoveAllListeners();
             topicText.onClick.AddListener(() =>
                 {
-                    OnTopicClicked(npc, npcTopic);
+                    OnTopicClicked(npc, npcTopic, npcTalk);
                 });
         }
 
     }
 
-    private void OnTopicClicked(Npc npc, NpcTopic npcTopic) {
+    private void OnTopicClicked(Npc npc, NpcTopic npcTopic, NpcTalk npcTalk) {
         npcText.text = npcTopic.Description;
+        npcTalk.Say(npcTopic.AudioName);
         RepositionNpcText();
     }
 

@@ -68,7 +68,7 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI> {
         StartCoroutine(PlayVideo("Assets/Resources/Videos/" + building.VideoFilename + ".mp4"));
         buildingNameText.text = building.Name;
         var npc = npcs[0]; // TODO: more than 1
-        dialogText.text = npc.NextGreeting();
+        dialogText.text = npc.NextGreeting().Text;
         portraitTopicsPortraitImage.texture = Resources.Load(string.Format("NPC Pictures/NPC{0:D3}", npc.PictureCode)) as Texture;
         portraitTopicsPortraitText.text = npc.Name;
         ShowTopics(npc);

@@ -3,19 +3,25 @@ using System.Collections.Generic;
 
 namespace Business
 {
+    public class Greeting {
+        public string Text;
+        public string AudioName;
+    }
+    
     public class Npc
     {
         public string Name { get; set; }
         public int PictureCode { get; set; }
-        public List<string> Greetings { get; set; }
+        public List<Greeting> Greetings { get; set; }
         public Shop Shop { get; set; }
         public List<NpcTopic> Topics { get; set; }
 
         private int currentGreetingIndex = 0;
 
-        public string NextGreeting() {
-            var greeting = "";
-            greeting = Greetings[currentGreetingIndex];
+        public Greeting NextGreeting() {
+            if (Greetings.Count == 0)
+                return new Greeting();
+            var greeting = Greetings[currentGreetingIndex];
             if (currentGreetingIndex + 1 < Greetings.Count)
                 currentGreetingIndex += 1;
             return greeting;
@@ -49,7 +55,7 @@ namespace Business
                     { 
                         Name = "Tor the Blacksmith",
                         PictureCode = 705, 
-                        Greetings = new List<string>() { "" },
+                        Greetings = new List<Greeting>(),
                         Shop = new Shop(ShopType.WeaponSmith, 1.5f, 1, 2),
                         Topics = Shop.GetCommonShopTopics(),
                     };
@@ -61,7 +67,7 @@ namespace Business
                     { 
                         Name = "Erik the Armorsmith",
                         PictureCode = 704, 
-                        Greetings = new List<string>() { "" },
+                        Greetings = new List<Greeting>(),
                         Shop = new Shop(ShopType.Armory, 1.5f, 1, 2),
                         Topics = Shop.GetCommonShopTopics(),
                     };
@@ -73,7 +79,7 @@ namespace Business
                     { 
                         Name = "Thurston the Magician",
                         PictureCode = 712, 
-                        Greetings = new List<string>() { "" },
+                        Greetings = new List<Greeting>(),
                         Shop = new Shop(ShopType.MagicShop, 1.5f, 1, 2),
                         Topics = Shop.GetCommonShopTopics(),
                     };
@@ -85,7 +91,7 @@ namespace Business
                     { 
                         Name = "Kethry the Alchemist",
                         PictureCode = 702, 
-                        Greetings = new List<string>() { "" },
+                        Greetings = new List<Greeting>(),
                         Shop = new Shop(ShopType.Alchemist, 2f, 1, 2),
                         Topics = Shop.GetCommonShopTopics(),
                     };
@@ -97,7 +103,7 @@ namespace Business
                     { 
                         Name = "Lauren the Healer",
                         PictureCode = 731, 
-                        Greetings = new List<string>() { "" },
+                        Greetings = new List<Greeting>(),
                         Shop = new Shop(ShopType.Healer, 10),
                         Topics = Shop.GetHealerShopTopics(),
                     };
@@ -109,7 +115,7 @@ namespace Business
                     { 
                         Name = "Trajan the Instructor",
                         PictureCode = 711, 
-                        Greetings = new List<string>() { "" },
+                        Greetings = new List<Greeting>(),
                         Topics = new List<NpcTopic>()
                             { 
                                 new NpcTopic("You need 1000 more experience to train to level 2", ""),
@@ -124,7 +130,7 @@ namespace Business
                     { 
                         Name = "Aaron the Innkeep",
                         PictureCode = 706, 
-                        Greetings = new List<string>() { "" },
+                        Greetings = new List<Greeting>(),
                         Shop = new Shop(ShopType.Inn, 6),
                         Topics = Shop.GetInnShopTopics(6),
                     };
@@ -136,7 +142,7 @@ namespace Business
                     { 
                         Name = "Sethric the Guildmaster",
                         PictureCode = 703, 
-                        Greetings = new List<string>() { "" },
+                        Greetings = new List<Greeting>(),
                         Shop = new Shop(ShopType.FireGuild, GuildLevel.Initiate),
                         Topics = Shop.GetGuildShopTopics(),
                     };
@@ -148,7 +154,7 @@ namespace Business
                     { 
                         Name = "Jenny the Guildmaster",
                         PictureCode = 164, 
-                        Greetings = new List<string>() { "" },
+                        Greetings = new List<Greeting>(),
                         Shop = new Shop(ShopType.AirGuild, GuildLevel.Initiate),
                         Topics = Shop.GetGuildShopTopics(),
                     };
@@ -160,7 +166,7 @@ namespace Business
                     { 
                         Name = "Fialt the Guildmaster",
                         PictureCode = 722, 
-                        Greetings = new List<string>() { "" },
+                        Greetings = new List<Greeting>(),
                         Shop = new Shop(ShopType.SpiritGuild, GuildLevel.Initiate),
                         Topics = Shop.GetGuildShopTopics(),
                     };
@@ -172,7 +178,7 @@ namespace Business
                     { 
                         Name = "Standish the Guildmaster",
                         PictureCode = 794, 
-                        Greetings = new List<string>() { "" },
+                        Greetings = new List<Greeting>(),
                         Shop = new Shop(ShopType.BodyGuild, GuildLevel.Initiate),
                         Topics = Shop.GetGuildShopTopics(),
                     };
@@ -184,7 +190,7 @@ namespace Business
                     { 
                         Name = "Lord Markham",
                         PictureCode = 709, 
-                        Greetings = new List<string>() { "I am Lord Markham, the benefactor providing the castle that is the prize of the this contest.", "Nice to see you again, how are you doing on the hunt?" },
+                        Greetings = StringsToGreetings(new List<string>() { "I am Lord Markham, the benefactor providing the castle that is the prize of the this contest.", "Nice to see you again, how are you doing on the hunt?" }),
                         Topics = new List<NpcTopic>()
                             { 
                                 new NpcTopic("Castle Harmondale", "If you win, you'll be in charge of one of the most scenic areas in all Erathia!  Harmondale is just outside of the Tularean Forest, right on the edge of the Elf-Human border.  And I'm sure you'll love the castle.  It's a bit of a fixer-upper, but it's quite roomy and has excellent ventilation.  It breaks my heart to part with this property, but I feel that the time has come for me to give something back to the people."),
@@ -197,7 +203,7 @@ namespace Business
                     { 
                         Name = "Thomas the Judge",
                         PictureCode = 707, 
-                        Greetings = new List<string>() { "Greetings, my name is Thomas.  I am the judge of the contest.", "Have you collected everything on the list yet?" },
+                        Greetings = StringsToGreetings(new List<string>() { "Greetings, my name is Thomas.  I am the judge of the contest.", "Have you collected everything on the list yet?" }),
                         Topics = new List<NpcTopic>()
                             { 
                                 new NpcTopic("Rules of the Hunt", "Good afternoon.  My duty is to verify that you have all the items necessary to win the contest.  You are required to bring a red potion, a longbow, a floor tile from the Temple of the Moon, a wealthy hat, seashell, and an instrument to me.  You can bring them in any order, just show them to me one at a time so that I may verify them."),
@@ -212,7 +218,7 @@ namespace Business
                     { 
                         Name = "Donna Wyrith",
                         PictureCode = 219, 
-                        Greetings = new List<string>() { "Hello, my name is Donna, I live here with my daughter Sally.", "Hello again, what can I do for you?" },
+                        Greetings = StringsToGreetings(new List<string>() { "Hello, my name is Donna, I live here with my daughter Sally.", "Hello again, what can I do for you?" }),
                         Topics = new List<NpcTopic>()
                             { 
                                 new NpcTopic("Missing People", "Hmm… I recall a few strangers poking around the entrance to the Dragon's Cave recently. I didn't notice if they went inside, but I haven't seen them around since. They must have realized how dangerous that place is and headed back to town."),
@@ -225,14 +231,14 @@ namespace Business
             {
                 var npc = new Npc()
                 { 
-                    Name = "Mia Lucille",
-                    PictureCode = 216, 
-                    Greetings = new List<string>() { "Greetings, I'm Mia.  Do you need something?", "Yes?  What do you want?" },
-                    Topics = new List<NpcTopic>()
-                    { 
-                        new NpcTopic("Dragonflies", "Wild Dragonflies have infested the northwestern side of Emerald Island recently, making it dangerous to store things in our shed out there.  Dragonflies aren't terribly powerful, but they are fast and can even occasionally shoot fire at you.  Don't take them too lightly!"),
-                        new NpcTopic("Dragon", "The Dragon of Emerald Island lives in a cave in the northeast.  I wouldn't go there, though, he doesn't like visitors.  He spares our town so that we may pay him tribute, and in return he keeps pirates and undesirables out.")
-                    }
+                        Name = "Mia Lucille",
+                        PictureCode = 216, 
+                        Greetings = StringsToGreetings(new List<string>() { "Greetings, I'm Mia.  Do you need something?", "Yes?  What do you want?" }),
+                        Topics = new List<NpcTopic>()
+                        { 
+                            new NpcTopic("Dragonflies", "Wild Dragonflies have infested the northwestern side of Emerald Island recently, making it dangerous to store things in our shed out there.  Dragonflies aren't terribly powerful, but they are fast and can even occasionally shoot fire at you.  Don't take them too lightly!"),
+                            new NpcTopic("Dragon", "The Dragon of Emerald Island lives in a cave in the northeast.  I wouldn't go there, though, he doesn't like visitors.  He spares our town so that we may pay him tribute, and in return he keeps pirates and undesirables out.")
+                        }
                 };
                 npcs.Add(npc);
             }
@@ -242,7 +248,7 @@ namespace Business
                     { 
                         Name = "William Darvees",
                         PictureCode = 77, 
-                        Greetings = new List<string>() { "Ahoy matey! I be William Darvees, captain of this vessel.", "Aye, good to see you again, mates!" },
+                        Greetings = StringsToGreetings(new List<string>() { "Ahoy matey! I be William Darvees, captain of this vessel.", "Aye, good to see you again, mates!" }),
                         Topics = new List<NpcTopic>()
                             { 
                                 new NpcTopic("Boat Travel", "Sorry mates, this vessel's moored until a winner has been declared in the contest."),
@@ -256,7 +262,7 @@ namespace Business
                     { 
                         Name = "Carolyn Weathers",
                         PictureCode = 158, 
-                        Greetings = new List<string>() { "Hello, I'm Carolyn. I handle the guild memberships for the Fire and Air Guilds here on the island." },
+                        Greetings = StringsToGreetings(new List<string>() { "Hello, I'm Carolyn. I handle the guild memberships for the Fire and Air Guilds here on the island." }),
                         Topics = new List<NpcTopic>()
                             { 
                                 new NpcTopic("Air Guild Membership", "Air is the element the sorcerers join the profession to learn!  We have all the best spells--including the glorious Fly spell.  Don't miss out on this fantastic opportunity to join the Air guild!  Just 50 gold!"),
@@ -271,7 +277,7 @@ namespace Business
                     { 
                         Name = "Roger Tellmar",
                         PictureCode = 10, 
-                        Greetings = new List<string>() { "I'm Roger and I sell guild memberships for the Body and Spirit Guilds on Emerald Island." },
+                        Greetings = StringsToGreetings(new List<string>() { "I'm Roger and I sell guild memberships for the Body and Spirit Guilds on Emerald Island." }),
                         Topics = new List<NpcTopic>()
                             { 
                                 new NpcTopic("Body Guild Membership", "I am the guild recruiter for the Guild of Body.  A lot of people think that our spells just heal the body, but some can damage the bodies of your opponents too.  The cost is 50 gold pieces."),
@@ -293,12 +299,22 @@ namespace Business
                 { 
                     Name = "Ailyssa the Bard",
                     PictureCode = 163, 
-                    Greetings = new List<string>() { "Hello, my name is Ailyssa.  I'm the Bard in charge of overseeing the entertainment on Emerald Island for the duration of the Scavenger Hunt.", "Hello again, how are you doing?" },
+                    Greetings = new List<Greeting>() 
+                    { 
+                            new Greeting() {
+                                Text = "Hello, my name is Ailyssa.  I'm the Bard in charge of overseeing the entertainment on Emerald Island for the duration of the Scavenger Hunt.", 
+                                AudioName = "BardGreeting1",
+                            },
+                            new Greeting() {
+                                Text = "Hello again, how are you doing?",
+                                AudioName = "BardGreeting2",
+                            },
+                    },
                     Topics = new List<NpcTopic>()
                     { 
-                        new NpcTopic("Scavenger Hunt", "Are you contestants in Lord Markham's Scavenger Hunt?  How neat!  I'm here to provide entertainment to Lord Markham's entourage, the contestants, and to anyone else that would like to hear a song."),
-                        new NpcTopic("Instruments", "I own a few instruments, but I only brought my lute with me.  Its old and not quite as well kept as some of the others, but I didn't want one of my good instruments stolen by pirates or damaged from exposure to the humid, salty air."),
-                        new NpcTopic("Lute", "You say you need an instrument for the Scavenger Hunt?  I suppose you could buy my lute, but I've had it for such a long time.  I guess I'd part with it for 500 gold.  Interested?", 
+                        new NpcTopic("Scavenger Hunt", "Are you contestants in Lord Markham's Scavenger Hunt?  How neat!  I'm here to provide entertainment to Lord Markham's entourage, the contestants, and to anyone else that would like to hear a song.", "BardTopic1"),
+                        new NpcTopic("Instruments", "I own a few instruments, but I only brought my lute with me.  Its old and not quite as well kept as some of the others, but I didn't want one of my good instruments stolen by pirates or damaged from exposure to the humid, salty air.", "BardTopic2"),
+                        new NpcTopic("Lute", "You say you need an instrument for the Scavenger Hunt?  I suppose you could buy my lute, but I've had it for such a long time.  I guess I'd part with it for 500 gold.  Interested?", "BardTopic3",
                             new List<NpcTopic>() { new NpcTopic("Buy Lute for 500 gold") }), // TODO: complete, gold npc topics?
                     }
                 };
@@ -310,7 +326,7 @@ namespace Business
                     { 
                         Name = "Sally",
                         PictureCode = 150, 
-                        Greetings = new List<string>() { "Hi there!  I'm Sally.  I don't usually see people this far from town, are you lost?", "Still out here?  Town's back a ways to the south." },
+                        Greetings = StringsToGreetings(new List<string>() { "Hi there!  I'm Sally.  I don't usually see people this far from town, are you lost?", "Still out here?  Town's back a ways to the south." }),
                         Topics = new List<NpcTopic>()
                             { 
                                 new NpcTopic("Ocean", "I love being out on this side of the island, the view of the ocean is much better than from town, don't you agree?"),
@@ -326,7 +342,7 @@ namespace Business
                     { 
                         Name = "Mr. Malwick",
                         PictureCode = 21, 
-                        Greetings = new List<string>() { "Pssst…  Come here, I have an offer for you.", "Ah, you've returned, no doubt to listen to my proposal." },
+                        Greetings = StringsToGreetings(new List<string>() { "Pssst…  Come here, I have an offer for you.", "Ah, you've returned, no doubt to listen to my proposal." }),
                         Topics = new List<NpcTopic>()
                             { 
                                 new NpcTopic("Harmondale", "We have reason to believe that whoever is in charge of Harmondale in the next few months will have an unprecedented opportunity to shape the future. That is why I am here today--to make sure the shape of the future is pleasing to my associates. I'm sure you understand."),
@@ -340,6 +356,16 @@ namespace Business
             return null;
         }
 
+
+        private static List<Greeting> StringsToGreetings(List<string> strings)
+        {
+            var greetings = new List<Greeting>();
+            foreach (var s in strings)
+            {
+                greetings.Add(new Greeting() { Text = s, AudioName = null });
+            }
+            return greetings;
+        }
 
     }
 }

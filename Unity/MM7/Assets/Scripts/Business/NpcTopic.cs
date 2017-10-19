@@ -8,6 +8,7 @@ namespace Business
         public List<NpcTopic> Subtopics { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+        public string AudioName { get; set; }
         public ShopActionType ShopActionType { get; set; }
 
         public NpcTopic() {
@@ -24,7 +25,17 @@ namespace Business
             Description = description;
         }
 
+        public NpcTopic(string title, string description, string audioName) : this() {
+            Title = title;
+            Description = description;
+            AudioName = audioName;
+        }
+
         public NpcTopic(string title, string description, List<NpcTopic> subtopics) : this(title, description) {
+            Subtopics = subtopics;
+        }
+
+        public NpcTopic(string title, string description, string audioName, List<NpcTopic> subtopics) : this(title, description, audioName) {
             Subtopics = subtopics;
         }
 

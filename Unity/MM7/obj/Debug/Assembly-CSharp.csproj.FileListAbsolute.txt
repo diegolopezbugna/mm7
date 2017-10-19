@@ -30,3 +30,4 @@ C:\Users\Diego\Documents\MM7\Unity\MM7\Temp\bin\Debug\UnityEngine.VR.xml
 C:\Users\Diego\Documents\MM7\Unity\MM7\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 C:\Users\Diego\Documents\MM7\Unity\MM7\obj\Debug\Assembly-CSharp.dll
 C:\Users\Diego\Documents\MM7\Unity\MM7\obj\Debug\Assembly-CSharp.pdb
+C:\Users\Diego\Documents\MM7\Unity\MM7\Temp\bin\Debug\SALSA.dll

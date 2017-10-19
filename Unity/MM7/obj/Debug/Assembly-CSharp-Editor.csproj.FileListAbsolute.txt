@@ -55,3 +55,5 @@ C:\Users\Diego\Documents\MM7\Unity\MM7\Temp\bin\Debug\UnityEditor.iOS.Extensions
 C:\Users\Diego\Documents\MM7\Unity\MM7\obj\Debug\Assembly-CSharp-Editor.csprojResolveAssemblyReference.cache
 C:\Users\Diego\Documents\MM7\Unity\MM7\obj\Debug\Assembly-CSharp-Editor.dll
 C:\Users\Diego\Documents\MM7\Unity\MM7\obj\Debug\Assembly-CSharp-Editor.pdb
+C:\Users\Diego\Documents\MM7\Unity\MM7\Temp\bin\Debug\SALSA.dll
+C:\Users\Diego\Documents\MM7\Unity\MM7\Temp\bin\Debug\SALSAEditor.dll

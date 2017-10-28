@@ -19,9 +19,11 @@ namespace Business
             switch (locationCode)
             {
                 case "1":
-                    return new Building() { Name = "The Knight's Blade", VideoFilename = "Human Weapon Smith01" };
+                    //return new Building() { Name = "The Knight's Blade", VideoFilename = "Human Weapon Smith01" };
+                    return new Building() { Name = "The Sharp Blade", VideoFilename = "blacksmith" };
                 case "15":
-                    return new Building() { Name = "Erik's Armory", VideoFilename = "human Armor01" };
+                    //return new Building() { Name = "Erik's Armory", VideoFilename = "human Armor01" };
+                    return new Building() { Name = "Armors & Shields", VideoFilename = "blacksmith" };
                 case "29":
                     return new Building() { Name = "Emerald Enchantments", VideoFilename = "Human Magic Shop01" };
                 case "42":
@@ -31,7 +33,8 @@ namespace Business
                 case "89":
                     return new Building() { Name = "Island Training Grounds", VideoFilename = "Human Training Ground01" };
                 case "107":
-                    return new Building() { Name = "Two Palms Tavern", VideoFilename = "Human Tavern01" };
+                    //return new Building() { Name = "Two Palms Tavern", VideoFilename = "Human Tavern01" };
+                    return new Building() { Name = "The Red Fox Tavern", VideoFilename = "tavern" };
                 case "139":
                     return new Building() { Name = "Initiate Guild of Fire", VideoFilename = "Fire Guild" };
                 case "143":
@@ -41,7 +44,8 @@ namespace Business
                 case "163":
                     return new Building() { Name = "Initiate Guild of Body", VideoFilename = "Body Guild" };
                 case "186":
-                    return new Building() { Name = "Markham's Headquarters", VideoFilename = "Lord and Judge Out01" };
+                    //return new Building() { Name = "Markham's Headquarters", VideoFilename = "Lord and Judge Out01" };
+                    return new Building() { Name = "Taylor's Manor", VideoFilename = "castle" };
                 case "224":
                     return new Building() { Name = "Donna Wyrith's Residence", VideoFilename = "Human Poor House 1" };
                 case "225":

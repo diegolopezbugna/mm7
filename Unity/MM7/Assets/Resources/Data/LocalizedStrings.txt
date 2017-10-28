@@ -14,3 +14,4 @@ GoodLuckInTheContest	Good luck in the contest!
 spcost	Spell points cost: {0}
 NoMagicSkills	{0} haven't learnt any magic skill
 YouFoundXGold	You found {0} gold!
+Goblin	Orc

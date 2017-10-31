@@ -51,10 +51,10 @@ public class EquippedItemsUI : MonoBehaviour, IPointerDownHandler {
         if (equippedItems.Cloak != null)
             DrawEquippedItem(equippedItems.Cloak, centeredBottomPivot, new Vector2(1.7f, 8f));
 
-        DrawBodyPart("bod", centeredBottomPivot, Vector2.zero);
+        DrawBodyPart("bod", centeredBottomPivot, GetBodyPosition());
 
         if (equippedItems.Armor != null)
-            DrawEquippedItem(equippedItems.Armor, Vector2.one, GetArmorPosition());
+            DrawEquippedItem(equippedItems.Armor, Vector2.one, GetArmorPosition(equippedItems.Armor));
 
         if (!equippedItems.IsDualHandWeaponEquipped)
             DrawBodyPart("lad", centeredPivot, GetLeftArmPosition());
@@ -115,6 +115,12 @@ public class EquippedItemsUI : MonoBehaviour, IPointerDownHandler {
             DrawEquippedItem(equippedItems.Rings[5], Vector2.right, new Vector2(0f, 60f * scale));
     }
 
+    private Vector2 GetBodyPosition()
+    {
+        var t = GetBodyPartTexture("bod");
+        return new Vector2((t.width - 173f) / 2f, - (t.height - 353f));
+    }
+
     private Vector2 GetRightHandPosition()
     {
         if (playingChar.Race.RaceCode == RaceCode.Dwarf && playingChar.Gender == Gender.Male)
@@ -159,16 +165,20 @@ public class EquippedItemsUI : MonoBehaviour, IPointerDownHandler {
             return new Vector2(44.2f, -22.5f);
     }
 
-    private Vector2 GetArmorPosition()
+    private Vector2 GetArmorPosition(Item item)
     {
+        Vector2 pos;
         if (playingChar.Race.RaceCode == RaceCode.Dwarf && playingChar.Gender == Gender.Male)
-            return new Vector2(-GetLeftArmPosition().x + 5f, -99.8f);
+            pos = new Vector2(-GetLeftArmPosition().x + 5f, -99.8f);
         else if (playingChar.Race.RaceCode == RaceCode.Dwarf && playingChar.Gender == Gender.Female)
-            return new Vector2(-GetLeftArmPosition().x + 2f, -103f);
+            pos = new Vector2(-GetLeftArmPosition().x + 2f, -103f);
         else if (playingChar.Gender == Gender.Female)
-            return new Vector2(-GetLeftArmPosition().x - 13f, -67f);
+            pos = new Vector2(-GetLeftArmPosition().x - 13f, -67f);
         else
-            return new Vector2(-GetLeftArmPosition().x + 2f, -67f);
+            pos = new Vector2(-GetLeftArmPosition().x + 2f, -67f);
+        pos.x += item.EquipX * scale;
+        pos.y += item.EquipY * scale;
+        return pos;
     }
 
     private Vector2 GetHelmPosition(Item item)

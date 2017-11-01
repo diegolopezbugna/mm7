@@ -25,8 +25,6 @@ namespace Business
                 targetCharacter.HitPoints -= damage;
                 MessagesScroller.Instance.AddMessage(string.Format("{0} hits {1} for {2} points", enemy.Name, targetCharacter.Name, damage));
 
-                View.TakeHit(targetCharacter);
-
                 if (targetCharacter.HitPoints <= -targetCharacter.Endurance) // TODO: PRESERVATION SPELL, endurance bonuses from items
                 {
                     targetCharacter.ConditionStatus = ConditionStatus.Dead;
@@ -39,7 +37,7 @@ namespace Business
                     MessagesScroller.Instance.AddMessage(string.Format("{0} gets unconscious.", targetCharacter.Name));
                 }
 
-                PlayingCharacterView.UpdatePlayingCharacter(targetCharacter);
+                View.TakeHit(targetCharacter);
 
                 if (Game.Instance.PartyStats.Chars.All(c => c.HitPoints <= 0)) {
                     PlayingCharacterView.ShowGameOver();

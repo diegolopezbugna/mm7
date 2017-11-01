@@ -415,11 +415,7 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
     public void UpdatePlayingCharacter(PlayingCharacter playingCharacter)
     {
         var i = Game.Instance.PartyStats.Chars.IndexOf(playingCharacter);
-        charsPortraits[i].SetMaxHitPoints(playingCharacter.MaxHitPoints);
-        charsPortraits[i].SetHitPoints(playingCharacter.HitPoints);
-        charsPortraits[i].SetMaxSpellPoints(playingCharacter.MaxSpellPoints);
-        charsPortraits[i].SetSpellPoints(playingCharacter.SpellPoints);
-        charsPortraits[i].ConditionStatus = playingCharacter.ConditionStatus;
+        charsPortraits[i].UpdatePlayingCharacter();
         if (!playingCharacter.IsActive && GetPlayingCharacterSelected() == playingCharacter)
             SelectNextPlayingCharacter();
     }
@@ -428,6 +424,8 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
     {
         partyBloodBehaviour.TakeHit();
         charsPortraits[Game.Instance.PartyStats.Chars.IndexOf(target)].ShowHitPortrait();
+        if (!target.IsActive && GetPlayingCharacterSelected() == target)
+            SelectNextPlayingCharacter();
     }
 
     public void ShowGameOver()

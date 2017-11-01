@@ -21,7 +21,7 @@ public class DungeonEntrance : MonoBehaviour {
     private Transform exitPoint;
 
     private DungeonEntranceInfo _dungeonEntranceInfo;
-    public DungeonEntranceInfo DungeonInstanceInfo
+    public DungeonEntranceInfo DungeonEntranceInfo
     {
         get
         {
@@ -32,12 +32,17 @@ public class DungeonEntrance : MonoBehaviour {
     }
 
     public string GetDescription() {
-        return DungeonInstanceInfo.Name;
+        if (!string.IsNullOrEmpty(DungeonEntranceInfo.VideoFilename))
+            return DungeonEntranceInfo.Name;
+        else if (isExit)
+            return DungeonEntranceInfo.LeaveText;
+        else
+            return DungeonEntranceInfo.EnterText;
     }
 
     public void Show()
     {
-        VideoBuildingUI.Instance.Show(DungeonInstanceInfo, picture, isExit);
+                VideoBuildingUI.Instance.Show(DungeonEntranceInfo, picture, isExit);
     }
 
     public void SetPartyLocation()

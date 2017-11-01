@@ -170,6 +170,7 @@ namespace Business
             pc.Speed = attributes[5];
             pc.HitPoints = pc.MaxHitPoints;
             pc.SpellPoints = pc.MaxSpellPoints;
+            pc.ConditionStatus = ConditionStatus.Normal;
             return pc;
         }
 

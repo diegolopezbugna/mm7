@@ -160,6 +160,14 @@ public class CharPortrait : MonoBehaviour {
             SetStatusNone();
     }
 
+    public void UpdatePlayingCharacter() {
+        SetMaxHitPoints(PlayingCharacter.MaxHitPoints);
+        SetHitPoints(PlayingCharacter.HitPoints);
+        SetMaxSpellPoints(PlayingCharacter.MaxSpellPoints);
+        SetSpellPoints(PlayingCharacter.SpellPoints);
+        ConditionStatus = PlayingCharacter.ConditionStatus;
+    }
+
     public void ShowHitPortrait() {
         StartCoroutine(DoShowHitPortrait());
     }
@@ -168,7 +176,7 @@ public class CharPortrait : MonoBehaviour {
         var ratio = hitPointsSlider.value / hitPointsSlider.maxValue;
         charPortraitImage.texture = portraitImages.Damage[ratio > 0.66 ? 0 : (ratio > 0.33 ? 1 : 2)];
         yield return new WaitForSeconds(0.5f);
-        ConditionStatus = ConditionStatus;
+        UpdatePlayingCharacter();
     }
 
     private void SetStatusNone() 

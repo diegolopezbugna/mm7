@@ -5,6 +5,7 @@ namespace Business
     // TODO: more conditions
     public enum ConditionStatus 
     {
+        None,
         Normal,
         Sleeping,
         Unconscious,

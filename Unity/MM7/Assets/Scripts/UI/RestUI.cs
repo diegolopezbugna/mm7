@@ -52,7 +52,8 @@ public class RestUI : BaseUI<RestUI>, PartyRestsViewInterface {
         base.Show(cursorLock);
         Time.timeScale = 1;
         _currentHourglassSprite = _defaultHourglassSprite;
-        hourglassImage.texture = HourglassTextures[_currentHourglassSprite];
+        if (hourglassImage != null)
+            hourglassImage.texture = HourglassTextures[_currentHourglassSprite];
     }
 
     public override void Update()
@@ -91,10 +92,13 @@ public class RestUI : BaseUI<RestUI>, PartyRestsViewInterface {
 
     private void NextHourGlass()
     {
-        _currentHourglassSprite++;
-        if (_currentHourglassSprite >= _hourglassTextures.Length)
-            _currentHourglassSprite = 0;
-        hourglassImage.texture = HourglassTextures[_currentHourglassSprite];
+        if (hourglassImage != null)
+        {
+            _currentHourglassSprite++;
+            if (_currentHourglassSprite >= _hourglassTextures.Length)
+                _currentHourglassSprite = 0;
+            hourglassImage.texture = HourglassTextures[_currentHourglassSprite];
+        }
     }
 
     private void Wait(float enviroTimeToWait, Action onFinished) 

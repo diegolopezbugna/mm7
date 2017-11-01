@@ -62,6 +62,7 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI> {
 	}
 
     public void Show(Building building, List<Npc> npcs) {
+        canvas.enabled = false;
         Building = building;
         Npcs = npcs;
         base.Show();
@@ -75,30 +76,44 @@ public class VideoBuildingUI : BaseUI<VideoBuildingUI> {
     }
 
     public void Show(DungeonEntranceInfo dungeonEntranceInfo, Texture picture, bool isExit) {
+        canvas.enabled = false;
         base.Show();
-        StartCoroutine(PlayVideo(dungeonEntranceInfo.VideoFilename));
-        buildingNameText.text = dungeonEntranceInfo.Name;
-        dialogText.text = dungeonEntranceInfo.Description;
-        portraitTopicsPortraitImage.texture = picture;
-        portraitTopicsPortraitText.text = "";
-        ShowTopic(isExit ? dungeonEntranceInfo.LeaveText : dungeonEntranceInfo.EnterText, () => {
-            Debug.LogFormat("Loading scene {0} ...", dungeonEntranceInfo.EnterSceneName);
-            StartCoroutine(LoadScene(isExit ? dungeonEntranceInfo.LeaveSceneName : dungeonEntranceInfo.EnterSceneName, () => 
+        if (!string.IsNullOrEmpty(dungeonEntranceInfo.VideoFilename))
+        {
+            StartCoroutine(PlayVideo(dungeonEntranceInfo.VideoFilename));
+            buildingNameText.text = dungeonEntranceInfo.Name;
+            dialogText.text = dungeonEntranceInfo.Description;
+            portraitTopicsPortraitImage.texture = picture;
+            portraitTopicsPortraitText.text = "";
+            ShowTopic(isExit ? dungeonEntranceInfo.LeaveText : dungeonEntranceInfo.EnterText, () =>
                 {
-                    foreach (var go in GameObject.FindGameObjectsWithTag("DungeonEntrance"))
+                    EnterLeaveDungeon(dungeonEntranceInfo, isExit);
+                });
+        }
+        else
+        {
+            EnterLeaveDungeon(dungeonEntranceInfo, isExit);
+        }
+    }
+
+    private void EnterLeaveDungeon(DungeonEntranceInfo dungeonEntranceInfo, bool isExit)
+    {
+        Debug.LogFormat("Loading scene {0} ...", dungeonEntranceInfo.EnterSceneName);
+        StartCoroutine(LoadScene(isExit ? dungeonEntranceInfo.LeaveSceneName : dungeonEntranceInfo.EnterSceneName, () => 
+            {
+                foreach (var go in GameObject.FindGameObjectsWithTag("DungeonEntrance"))
+                {
+                    var dungeonEntrance = go.GetComponent<DungeonEntrance>();
+                    if (dungeonEntrance.LocationCode == dungeonEntranceInfo.LocationCode)
                     {
-                        var dungeonEntrance = go.GetComponent<DungeonEntrance>();
-                        if (dungeonEntrance.LocationCode == dungeonEntranceInfo.LocationCode)
-                        {
-                            dungeonEntrance.SetPartyLocation();
-                            break;
-                        }
+                        dungeonEntrance.SetPartyLocation();
+                        break;
                     }
-                    // TODO: hide loading
-                    Hide();
-                }));
-            // TODO: show loading
-        });
+                }
+                // TODO: hide loading
+                Hide();
+            }));
+        // TODO: show loading
     }
 
     IEnumerator LoadScene(string sceneName, Action onLoaded)

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Business;
+using Infrastructure;
 
 namespace Business
 {
@@ -107,22 +109,24 @@ namespace Business
 
         public static List<NpcTopic> GetCommonShopTopics()
         {
-            return new List<NpcTopic>()
-            { 
-                new NpcTopic("Buy standard", ShopActionType.BuyStandard),
-                new NpcTopic("Buy special", ShopActionType.BuySpecial),
-                new NpcTopic("Sell", ShopActionType.Sell),
-                new NpcTopic("Identify Item", ShopActionType.IdentifyItem),
-                new NpcTopic("Repair Item", ShopActionType.RepairItem),
-                new NpcTopic("Learn skills", ShopActionType.LearnSkills),
-            };
+            var topics = new List<NpcTopic>();
+            if (Game.Instance.IsBuyStandardEnabled)
+                topics.Add(new NpcTopic(Localization.Instance.Get("BuyStandard"), ShopActionType.BuyStandard));
+            topics.Add(new NpcTopic(Localization.Instance.Get("BuySpecial"), ShopActionType.BuySpecial));
+            topics.Add(new NpcTopic(Localization.Instance.Get("Sell"), ShopActionType.Sell));
+            if (Game.Instance.IsIdentifyEnabled)
+                topics.Add(new NpcTopic(Localization.Instance.Get("IdentifyItem"), ShopActionType.IdentifyItem));
+            if (Game.Instance.IsRepairEnabled)
+                topics.Add(new NpcTopic(Localization.Instance.Get("RepairItem"), ShopActionType.RepairItem));
+            topics.Add(new NpcTopic(Localization.Instance.Get("LearnSkills"), ShopActionType.LearnSkills));
+            return topics;
         }
 
         public static List<NpcTopic> GetGuildShopTopics()
         {
             return new List<NpcTopic>()
             { 
-                new NpcTopic("You must be a member of this guild to study here", ""), // TODO: guild membership
+//                new NpcTopic("You must be a member of this guild to study here", ""), // TODO: guild membership
                 new NpcTopic("Buy spells", ShopActionType.BuySpells),
                 new NpcTopic("Learn skills", ShopActionType.LearnSkills),
             };

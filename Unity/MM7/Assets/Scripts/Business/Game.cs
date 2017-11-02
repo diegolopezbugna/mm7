@@ -7,6 +7,10 @@ namespace Business
 {
     public class Game
     {
+        public bool IsBuyStandardEnabled = false; // TODO: move to config
+        public bool IsIdentifyEnabled = false; // TODO: move to config
+        public bool IsRepairEnabled = false; // TODO: move to config
+
         private PartyStats _partyStats;
         public PartyStats PartyStats { 
             get { 

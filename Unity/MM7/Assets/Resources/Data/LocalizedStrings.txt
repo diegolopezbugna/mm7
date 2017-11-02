@@ -15,3 +15,9 @@ spcost	Spell points cost: {0}
 NoMagicSkills	{0} haven't learnt any magic skill
 YouFoundXGold	You found {0} gold!
 Goblin	Orc
+BuyStandard	Buy standard
+BuySpecial	Buy
+Sell	Sell
+IdentifyItem	Identify item
+RepairItem	Repair item
+LearnSkills	Learn skills

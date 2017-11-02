@@ -83,7 +83,8 @@ public class SpellBookUI : BaseUI<SpellBookUI> {
         var spells = SpellInfo.GetAllBySkill(skillCode); // TODO: learnt spells!
 
         foreach (var s in spells)
-            DrawSpell(s);
+            if (s.Name == "Heal" || s.Name == "Implosion" || s.Name == "Lightning Bolt" || s.Name == "Fire Bolt" || s.Name == "Incinerate" || s.Name == "Fire Resistance") // TODO: remove this, only for trailer
+                DrawSpell(s);
     }
 
     private void DrawSpell(SpellInfo spell)

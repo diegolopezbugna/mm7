@@ -53,8 +53,10 @@ namespace Business
             {
                 var npc = new Npc()
                     { 
-                        Name = "Tor the Blacksmith",
-                        PictureCode = 705, 
+//                        Name = "Tor the Blacksmith",
+//                        PictureCode = 705, 
+                        Name = "Juba the Blacksmith",
+                        PictureCode = 1006, 
                         Greetings = new List<Greeting>(),
                         Shop = new Shop(ShopType.WeaponSmith, 1.5f, 1, 2),
                         Topics = Shop.GetCommonShopTopics(),
@@ -128,8 +130,10 @@ namespace Business
             {
                 var npc = new Npc()
                     { 
-                        Name = "Aaron the Innkeep",
-                        PictureCode = 706, 
+//                        Name = "Aaron the Innkeep",
+//                        PictureCode = 706, 
+                        Name = "Maia the Innkeep",
+                        PictureCode = 1471, 
                         Greetings = new List<Greeting>(),
                         Shop = new Shop(ShopType.Inn, 6),
                         Topics = Shop.GetInnShopTopics(6),
@@ -188,14 +192,19 @@ namespace Business
             {
                 var npc = new Npc()
                     { 
-                        Name = "Lord Markham",
-                        PictureCode = 709, 
-                        Greetings = StringsToGreetings(new List<string>() { "I am Lord Markham, the benefactor providing the castle that is the prize of the this contest.", "Nice to see you again, how are you doing on the hunt?" }),
+//                        Name = "Lord Markham",
+//                        PictureCode = 709, 
+                        Name = "Lord Falk",
+                        PictureCode = 1033, 
+//                        Greetings = StringsToGreetings(new List<string>() { "I am Lord Markham, the benefactor providing the castle that is the prize of the this contest.", "Nice to see you again, how are you doing on the hunt?" }),
+                        Greetings = StringsToGreetings(new List<string>() { "I am Lord Falk, the ruler of this island.", "Nice to see you again, have you found the spider's nest?" }),
                         Topics = new List<NpcTopic>()
                             { 
-                                new NpcTopic("Castle Harmondale", "If you win, you'll be in charge of one of the most scenic areas in all Erathia!  Harmondale is just outside of the Tularean Forest, right on the edge of the Elf-Human border.  And I'm sure you'll love the castle.  It's a bit of a fixer-upper, but it's quite roomy and has excellent ventilation.  It breaks my heart to part with this property, but I feel that the time has come for me to give something back to the people."),
-                                new NpcTopic("The Hunt", "Isn't this hunt exciting?  I really am grateful you came to my little event, and I hope you have fun, even if you don't win.  I think it's great that everyone is competing in a spirit of good sportsmanship and camaraderie."),
-                                new NpcTopic("Missing Contestants", "Keep in mind I have a 1000 gold reward for the group to bring back information on the contestants that have disappeared."),
+//                                new NpcTopic("Castle Harmondale", "If you win, you'll be in charge of one of the most scenic areas in all Erathia!  Harmondale is just outside of the Tularean Forest, right on the edge of the Elf-Human border.  And I'm sure you'll love the castle.  It's a bit of a fixer-upper, but it's quite roomy and has excellent ventilation.  It breaks my heart to part with this property, but I feel that the time has come for me to give something back to the people."),
+//                                new NpcTopic("The Hunt", "Isn't this hunt exciting?  I really am grateful you came to my little event, and I hope you have fun, even if you don't win.  I think it's great that everyone is competing in a spirit of good sportsmanship and camaraderie."),
+//                                new NpcTopic("Missing Contestants", "Keep in mind I have a 1000 gold reward for the group to bring back information on the contestants that have disappeared."),
+                                new NpcTopic("Spiders", "A bunch of spiders have made a nest on the cave North of town. We tried to kill them but we are few and they are fearless. I have placed a reward of 2000 gold reward for the ones that can eliminate them."),
+                                new NpcTopic("Missing people", "After the spiders arrived, there were some people missing. At night the spiders get out of the cave, be carefull. Please help us with them."),
                             }
                     };
                 npcs.Add(npc);
@@ -297,25 +306,33 @@ namespace Business
             {
                 var npc = new Npc()
                 { 
-                    Name = "Ailyssa the Bard",
+//                    Name = "Ailyssa the Bard",
+                    Name = "Kate",
                     PictureCode = 163, 
                     Greetings = new List<Greeting>() 
                     { 
                             new Greeting() {
-                                Text = "Hello, my name is Ailyssa.  I'm the Bard in charge of overseeing the entertainment on Emerald Island for the duration of the Scavenger Hunt.", 
-                                AudioName = "BardGreeting1",
+//                                Text = "Hello, my name is Ailyssa.  I'm the Bard in charge of overseeing the entertainment on Emerald Island for the duration of the Scavenger Hunt.", 
+//                                AudioName = "BardGreeting1",
+                                    Text = "Hi! I'm Kate! What is a group of adventurers like you doing in this boring island?", // TODO: ckeck english
+                                AudioName = "KateGreeting1",
                             },
                             new Greeting() {
-                                Text = "Hello again, how are you doing?",
-                                AudioName = "BardGreeting2",
+//                                Text = "Hello again, how are you doing?",
+//                                AudioName = "BardGreeting2",
+                                Text = "Hello again! Any exciting news?",
+                                AudioName = "KateGreeting2",
                             },
                     },
                     Topics = new List<NpcTopic>()
                     { 
-                        new NpcTopic("Scavenger Hunt", "Are you contestants in Lord Markham's Scavenger Hunt?  How neat!  I'm here to provide entertainment to Lord Markham's entourage, the contestants, and to anyone else that would like to hear a song.", "BardTopic1"),
-                        new NpcTopic("Instruments", "I own a few instruments, but I only brought my lute with me.  Its old and not quite as well kept as some of the others, but I didn't want one of my good instruments stolen by pirates or damaged from exposure to the humid, salty air.", "BardTopic2"),
-                        new NpcTopic("Lute", "You say you need an instrument for the Scavenger Hunt?  I suppose you could buy my lute, but I've had it for such a long time.  I guess I'd part with it for 500 gold.  Interested?", "BardTopic3",
-                            new List<NpcTopic>() { new NpcTopic("Buy Lute for 500 gold") }), // TODO: complete, gold npc topics?
+//                        new NpcTopic("Scavenger Hunt", "Are you contestants in Lord Markham's Scavenger Hunt?  How neat!  I'm here to provide entertainment to Lord Markham's entourage, the contestants, and to anyone else that would like to hear a song.", "BardTopic1"),
+//                        new NpcTopic("Instruments", "I own a few instruments, but I only brought my lute with me.  Its old and not quite as well kept as some of the others, but I didn't want one of my good instruments stolen by pirates or damaged from exposure to the humid, salty air.", "BardTopic2"),
+//                        new NpcTopic("Lute", "You say you need an instrument for the Scavenger Hunt?  I suppose you could buy my lute, but I've had it for such a long time.  I guess I'd part with it for 500 gold.  Interested?", "BardTopic3",
+//                            new List<NpcTopic>() { new NpcTopic("Buy Lute for 500 gold") }), // TODO: complete, gold npc topics?
+                        new NpcTopic("Spiders", "This town used to be boring as hell, but a week ago a group of big spiders made a nest on a cave near here. At night, those nasty bugs get out. At last something different happens! Oh, but they killed my friend Merry...", "KateTopic1", 
+                                    new List<NpcTopic>() { new NpcTopic("Merry", "") }), // TODO: complete, gold npc topics?
+                                new NpcTopic("Lord Falk", "Lord Falk? He's my father. We live at the house with the red flowers, you can't miss it. He doesn't like strangers, but we need help with those nasty creatures.", "KateTopic2"),
                     }
                 };
                 return npc;

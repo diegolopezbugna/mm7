@@ -104,7 +104,8 @@ public class CreatePartyChar : MonoBehaviour {
             PortraitSelected = 20;
         else
             PortraitSelected--;
-        UpdatePortrait();
+        if (!IsPortraitAvailable())
+            PrevPortraitButtonClick();
     }
 
     public void NextPortraitButtonClick() {
@@ -112,7 +113,12 @@ public class CreatePartyChar : MonoBehaviour {
             PortraitSelected = 1;
         else
             PortraitSelected++;
-        UpdatePortrait();
+        if (!IsPortraitAvailable())
+            NextPortraitButtonClick();
+    }
+
+    private bool IsPortraitAvailable() {
+        return Game.Instance.CreatePartyAvailablePortraits == null || Game.Instance.CreatePartyAvailablePortraits.Contains(PortraitSelected);
     }
 
     private void UpdatePortrait() {

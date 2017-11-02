@@ -10,6 +10,7 @@ namespace Business
         public bool IsBuyStandardEnabled = false; // TODO: move to config
         public bool IsIdentifyEnabled = false; // TODO: move to config
         public bool IsRepairEnabled = false; // TODO: move to config
+        public int[] CreatePartyAvailablePortraits = new int[] { 1, 2, 5, 6, 7, 8, 9, 10, 11, 12, 17, 18, 19, 20 }; // TODO: move to config
 
         private PartyStats _partyStats;
         public PartyStats PartyStats { 

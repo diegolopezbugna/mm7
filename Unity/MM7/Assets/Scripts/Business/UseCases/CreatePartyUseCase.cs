@@ -70,7 +70,7 @@ namespace Business
             dummyParty.Chars = new List<PlayingCharacter>();
 //            var pc = CreateDummyChar("Zoltan", Race.Goblin(), Gender.Male, "18", Profession.Get(ProfessionCode.Knight), new int[] { 30, 5, 5, 13, 13, 20 },
 //                new SkillCode[] { SkillCode.Sword, SkillCode.Leather, SkillCode.Bow, SkillCode.Armsmaster });
-            var pc = CreateDummyChar("Zugorim", Race.Goblin(), Gender.Male, "18", Profession.Get(ProfessionCode.Knight), new int[] { 30, 5, 5, 13, 13, 20 },
+            var pc = CreateDummyChar("Zugorim", Race.Goblin(), Gender.Male, "17", Profession.Get(ProfessionCode.Knight), new int[] { 30, 5, 5, 13, 13, 20 },
                 new SkillCode[] { SkillCode.Sword, SkillCode.Leather, SkillCode.Bow, SkillCode.Armsmaster });
             pc.Inventory.TryInsertItem(Item.GetByCode(1));
             pc.Inventory.TryInsertItem(Item.GetByCode(47));

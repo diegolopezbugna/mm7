@@ -203,7 +203,7 @@ namespace Business
 //                                new NpcTopic("Castle Harmondale", "If you win, you'll be in charge of one of the most scenic areas in all Erathia!  Harmondale is just outside of the Tularean Forest, right on the edge of the Elf-Human border.  And I'm sure you'll love the castle.  It's a bit of a fixer-upper, but it's quite roomy and has excellent ventilation.  It breaks my heart to part with this property, but I feel that the time has come for me to give something back to the people."),
 //                                new NpcTopic("The Hunt", "Isn't this hunt exciting?  I really am grateful you came to my little event, and I hope you have fun, even if you don't win.  I think it's great that everyone is competing in a spirit of good sportsmanship and camaraderie."),
 //                                new NpcTopic("Missing Contestants", "Keep in mind I have a 1000 gold reward for the group to bring back information on the contestants that have disappeared."),
-                                new NpcTopic("Spiders", "A bunch of spiders have made a nest on the cave North of town. We tried to kill them but we are few and they are fearless. I have placed a reward of 2000 gold reward for the ones that can eliminate them."),
+                                new NpcTopic("Spiders", "A bunch of spiders have made a nest on the cave North of town. We tried to kill them but we are few and they are fearless. I'm offering a 2000 gold reward for the ones that eliminate them."),
                                 new NpcTopic("Missing people", "After the spiders arrived, there were some people missing. At night the spiders get out of the cave, be carefull. Please help us with them."),
                             }
                     };

@@ -1,0 +1,12 @@
+Volver ITEMS.TXT
+en localizaedStrings quitar Goblin Orc
+Cambiar stats en chardetails.prefab, createpartychar.prefab, statsbg.prefab 
+Cambiar títulos de secciones en chardetails.prefab, createpartychar.prefab, statsbg.prefab (attributes -> stats, profession -> class)
+Volver a poner recursos items/pcbodies/pcportraits/professions
+Volver a poner recursos UI
+Volver a poner recursos Spells/SpellPortraitSprites
+Configurar en el loader para que use Rest y no Rest2
+en assets/ui/food poner el item de la manzana (274)
+descomentar: CreatePartyUseCase.cs, DungeonEntranceInfo.cs, Npc.cs, SpellBookUI.cs, Building.cs, 
+en game.cs poner isBuyStandardEnabled = true
+en game.cs poner CreatePartyAvailablePortraits = null

@@ -122,6 +122,7 @@
      <None Include="Assets\Gaia\3rd Party Samplers\GameTexturesDotCom\_Readme.txt" />
      <None Include="Assets\Enviro - Dynamic Enviroment\Scripts\UBER Integration\UBER Integration.txt" />
      <None Include="Assets\Standard Assets\Effects\TessellationShaders\Shaders\BumpedSpecularSmooth.shader" />
+     <None Include="Assets\backToMM7.txt" />
      <None Include="Assets\Standard Assets\Effects\Projectors\Guidelines.txt" />
      <None Include="Assets\UMA\Core\StandardAssets\UMA\Atlas\AtlasCutoutShader.shader" />
      <None Include="Assets\Gaia\Documentation\Release Notes v1_5_3.txt" />

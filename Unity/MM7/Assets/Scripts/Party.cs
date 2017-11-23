@@ -9,6 +9,9 @@ using System;
 
 public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttacksViewInterface, PlayingCharacterViewInterface {
 
+    private const float PAUSED_ATTACK_CONTINUE_TIME_IN_SECONDS = 1f;
+    private const float PAUSED_ATTACK_WAIT_TIME_IN_SECONDS = 1f;
+
     [SerializeField]
     private Text foodValue;
 
@@ -84,35 +87,11 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
 
     public event EventHandler PlayingCharacterSelectedChanged;
 
-    private Transform currentTarget;
-    public Transform CurrentTarget
-    {
-        get
-        {
-            return currentTarget;
-        }
-        set
-        {
-            currentTarget = value;
-        }
-    }
-
-    private Vector3 currentTargetPoint;
-    public Vector3 CurrentTargetPoint
-    {
-        get
-        {
-            return currentTargetPoint;
-        }
-        set
-        {
-            currentTargetPoint = value;
-        }
-    }
-
     private bool isEnemyEngagingPartyThisFrame = false;
     private bool isEnemyInHandToHandCombatThisFrame = false;
     private SpellInfo spellChoosingTarget = null;
+    private bool isPausedAttack = false;
+    private float nextPausedAttack = 0f;
 
     private PartyBlood partyBloodBehaviour;
     private PartyAttack partyAttackBehaviour;
@@ -143,6 +122,16 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
     {
         // TODO: refactor main loop
 
+        if (VideoBuildingUI.Instance.IsShowing ||
+            CharDetailsUI.Instance.IsShowing ||
+            OpenChestUI.Instance.IsShowing ||
+            RestUI.Instance.IsShowing ||
+            SpellBookUI.Instance.IsShowing ||
+            NpcDialog.Instance.IsShowing)
+        {
+            return;
+        }
+
         if (CharPortraitSelected < 0)
         {
             SelectNextPlayingCharacter();
@@ -154,175 +143,218 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
                 OnPortraitLeftClick(Game.Instance.PartyStats.Chars[i]);
         }
 
-        if (spellChoosingTarget != null && spellChoosingTarget.Needs3dTarget) 
+        if (nextPausedAttack > 0 && nextPausedAttack < Time.time)
         {
-            var targetRaycastHit = CalculateMouseTarget();
-            if (Input.GetMouseButtonDown(0) && 
-                targetRaycastHit != null)
+            nextPausedAttack = 0f;
+            isPausedAttack = true;
+        }
+
+        if (CharPortraitSelected >= 0)
+        {
+            if (Input.GetKeyDown("i"))
             {
-                var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, this, FirstPersonController.Instance.transform);
-                Time.timeScale = 1;
-                partyCastsSpellUseCase.CastSpell(GetPlayingCharacterSelected(), spellChoosingTarget, targetRaycastHit.Value.point, targetRaycastHit.Value.transform);
+                CharDetailsUI.Instance.ShowInventory();
+            }
+            else if (Input.GetKeyDown("r"))
+            {
+                OnRestIconClicked();
+            }
+            else if (Input.GetKeyDown("b"))
+            {
+                OnSpellBookIconClicked();
+            }
+
+            if (Input.GetKeyDown("e"))
+            {
+                isPausedAttack = true;
+            }
+        }
+
+        if ((spellChoosingTarget != null && spellChoosingTarget.Needs3dTarget) ||
+            isPausedAttack)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
                 spellChoosingTarget = null;
-                FirstPersonController.Instance.SetCursorLock(true);
+                ExitPausedAttack();
+            }
+            else
+            {
+                // TODO: exiting identifyMonsterUI sets timeScale to 1
+                Time.timeScale = 0;
+                FirstPersonController.Instance.SetCursorLock(false);
+
+                var targetRaycastHit = CalculateMouseTarget();
+                if (targetRaycastHit != null)
+                {
+                    if (Input.GetKeyDown("t"))
+                    {
+                        SelectNextPlayingCharacter();
+                        nextPausedAttack = Time.time + PAUSED_ATTACK_WAIT_TIME_IN_SECONDS;
+                        ContinuePausedAttack();
+                    }
+                }
             }
             return;
         }
 
-        if (Input.GetKeyDown("i"))
-        {
-            CharDetailsUI.Instance.ShowInventory();
-        }
-        else if (Input.GetKeyDown("r"))
-        {
-            OnRestIconClicked();
-        }
-        else if (Input.GetKeyDown("b"))
-        {
-            OnSpellBookIconClicked();
-        }
-        else if (Input.GetKeyUp(KeyCode.Escape) && 
-            !VideoBuildingUI.Instance.IsShowing && 
-            !RestUI.Instance.IsShowing && 
-            !CharDetailsUI.Instance.IsShowing && 
-            !SpellBookUI.Instance.IsShowing &&
-            !NpcDialog.Instance.IsShowing && !GameOverUI.Instance.IsShowing)
-        {
-            // TODO: better way
-            FirstPersonController.Instance.SetCursorLock(false);
-        }
-            
-
         bool isUserAttacking = Input.GetKeyDown("q");
-        CalculateTarget(isUserAttacking);
+        CalculateCrosshairTarget(isUserAttacking);
 	}
 
     void LateUpdate() {
         CheckEnemiesEngagingStatus();
     }
 
-    void CalculateTarget(bool includeTargetPoint) {
+    private void CalculateCrosshairTarget(bool isUserAttacking) {
         // TODO: refactor main loop
 
         RaycastHit hit;
         var ray = Camera.main.ScreenPointToRay(crosshair.transform.position);
         if (Physics.Raycast(ray, out hit, Camera.main.farClipPlane))
         {
-            if (hit.transform.tag.StartsWith("Enemy"))
-            {
-                Debug.DrawRay(ray.origin, ray.direction, Color.blue, 2, true);
-                //Debug.Log("HIT: " + hit.transform.gameObject.tag);
-
-                focussedText.text = hit.transform.gameObject.tag.TagToDescription() + string.Format(" - {0:F1}", hit.distance);
-
-                if (Input.GetMouseButton(1))
-                {
-                    var enemyAttack = hit.transform.GetComponent<EnemyAttack>();
-                    var enemyHealth = hit.transform.GetComponent<EnemyHealth>();
-                    if (enemyAttack != null && enemyHealth != null)
-                    {
-                        IdentifyMonsterUI.Instance.Show(enemyAttack.EnemyInfo, enemyHealth);
-                    }
-                }
-            }
-            else if (hit.transform.tag.StartsWith("VideoDoor") && hit.distance < 5)
-            {
-                var videoDoor = hit.transform.GetComponent<VideoDoor>();
-                focussedText.text = videoDoor.GetDescription();
-                if (Input.GetMouseButton(0) && !VideoBuildingUI.Instance.IsShowing && !CharDetailsUI.Instance.IsShowing) // TODO: better way
-                {
-                    ShowMessage(videoDoor.TryOpen());
-                }
-            }
-            else if (hit.transform.tag.StartsWith("DungeonEntrance") && hit.distance < 5)
-            {
-                var dungeonEntrance = hit.transform.GetComponent<DungeonEntrance>();
-                focussedText.text = dungeonEntrance.GetDescription();
-                if (Input.GetMouseButton(0) && !VideoBuildingUI.Instance.IsShowing && !CharDetailsUI.Instance.IsShowing) // TODO: better way
-                {
-                    dungeonEntrance.Show();
-                }
-            }
-            else if (hit.transform.tag.StartsWith("Npc") && hit.distance < 2)
-            {
-                var npcTalk = hit.transform.GetComponent<NpcTalk>();
-                if (npcTalk != null)
-                {
-                    focussedText.text = npcTalk.GetDescription();
-                    if (Input.GetMouseButton(0) && !NpcDialog.Instance.IsShowing)
-                    {
-                        npcTalk.Talk();
-                    }
-                }
-                var npcNews = hit.transform.GetComponent<NpcNews>();
-                if (npcNews != null)
-                {
-                    focussedText.text = npcNews.GetDescription();
-                    if (Input.GetMouseButton(0))
-                        npcNews.Talk();
-                }
-            }
-            else
-            {
-                focussedText.text = "";
-            }
-
-			CurrentTarget = hit.transform;
-
-            if (includeTargetPoint)
-                CurrentTargetPoint = hit.point;
+            ProcessMainRaycastHit(hit);
         }
         else
         {
             focussedText.text = "";
-            CurrentTarget = null;
 
-            if (includeTargetPoint)
+            if (isUserAttacking)
             {
-                var screenPoint = new Vector3(crosshair.transform.position.x, crosshair.transform.position.y, Camera.main.farClipPlane);
-                CurrentTargetPoint = Camera.main.ScreenToWorldPoint(screenPoint);
+                // TODO: get nearest enemy
+                Transform nearestAttackableEnemy = null;
+                if (nearestAttackableEnemy == null)
+                {
+                    // TODO: shoot to nothing
+                    //var screenPoint = new Vector3(crosshair.transform.position.x, crosshair.transform.position.y, Camera.main.farClipPlane);
+                }
             }
         }
     }
 
-    public RaycastHit? CalculateMouseTarget() {
+    private RaycastHit? CalculateMouseTarget() {
         RaycastHit hit;
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit, Camera.main.farClipPlane))
         {
-            UpdateFocussedText(hit);
+            ProcessMainRaycastHit(hit);
             return hit;
         }
         return null;
     }
 
-    private void UpdateFocussedText(RaycastHit hit)
+    private void ProcessMainRaycastHit(RaycastHit hit)
     {
+        if (spellChoosingTarget != null && spellChoosingTarget.Needs3dTarget) 
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                var partyCastsSpellUseCase = new PartyCastsSpellUseCase(this, this, FirstPersonController.Instance.transform);
+                Time.timeScale = 1;
+                FirstPersonController.Instance.SetCursorLock(true);
+                partyCastsSpellUseCase.CastSpell(GetPlayingCharacterSelected(), spellChoosingTarget, hit.point, hit.transform);
+                spellChoosingTarget = null;
+                return;
+            }
+        }
+
         if (hit.transform.tag.StartsWith("Enemy"))
         {
-            focussedText.text = hit.transform.gameObject.tag.TagToDescription() + " - " + hit.distance;
+            //Debug.LogFormat("HIT: {0} - {1}" + hit.transform.gameObject.tag, hit.distance);
+            focussedText.text = hit.transform.gameObject.tag.TagToDescription();
+
+            if (Input.GetMouseButton(1))
+            {
+                var enemyAttack = hit.transform.GetComponent<EnemyAttack>();
+                var enemyHealth = hit.transform.GetComponent<EnemyHealth>();
+                if (enemyAttack != null && enemyHealth != null)
+                {
+                    IdentifyMonsterUI.Instance.Show(enemyAttack.EnemyInfo, enemyHealth);
+                }
+            }
+            else if (Input.GetKeyDown("q") ||
+                     (isPausedAttack && Input.GetMouseButtonDown(0)))
+            {
+                var attackingChar = GetPlayingCharacterSelected();
+                if (attackingChar != null)
+                {
+                    if (isPausedAttack)
+                        ContinuePausedAttack();
+                    partyAttackBehaviour.DoAttack(attackingChar, hit.point, hit.transform);
+                }
+            }
+            else
+            {
+                var enemyLoot = hit.transform.GetComponent<EnemyLoot>(); // TODO: remove enemyLoot
+                if (enemyLoot != null && enemyLoot.isActiveAndEnabled && hit.distance < 4 && Input.GetMouseButtonDown(0))
+                    enemyLoot.Loot();
+            }
         }
         else if (hit.transform.tag.StartsWith("VideoDoor") && hit.distance < 5)
         {
             var videoDoor = hit.transform.GetComponent<VideoDoor>();
             focussedText.text = videoDoor.GetDescription();
+            if (Input.GetMouseButton(0))
+            {
+                ShowMessage(videoDoor.TryOpen());
+            }
+        }
+        else if (hit.transform.tag.StartsWith("DungeonEntrance") && hit.distance < 5)
+        {
+            var dungeonEntrance = hit.transform.GetComponent<DungeonEntrance>();
+            focussedText.text = dungeonEntrance.GetDescription();
+            if (Input.GetMouseButton(0))
+            {
+                dungeonEntrance.Show();
+            }
         }
         else if (hit.transform.tag.StartsWith("Npc") && hit.distance < 2)
         {
             var npcTalk = hit.transform.GetComponent<NpcTalk>();
             if (npcTalk != null)
-                focussedText.text = npcTalk.GetDescription();
-            else
             {
-                var npcNews = hit.transform.GetComponent<NpcNews>();
-                if (npcNews != null)
-                    focussedText.text = npcNews.GetDescription();
+                focussedText.text = npcTalk.GetDescription();
+                if (Input.GetMouseButton(0))
+                {
+                    npcTalk.Talk();
+                }
+            }
+            var npcNews = hit.transform.GetComponent<NpcNews>();
+            if (npcNews != null)
+            {
+                focussedText.text = npcNews.GetDescription();
+                if (Input.GetMouseButton(0))
+                    npcNews.Talk();
+            }
+        }
+        else if (hit.transform.tag.StartsWith("Chest") && hit.distance < 4)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                // TODO: which chest background?
+                var chest = hit.transform.GetComponent<Chest>();
+                OpenChestUI.Instance.Show(chest.GeneratedItems);
             }
         }
         else
         {
             focussedText.text = "";
         }
+    }
+
+    private void ContinuePausedAttack()
+    {
+        nextPausedAttack = Time.time + PAUSED_ATTACK_CONTINUE_TIME_IN_SECONDS;
+        isPausedAttack = false;
+        Time.timeScale = 1;
+        FirstPersonController.Instance.SetCursorLock(true);
+    }
+
+    private void ExitPausedAttack()
+    {
+        Time.timeScale = 1;
+        FirstPersonController.Instance.SetCursorLock(true);
+        isPausedAttack = false;
     }
 
     public void SetEnemyEngagingParty(GameObject enemy, float distanceSqr) {
@@ -462,6 +494,9 @@ public class Party : Singleton<Party>, PartyCastsSpellViewInterface, EnemyAttack
 
     public void OnSpellBookIconClicked()
     {
+        if (isPausedAttack)
+            ContinuePausedAttack();
+        
         var playingCharacterSelected = GetPlayingCharacterSelected();
         if (playingCharacterSelected != null)
             SpellBookUI.Instance.Show(playingCharacterSelected);

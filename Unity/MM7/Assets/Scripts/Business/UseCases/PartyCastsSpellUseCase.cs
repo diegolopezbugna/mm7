@@ -99,7 +99,7 @@ namespace Business
         {
             speller.LastAttackTimeFrom = Time.time;
             // TODO: anything else that affects recovery time?
-            speller.LastAttackTimeTo = speller.LastAttackTimeFrom + spellInfo.RecoveryTimes[speller.Skills[spellInfo.SkillCode].SkillLevel] / 100f;
+            speller.LastAttackTimeTo = speller.LastAttackTimeFrom + 2f + spellInfo.RecoveryTimes[speller.Skills[spellInfo.SkillCode].SkillLevel] / 100f;
             PlayingCharacterView.SelectNextPlayingCharacter();
         }
 

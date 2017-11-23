@@ -126,7 +126,7 @@ public class EnemyAttack : MonoBehaviour {
                 }
 
                 var currentTime = Time.time;
-                if (currentTime - lastAttack > 2f)  // TODO: enemy recovery time
+                if (currentTime - lastAttack > 4f)  // TODO: enemy recovery time
                 {
                     lastAttack = currentTime;
                     StartCoroutine(AttackParty());

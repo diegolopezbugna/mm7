@@ -30,17 +30,9 @@ public class PartyAttack : MonoBehaviour, PartyAttacksViewInterface {
 	
 	void Update () 
     {
-        if (Input.GetKeyDown("q"))
-        {
-            var attackingPlayer = Party.Instance.GetPlayingCharacterSelected();
-            if (attackingPlayer != null)
-            {
-                DoAttack(attackingPlayer, Party.Instance.CurrentTargetPoint, Party.Instance.CurrentTarget);
-            }
-        }
 	}
 
-    void DoAttack(PlayingCharacter attackingChar, Vector3? targetPoint, Transform targetTransform) 
+    public void DoAttack(PlayingCharacter attackingChar, Vector3? targetPoint, Transform targetTransform) 
     {
         var partyAttacksUseCase = new PartyAttacksUseCase(this, Party.Instance, targetPoint, targetTransform, FirstPersonController.Instance.transform);
 

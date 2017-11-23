@@ -179,14 +179,14 @@ namespace Business
         public float RecoveryTime {
             get {
                 // TODO: formula! depends on speed? armor?
-                return 2f;
+                return 4f;
             }
         }
 
         public float RangedRecoveryTime {
             get {
                 // TODO: formula! depends on speed? armor?
-                return 2f;
+                return 4f;
             }
         }
 

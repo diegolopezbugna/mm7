@@ -37,7 +37,7 @@ public class PartyBlood : MonoBehaviour {
             yield return null;
         }
 
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSecondsRealtime(0.1f);
 
         while (bloodColor.a > 0f)
         {

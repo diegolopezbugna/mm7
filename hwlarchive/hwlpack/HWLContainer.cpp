@@ -12,7 +12,7 @@ HWLContainer::~HWLContainer() {
 }
 
 bool HWLContainer::Open(const char* pFilename) {
-	pFile = fopen(pFilename, "rb");
+	pFile = fopen(pFilename, "rb+");
 	if (!pFile) {
 		printf("Failed to open file: %s\n", pFilename);
 		return false;
@@ -55,23 +55,21 @@ bool HWLContainer::Open(const char* pFilename) {
 }
 
 void HWLContainer::UpdateTexture(std::string textureName, HWLTextureHeader header, uint16_t *pPixels) {
-	//mNodes[name].uFileTableOffset = newOffset;
-	//pFile
 	fseek(pFile, 0, SEEK_END);
 	size_t endPosition = ftell(pFile);
 
 	uint32_t nodeOffset = mNodes[textureName].uNodeOffsetInFileTable;
 	fseek(pFile, nodeOffset, SEEK_SET);
 	uint32_t newTextureOffset = endPosition;
-	//fwrite(&newTextureOffset, 4, 1, pFile);
+	fwrite(&newTextureOffset, 4, 1, pFile);
 	mNodes[textureName].uTextureOffset = newTextureOffset;
 
 	fseek(pFile, newTextureOffset, SEEK_SET);
-	//fwrite(&header, sizeof(HWLTextureHeader), 1, pFile);
-	//fwrite(pPixels, sizeof(uint16_t), 1000, pFile); // TODO: cantidad de pixeles
-
+	fwrite(&header, sizeof(HWLTextureHeader), 1, pFile);
+	fwrite(pPixels, sizeof(uint16_t), header.uWidth * header.uHeight, pFile); // TODO: cantidad de pixeles
 }
 
+// do not used
 long HWLContainer::FindFileTablePos(std::string name) {
 	fseek(pFile, header.uFileTableOffset, SEEK_SET);
 
@@ -125,6 +123,12 @@ void HWLContainer::LoadTexture(std::string textureName) {
 	}
 	else {
 		fread(pPixels, 2, textureHeader.uWidth * textureHeader.uHeight, pFile);
+	}
+
+	bool isAllSameSizeH = textureHeader.uWidth == textureHeader.uBufferWidth && textureHeader.uWidth == textureHeader.uAreaWidth;
+	bool isAllSameSizeV = textureHeader.uHeight == textureHeader.uBufferHeight && textureHeader.uHeight == textureHeader.uAreaHeigth;
+	if (!isAllSameSizeH || !isAllSameSizeV) {
+		printf("Wrong texture dimensions: %s", textureName.c_str());
 	}
 
 	free(pPixels);

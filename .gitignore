@@ -45,3 +45,4 @@ Unity/MM7/Assets/PostProcessing/
 hwlarchive/.vs/
 hwlarchive/Debug/
 hwlarchive/hwlpack/Debug/
+*.user

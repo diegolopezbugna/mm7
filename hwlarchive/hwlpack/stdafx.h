@@ -19,3 +19,6 @@
 #include <cstring>
 #include <vector>
 #include "tinf\tinf.h"
+
+#define ZLIB_WINAPI
+#include <zlib.h>

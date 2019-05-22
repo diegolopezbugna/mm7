@@ -54,7 +54,7 @@ bool HWLContainer::Open(const char* pFilename) {
 	return true;
 }
 
-void HWLContainer::UpdateTexture(std::string textureName, HWLTextureHeader header, uint16_t *pPixels) {
+void HWLContainer::UpdateTexture(std::string textureName, uint32_t width, uint32_t height, uint32_t compressedSize, uint16_t *pPixels) {
 	fseek(pFile, 0, SEEK_END);
 	size_t endPosition = ftell(pFile);
 
@@ -64,9 +64,23 @@ void HWLContainer::UpdateTexture(std::string textureName, HWLTextureHeader heade
 	fwrite(&newTextureOffset, 4, 1, pFile);
 	mNodes[textureName].uTextureOffset = newTextureOffset;
 
+	HWLTextureHeader header = HWLTextureHeader();
+	header.uAreaHeigth = header.uBufferHeight = header.uHeight = height;
+	header.uAreaWidth = header.uBufferWidth = header.uWidth = width;
+	header.uAreaX = header.uAreaY = 0;
+	header.uCompressedSize = compressedSize;
+
 	fseek(pFile, newTextureOffset, SEEK_SET);
 	fwrite(&header, sizeof(HWLTextureHeader), 1, pFile);
 	fwrite(pPixels, sizeof(uint16_t), header.uWidth * header.uHeight, pFile); // TODO: cantidad de pixeles
+}
+
+std::string *HWLContainer::GetAllTextureNames() {
+	vector<std::string> names;
+	for (node in mNodes) {
+		names.push_back(node.key);
+	}
+	return names;
 }
 
 // do not used
@@ -92,6 +106,7 @@ long HWLContainer::FindFileTablePos(std::string name) {
 	return posInFileTable;
 }
 
+// do not used
 void HWLContainer::LoadTexture(std::string textureName) {
 	size_t uOffset = mNodes[textureName].uTextureOffset;
 	fseek(pFile, uOffset, SEEK_SET);

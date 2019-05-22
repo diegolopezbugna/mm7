@@ -47,28 +47,13 @@ struct HWLNode {
 	size_t uNodeOffsetInFileTable;
 };
 
-//class HWLTexture {
-//public:
-//	inline HWLTexture() {}
-//
-//	int uBufferWidth;
-//	int uBufferHeight;
-//	int uAreaWidth;
-//	int uAreaHeigth;
-//	unsigned int uWidth;
-//	unsigned int uHeight;
-//	int uAreaX;
-//	int uAreaY;
-//	uint16_t *pPixels;
-//};
-
 class HWLContainer {
 public:
 	HWLContainer();
 	virtual ~HWLContainer();
 
 	bool Open(const char* pFilename);
-	void UpdateTexture(std::string textureName, HWLTextureHeader header, uint16_t *pPixels);
+	void UpdateTexture(std::string textureName, uint32_t width, uint32_t height, uint32_t compressedSize, uint16_t *pPixels);
 	void LoadTexture(std::string textureName);
 	long FindFileTablePos(std::string);
 

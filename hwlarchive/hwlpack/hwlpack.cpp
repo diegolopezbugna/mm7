@@ -22,7 +22,7 @@ int main()
 	BmpReader bmpReader = BmpReader();
 	uint32_t width = 0;
 	uint32_t height = 0;
-	uint16_t *pixels = bmpReader.Read16BitsFile("C:\\Program Files (x86)\\3DO\\Might and Magic VII\\DATA\\DRSRSCAP.bmp", width, height);
+	uint16_t *pixels = bmpReader.Read24BitsFileTo16Bits("C:\\Program Files (x86)\\3DO\\Might and Magic VII\\DATA\\DRSRSCAP.bmp", width, height);
 	uint8_t *compressedPixels = (uint8_t *)malloc(compressBound(width * height * 2));
 
 	HWLTextureHeader header = HWLTextureHeader();

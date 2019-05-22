@@ -82,13 +82,13 @@ uint16_t *BmpReader::Read24BitsFileTo16Bits(std::string fileName, uint32_t &outW
             //int p24i = h * width_in_bytes_32 + w * 4;
             //int p16i = h * width_in_bytes_16 + w * 2;
             int src_i = (h * header2.biWidth + w) * 3; // TODO: padding???
-            uint16_t blu = (uint16_t)(pPixels24[i + 0] * 31.f / 255.f);
-            uint16_t grn = (uint16_t)(pPixels24[i + 1] * 31.f / 255.f);
-            uint16_t red = (uint16_t)(pPixels24[i + 2] * 31.f / 255.f);
+			uint16_t red = (uint16_t)(pPixels24[src_i + 0] * 31.f / 255.f);
+			uint16_t grn = (uint16_t)(pPixels24[src_i + 1] * 31.f / 255.f);
+			uint16_t blu = (uint16_t)(pPixels24[src_i + 2] * 31.f / 255.f);
             uint16_t sum = (red) | (grn << 5) | (blu << 10);
 
             int dest_i = ((511 - h) * header2.biWidth + w); // * 2;   ???
-            memcpy(pPixels[dest_i], &sum, 2);
+            memcpy(&pPixels[dest_i], &sum, 2);
 		}
 	}
 

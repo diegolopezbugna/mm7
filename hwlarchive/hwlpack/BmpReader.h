@@ -9,5 +9,5 @@ class BmpReader {
 public:
 	uint16_t *Read16BitsFile(std::string fileName, uint32_t &outWidth, uint32_t &outHeight);
 	uint8_t *Read24BitsFile(std::string fileName);
-
+	uint16_t *Read24BitsFileTo16Bits(std::string fileName, uint32_t &outWidth, uint32_t &outHeight);
 };

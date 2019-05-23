@@ -55,6 +55,9 @@ uint8_t *BmpReader::Read24BitsFile(std::string fileName) {
 uint16_t *BmpReader::Read24BitsFileTo16Bits(std::string fileName, uint32_t &outWidth, uint32_t &outHeight) {
 
 	FILE *pFile = fopen(fileName.c_str(), "rb");
+	if (pFile == nullptr) {
+		return nullptr;
+	}
 
 	BITMAPFILEHEADER header1;
 	BITMAPINFOHEADER header2; // TODO: another bmp version?
@@ -87,7 +90,7 @@ uint16_t *BmpReader::Read24BitsFileTo16Bits(std::string fileName, uint32_t &outW
 			uint16_t blu = (uint16_t)(pPixels24[src_i + 2] * 31.f / 255.f);
             uint16_t sum = (red) | (grn << 5) | (blu << 10);
 
-            int dest_i = ((511 - h) * header2.biWidth + w); // * 2;   ???
+            int dest_i = ((header2.biHeight - 1 - h) * header2.biWidth + w); // * 2;
             memcpy(&pPixels[dest_i], &sum, 2);
 		}
 	}

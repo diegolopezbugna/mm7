@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <map>
+#include <vector>
 
 //#include "Engine/Strings.h"
 
@@ -52,7 +53,8 @@ public:
 	HWLContainer();
 	virtual ~HWLContainer();
 
-	bool Open(const char* pFilename);
+	bool Open(std::string filename);
+	std::vector<std::string> GetAllTextureNames();
 	void UpdateTexture(std::string textureName, uint32_t width, uint32_t height, uint32_t compressedSize, uint16_t *pPixels);
 	void LoadTexture(std::string textureName);
 	long FindFileTablePos(std::string);

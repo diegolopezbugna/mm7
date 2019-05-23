@@ -11,16 +11,16 @@ HWLContainer::~HWLContainer() {
 	}
 }
 
-bool HWLContainer::Open(const char* pFilename) {
-	pFile = fopen(pFilename, "rb+");
+bool HWLContainer::Open(std::string filename) {
+	pFile = fopen(filename.c_str(), "rb+");
 	if (!pFile) {
-		printf("Failed to open file: %s\n", pFilename);
+		printf("Failed to open file: %s\n", filename.c_str());
 		return false;
 	}
 
 	fread(&header, sizeof(HWLHeader), 1, pFile);
 	if (header.uSignature != 'TD3D') {
-		printf("Invalid format: %s\n", pFilename);
+		printf("Invalid format: %s\n", filename.c_str());
 		return false;
 	}
 	printf("  header.uFileTableOffset: %ul\n", header.uFileTableOffset);
@@ -55,6 +55,11 @@ bool HWLContainer::Open(const char* pFilename) {
 }
 
 void HWLContainer::UpdateTexture(std::string textureName, uint32_t width, uint32_t height, uint32_t compressedSize, uint16_t *pPixels) {
+	if (width % 4 != 0 || height %4 != 0) {
+		printf(" error updating %s, width and height must be multiple of 4 (must implement)", textureName.c_str());
+		return;
+	}
+
 	fseek(pFile, 0, SEEK_END);
 	size_t endPosition = ftell(pFile);
 
@@ -73,12 +78,14 @@ void HWLContainer::UpdateTexture(std::string textureName, uint32_t width, uint32
 	fseek(pFile, newTextureOffset, SEEK_SET);
 	fwrite(&header, sizeof(HWLTextureHeader), 1, pFile);
 	fwrite(pPixels, sizeof(uint16_t), header.uWidth * header.uHeight, pFile); // TODO: cantidad de pixeles
+
+	printf(" texture %s updated\n", textureName.c_str());
 }
 
-std::string *HWLContainer::GetAllTextureNames() {
-	vector<std::string> names;
-	for (node in mNodes) {
-		names.push_back(node.key);
+std::vector<std::string> HWLContainer::GetAllTextureNames() {
+	std::vector<std::string> names;
+	for (auto& node: mNodes) {
+		names.push_back(node.first);
 	}
 	return names;
 }

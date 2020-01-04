@@ -5,6 +5,12 @@ using Business;
 using UnityEngine.AI;
 using UnityStandardAssets.Characters.FirstPerson;
 
+public enum EnemyAttackState {
+    FarAway,
+    EngagingParty,
+    AttackingParty
+}
+
 public class EnemyAttack : MonoBehaviour {
 
     [SerializeField]
@@ -66,7 +72,8 @@ public class EnemyAttack : MonoBehaviour {
     private RandomWanderMove wanderMoveBehaviour;
     private NavMeshAgent agent;
     private float lastAttack = 0;
-    private bool isEngagingParty = false;
+
+    private TurnBasedController turnBasedController;
 
     private const int engagingDistanceSqr = 20 * 20;
     public float EngagingDistanceSqr {
@@ -75,67 +82,67 @@ public class EnemyAttack : MonoBehaviour {
         }
     }
 
+    public EnemyAttackState state = EnemyAttackState.FarAway;
+
 	// Use this for initialization
 	void Start () {
         animator = GetComponent<Animator>();
         wanderMoveBehaviour = GetComponent<RandomWanderMove>();
         agent = GetComponent<NavMeshAgent>();
+        turnBasedController = FindObjectOfType<TurnBasedController>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
         float distanceToParty = Party.Instance.GetDistanceSqrTo(transform);
 
-        if (distanceToParty > this.EngagingDistanceSqr && !isEngagingParty)
+        if (distanceToParty > this.EngagingDistanceSqr && state != EnemyAttackState.EngagingParty)
         {
+            state = EnemyAttackState.FarAway;
             wanderMoveBehaviour.StartMoving();
         }
         else
         {
             Party.Instance.SetEnemyEngagingParty(this.gameObject, distanceToParty);
             wanderMoveBehaviour.StopMoving();
-
-            if (agent == null)
-            {
-                var partyPostitionToLookAt = new Vector3(FirstPersonController.Instance.transform.position.x, transform.position.y, FirstPersonController.Instance.transform.position.z);
-                transform.LookAt(partyPostitionToLookAt); // TODO: smooth
-            }
+            LookAtParty();
 
             if (distanceToParty > maxAttackDistanceSqr)
-            {
-                animator.SetBool("IsRunning", true);
-                if (agent != null)
-                {
-                    agent.speed = engagingSpeed;
-                    agent.SetDestination(FirstPersonController.Instance.transform.position);
-                    agent.isStopped = false;
-                }
-                else
-                {
-                    transform.position = Vector3.MoveTowards(transform.position, FirstPersonController.Instance.transform.position, engagingSpeed * Time.deltaTime);
-                }
-            }
+                EngageParty();
             else
-            {
-                if (agent != null)
-                {
-                    agent.isStopped = true;
-                    var partyPostitionToLookAt = new Vector3(FirstPersonController.Instance.transform.position.x, transform.position.y, FirstPersonController.Instance.transform.position.z);
-                    transform.LookAt(partyPostitionToLookAt); // TODO: smooth
-                }
-
-                var currentTime = Time.time;
-                if (currentTime - lastAttack > 4f)  // TODO: enemy recovery time
-                {
-                    lastAttack = currentTime;
-                    StartCoroutine(AttackParty());
-                }
-            }
+                StartAttackingParty();
         }
 	}
 
+    void EngageParty() {
+        state = EnemyAttackState.EngagingParty;
+        animator.SetBool("IsRunning", true);
+        agent.speed = engagingSpeed;
+        agent.SetDestination(FirstPersonController.Instance.transform.position);
+        agent.isStopped = false;
+    }
+
+    void LookAtParty() {
+        var partyPostitionToLookAt = new Vector3(FirstPersonController.Instance.transform.position.x, transform.position.y, FirstPersonController.Instance.transform.position.z);
+        transform.LookAt(partyPostitionToLookAt); // TODO: smooth
+    }
+
+    void StartAttackingParty() {
+        state = EnemyAttackState.AttackingParty;
+
+        agent.isStopped = true;
+        LookAtParty();
+
+        var currentTime = Time.time;
+        if (currentTime - lastAttack > 4f)  // TODO: enemy recovery time
+        {
+            lastAttack = currentTime;
+            StartCoroutine(AttackParty());
+        }
+    }
+
     IEnumerator AttackParty() {
+        // TODO: proyectiles?
         animator.SetBool("IsRunning", false);
         animator.SetBool("IsWalking", false);
         animator.SetTrigger("Attack");
@@ -145,16 +152,6 @@ public class EnemyAttack : MonoBehaviour {
         {
             var enemyAttacksUseCase = new EnemyAttacksUseCase(Party.Instance, Party.Instance);
             enemyAttacksUseCase.EnemyAttacks(EnemyInfo, Game.Instance.PartyStats.Chars[charAttacked]);
-
-            if (isRanged)
-            {
-                // TODO: proyectiles?
-            }
-
-        }
-        else
-        {
-            // TODO: can't attack
         }
     }
 
@@ -172,7 +169,7 @@ public class EnemyAttack : MonoBehaviour {
     }
 
     public void ForceEngageParty() {
-        isEngagingParty = true;
+        state = EnemyAttackState.EngagingParty;
     }
 
     public void AlertOthers() {
